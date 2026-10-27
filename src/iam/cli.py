@@ -253,6 +253,121 @@ def build_parser() -> argparse.ArgumentParser:
         help="Path to save IAMGraph JSON if --ingest is set",
     )
 
+    # 10. iam ingest-tac-bench
+    p_ingest_tac = subparsers.add_parser(
+        "ingest-tac-bench",
+        help="Generate or ingest TAC-Bench benchmark tasks into unified dataset directory",
+    )
+    p_ingest_tac.add_argument(
+        "--num-tasks",
+        type=int,
+        default=35,
+        help="Number of balanced benchmark tasks to generate (default: 35)",
+    )
+    p_ingest_tac.add_argument(
+        "--output-dir",
+        type=str,
+        default="data/tac_bench",
+        help="Directory to save generated TAC-Bench tasks (default: data/tac_bench)",
+    )
+    p_ingest_tac.add_argument(
+        "--seed",
+        type=int,
+        default=42,
+        help="Random seed for generation (default: 42)",
+    )
+
+    # 11. iam evaluate-transfer
+    p_eval_trans = subparsers.add_parser(
+        "evaluate-transfer",
+        help="Execute synthetic-to-TAC-Bench zero-shot inductive transfer benchmark (Gate G1)",
+    )
+    p_eval_trans.add_argument(
+        "--tac-bench-dir",
+        type=str,
+        default="data/tac_bench",
+        help="Directory containing TAC-Bench tasks (default: data/tac_bench)",
+    )
+    p_eval_trans.add_argument(
+        "--num-tasks",
+        type=int,
+        default=35,
+        help="Number of tasks to evaluate if generating on the fly (default: 35)",
+    )
+    p_eval_trans.add_argument(
+        "--output-dir",
+        type=str,
+        default="experiments/zero_shot",
+        help="Directory to save transfer report and JSON results (default: experiments/zero_shot)",
+    )
+    p_eval_trans.add_argument(
+        "--epochs",
+        type=int,
+        default=20,
+        help="Training epochs for synthetic RGCN model (default: 20)",
+    )
+    p_eval_trans.add_argument(
+        "--seed",
+        type=int,
+        default=42,
+        help="Random seed for reproducibility (default: 42)",
+    )
+
+    # 12. iam evaluate-pareto
+    p_eval_pareto = subparsers.add_parser(
+        "evaluate-pareto",
+        help="Execute Gate G2 multi-objective Pareto tradeoff benchmark across diverse environments",
+    )
+    p_eval_pareto.add_argument(
+        "--output-dir",
+        type=str,
+        default="experiments/pareto_frontier",
+        help="Directory to save Pareto report and JSON results (default: experiments/pareto_frontier)",
+    )
+    p_eval_pareto.add_argument(
+        "--num-completions",
+        type=int,
+        default=15,
+        help="Number of stochastic completions per environment (default: 15)",
+    )
+    p_eval_pareto.add_argument(
+        "--seed",
+        type=int,
+        default=42,
+        help="Random seed for reproducibility (default: 42)",
+    )
+
+    # 13. iam evaluate-scalability
+    p_eval_scale = subparsers.add_parser(
+        "evaluate-scalability",
+        help="Execute Section 6.4 runtime scalability and enterprise graph scaling benchmark",
+    )
+    p_eval_scale.add_argument(
+        "--output-dir",
+        type=str,
+        default="experiments/scalability",
+        help="Directory to save scalability report and JSON results (default: experiments/scalability)",
+    )
+    p_eval_scale.add_argument(
+        "--scales",
+        type=int,
+        nargs="+",
+        default=[50, 100, 250, 500, 1000],
+        help="Node scales to evaluate (default: 50 100 250 500 1000)",
+    )
+    p_eval_scale.add_argument(
+        "--max-z3-scale",
+        type=int,
+        default=250,
+        help="Maximum scale to execute exact Z3 MaxSAT solver (default: 250)",
+    )
+    p_eval_scale.add_argument(
+        "--seed",
+        type=int,
+        default=42,
+        help="Random seed for reproducibility (default: 42)",
+    )
+
     return parser
 
 
@@ -544,6 +659,128 @@ def cmd_benchmark_iac(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_ingest_tac_bench(args: argparse.Namespace) -> int:
+    """Generate or ingest TAC-Bench benchmark tasks."""
+    from iam.parser.tac_bench import TACBenchGenerator
+
+    logger.info(
+        "Generating %d TAC-Bench benchmark tasks (output_dir=%s, seed=%d)...",
+        args.num_tasks,
+        args.output_dir,
+        args.seed,
+    )
+    generator = TACBenchGenerator(seed=args.seed)
+    dataset = generator.generate_benchmark_suite(num_tasks=args.num_tasks)
+    out_dir = Path(args.output_dir)
+    dataset.save_to_dir(out_dir)
+    summary = dataset.summary()
+    logger.info(
+        "Successfully saved %d TAC-Bench tasks to %s (categories: %s)",
+        len(dataset),
+        out_dir,
+        summary["categories"],
+    )
+    return 0
+
+
+def cmd_evaluate_transfer(args: argparse.Namespace) -> int:
+    """Execute synthetic-to-TAC-Bench zero-shot inductive transfer benchmark."""
+    from iam.models.zero_shot import ZeroShotTransferConfig, ZeroShotTransferRunner
+    from iam.parser.tac_bench import TACBenchDataset, TACBenchGenerator
+
+    logger.info("Initializing synthetic-to-TAC-Bench zero-shot transfer benchmark...")
+    tac_dir = Path(args.tac_bench_dir)
+    if tac_dir.exists() and (tac_dir / "manifest.json").exists():
+        logger.info("Loading existing TAC-Bench dataset from: %s", tac_dir)
+        dataset = TACBenchDataset.load_from_dir(tac_dir)
+    else:
+        logger.info("Generating on-the-fly TAC-Bench dataset with %d tasks...", args.num_tasks)
+        generator = TACBenchGenerator(seed=args.seed)
+        dataset = generator.generate_benchmark_suite(num_tasks=args.num_tasks)
+        dataset.save_to_dir(tac_dir)
+
+    cfg = ZeroShotTransferConfig(
+        num_epochs=args.epochs,
+        seed=args.seed,
+        output_dir=Path(args.output_dir),
+    )
+    runner = ZeroShotTransferRunner(config=cfg)
+    result = runner.run_transfer_benchmark(dataset)
+
+    print("\n" + "=" * 70)
+    print(f"  GATE G1 BENCHMARK VERDICT: {result.gate_g1_status}")
+    print("=" * 70)
+    for model_name, m in result.model_metrics.items():
+        print(
+            f"  {model_name:24s} | PR-AUC: {m.pr_auc:.3f} | ROC-AUC: {m.roc_auc:.3f} | "
+            f"Rec@1: {m.recall_at_1:.3f} | FNR: {m.fnr:.3f} | Latency: {m.avg_latency_ms:.1f}ms"
+        )
+    print("-" * 70)
+    print(f"Rationale: {result.gate_g1_rationale}")
+    print(f"Report: {result.output_files.get('markdown_report')}")
+    print("=" * 70 + "\n")
+    return 0
+
+
+def cmd_evaluate_pareto(args: argparse.Namespace) -> int:
+    """Execute Gate G2 Pareto tradeoff benchmark suite."""
+    from iam.verifier.pareto import ParetoBenchmarkSuiteRunner
+    from iam.verifier.tradeoff import TradeoffConfig
+
+    output_dir = Path(args.output_dir)
+    cfg = TradeoffConfig(num_completions=args.num_completions)
+    runner = ParetoBenchmarkSuiteRunner(tradeoff_config=cfg)
+
+    logger.info("Executing Gate G2 Pareto benchmark across environments...")
+    res = runner.run_suite(output_dir=output_dir, seed=args.seed)
+
+    print("\n" + "=" * 70)
+    print(f"  GATE G2 BENCHMARK VERDICT: {res.gate_g2_status}")
+    print("=" * 70)
+    for m_name, metrics in res.macro_metrics.items():
+        print(
+            f"  {m_name:24s} | Level3 Risk: {metrics['level3_risk']:.3f} | "
+            f"T1 Break: {metrics['t1_breakage']:.1%} | T2 Break: {metrics['t2_breakage']:.1%} | "
+            f"Cost: {metrics['transformation_cost']:.2f} | Latency: {metrics['latency_ms']:.1f}ms"
+        )
+    print("-" * 70)
+    print(f"Rationale: {res.gate_g2_rationale}")
+    print(f"Report: {res.output_files.get('markdown_report')}")
+    print("=" * 70 + "\n")
+    return 0
+
+
+def cmd_evaluate_scalability(args: argparse.Namespace) -> int:
+    """Execute Section 6.4 runtime scalability and enterprise graph scaling benchmark."""
+    from iam.verifier.scalability import ScalabilityBenchmarkRunner
+
+    output_dir = Path(args.output_dir)
+    runner = ScalabilityBenchmarkRunner(max_z3_scale=args.max_z3_scale)
+
+    scales = args.scales or [50, 100, 250, 500, 1000]
+    logger.info("Executing scalability benchmark across scales %s...", scales)
+    res = runner.run_suite(scales=scales, output_dir=output_dir, seed=args.seed)
+
+    print("\n" + "=" * 70)
+    print(f"  SCALABILITY BENCHMARK COMPLETE (Max Scale N={res.max_scale_evaluated:,})")
+    print("=" * 70)
+    for dp in res.data_points:
+        z3_lat = (
+            f"{dp.z3_repair_latency_ms:.1f}ms"
+            if dp.z3_repair_latency_ms is not None
+            else "Timeout/Skip"
+        )
+        print(
+            f"  N={dp.num_nodes:5d} | Sampling: {dp.sampling_latency_ms:5.1f}ms | "
+            f"Pruning Red: {dp.pruning_reduction_pct:4.1f}% | Greedy: {dp.greedy_repair_latency_ms:4.1f}ms | "
+            f"Z3: {z3_lat:12s} | Total: {dp.total_pipeline_latency_ms:6.1f}ms"
+        )
+    print("-" * 70)
+    print(f"Report: {res.output_files.get('markdown_report')}")
+    print("=" * 70 + "\n")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     """CLI dispatcher entry point."""
     parser = build_parser()
@@ -566,6 +803,10 @@ def main(argv: list[str] | None = None) -> int:
         "benchmark": cmd_benchmark,
         "ingest-iac": cmd_ingest_iac,
         "benchmark-iac": cmd_benchmark_iac,
+        "ingest-tac-bench": cmd_ingest_tac_bench,
+        "evaluate-transfer": cmd_evaluate_transfer,
+        "evaluate-pareto": cmd_evaluate_pareto,
+        "evaluate-scalability": cmd_evaluate_scalability,
     }
 
     handler = command_handlers.get(args.command)

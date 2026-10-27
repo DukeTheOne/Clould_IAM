@@ -1,0 +1,1086 @@
+{
+  "task_id": "tac-task-0002",
+  "category": "cross_account_delegation",
+  "name": "Organizational Unit Transitive Cross-Delegation",
+  "description": "Transitive assume-role delegation between partner analytics role and internal gateway role.",
+  "observed_graph": {
+    "graph_id": "tac-task-0002_graph_clone",
+    "metadata": {},
+    "num_nodes": 24,
+    "num_edges": 14,
+    "nodes": [
+      {
+        "id": "tac-task-0002_partner_role",
+        "node_type": "Role",
+        "arn": "arn:aws:iam::222233334444:role/partner-analyst-role",
+        "name": "partner-analyst-role",
+        "account_id": "222233334444",
+        "department": "Analytics",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_gateway_role",
+        "node_type": "Role",
+        "arn": "arn:aws:iam::555566667777:role/internal-gateway-role",
+        "name": "internal-gateway-role",
+        "account_id": "555566667777",
+        "department": "CoreServices",
+        "is_high_value": false,
+        "is_admin": true,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_finance_bucket",
+        "node_type": "Resource",
+        "arn": "arn:aws:s3:::partner-finance-records-tac-task-0002",
+        "name": "partner-finance-records-tac-task-0002",
+        "account_id": "555566667777",
+        "department": "CoreServices",
+        "is_high_value": true,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_gateway_pol",
+        "node_type": "Policy",
+        "arn": "arn:aws:iam::555566667777:policy/GatewayDataAccess",
+        "name": "GatewayDataAccess",
+        "account_id": "555566667777",
+        "department": "CoreServices",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_0",
+        "node_type": "User",
+        "arn": "arn:aws:iam::222233334444:user/bg-user-0",
+        "name": "bg-user-0",
+        "account_id": "222233334444",
+        "department": "Operations",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_1",
+        "node_type": "Policy",
+        "arn": "arn:aws:iam::222233334444:policy/bg-policy-1",
+        "name": "bg-policy-1",
+        "account_id": "222233334444",
+        "department": "Engineering",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_2",
+        "node_type": "Role",
+        "arn": "arn:aws:iam::222233334444:role/bg-role-2",
+        "name": "bg-role-2",
+        "account_id": "222233334444",
+        "department": "Analytics",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_3",
+        "node_type": "Role",
+        "arn": "arn:aws:iam::222233334444:role/bg-role-3",
+        "name": "bg-role-3",
+        "account_id": "222233334444",
+        "department": "Engineering",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_4",
+        "node_type": "User",
+        "arn": "arn:aws:iam::222233334444:user/bg-user-4",
+        "name": "bg-user-4",
+        "account_id": "222233334444",
+        "department": "Engineering",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_5",
+        "node_type": "User",
+        "arn": "arn:aws:iam::222233334444:user/bg-user-5",
+        "name": "bg-user-5",
+        "account_id": "222233334444",
+        "department": "Operations",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_6",
+        "node_type": "Role",
+        "arn": "arn:aws:iam::222233334444:role/bg-role-6",
+        "name": "bg-role-6",
+        "account_id": "222233334444",
+        "department": "Product",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_7",
+        "node_type": "Role",
+        "arn": "arn:aws:iam::222233334444:role/bg-role-7",
+        "name": "bg-role-7",
+        "account_id": "222233334444",
+        "department": "Operations",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_8",
+        "node_type": "Resource",
+        "arn": "arn:aws:s3:::bg-bucket-8",
+        "name": "bg-bucket-8",
+        "account_id": "222233334444",
+        "department": "Analytics",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_9",
+        "node_type": "Role",
+        "arn": "arn:aws:iam::222233334444:role/bg-role-9",
+        "name": "bg-role-9",
+        "account_id": "222233334444",
+        "department": "Product",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_10",
+        "node_type": "Resource",
+        "arn": "arn:aws:s3:::bg-bucket-10",
+        "name": "bg-bucket-10",
+        "account_id": "222233334444",
+        "department": "Analytics",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_11",
+        "node_type": "Resource",
+        "arn": "arn:aws:s3:::bg-bucket-11",
+        "name": "bg-bucket-11",
+        "account_id": "222233334444",
+        "department": "Analytics",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_12",
+        "node_type": "User",
+        "arn": "arn:aws:iam::222233334444:user/bg-user-12",
+        "name": "bg-user-12",
+        "account_id": "222233334444",
+        "department": "Operations",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_13",
+        "node_type": "Role",
+        "arn": "arn:aws:iam::222233334444:role/bg-role-13",
+        "name": "bg-role-13",
+        "account_id": "222233334444",
+        "department": "Product",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_14",
+        "node_type": "Policy",
+        "arn": "arn:aws:iam::222233334444:policy/bg-policy-14",
+        "name": "bg-policy-14",
+        "account_id": "222233334444",
+        "department": "Engineering",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_15",
+        "node_type": "Role",
+        "arn": "arn:aws:iam::222233334444:role/bg-role-15",
+        "name": "bg-role-15",
+        "account_id": "222233334444",
+        "department": "Engineering",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_16",
+        "node_type": "User",
+        "arn": "arn:aws:iam::222233334444:user/bg-user-16",
+        "name": "bg-user-16",
+        "account_id": "222233334444",
+        "department": "Product",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_17",
+        "node_type": "User",
+        "arn": "arn:aws:iam::222233334444:user/bg-user-17",
+        "name": "bg-user-17",
+        "account_id": "222233334444",
+        "department": "Engineering",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_18",
+        "node_type": "User",
+        "arn": "arn:aws:iam::222233334444:user/bg-user-18",
+        "name": "bg-user-18",
+        "account_id": "222233334444",
+        "department": "Product",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_19",
+        "node_type": "Policy",
+        "arn": "arn:aws:iam::222233334444:policy/bg-policy-19",
+        "name": "bg-policy-19",
+        "account_id": "222233334444",
+        "department": "Engineering",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      }
+    ],
+    "edges": [
+      {
+        "source": "tac-task-0002_gateway_role",
+        "target": "tac-task-0002_gateway_pol",
+        "relation": "AttachedWith",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [],
+        "condition": null,
+        "metadata": {}
+      },
+      {
+        "source": "tac-task-0002_gateway_pol",
+        "target": "tac-task-0002_finance_bucket",
+        "relation": "ActsOn",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [
+          "s3:GetObject",
+          "s3:ListBucket"
+        ],
+        "condition": null,
+        "metadata": {}
+      },
+      {
+        "source": "tac-task-0002_bg_0",
+        "target": "tac-task-0002_bg_1",
+        "relation": "AttachedWith",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [],
+        "condition": null,
+        "metadata": {}
+      },
+      {
+        "source": "tac-task-0002_bg_0",
+        "target": "tac-task-0002_bg_7",
+        "relation": "AssumesRole",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [],
+        "condition": null,
+        "metadata": {}
+      },
+      {
+        "source": "tac-task-0002_bg_1",
+        "target": "tac-task-0002_bg_8",
+        "relation": "ActsOn",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [
+          "s3:GetObject"
+        ],
+        "condition": null,
+        "metadata": {}
+      },
+      {
+        "source": "tac-task-0002_bg_3",
+        "target": "tac-task-0002_bg_14",
+        "relation": "AttachedWith",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [],
+        "condition": null,
+        "metadata": {}
+      },
+      {
+        "source": "tac-task-0002_bg_4",
+        "target": "tac-task-0002_bg_1",
+        "relation": "AttachedWith",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [],
+        "condition": null,
+        "metadata": {}
+      },
+      {
+        "source": "tac-task-0002_bg_9",
+        "target": "tac-task-0002_bg_1",
+        "relation": "AttachedWith",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [],
+        "condition": null,
+        "metadata": {}
+      },
+      {
+        "source": "tac-task-0002_bg_12",
+        "target": "tac-task-0002_bg_14",
+        "relation": "AttachedWith",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [],
+        "condition": null,
+        "metadata": {}
+      },
+      {
+        "source": "tac-task-0002_bg_13",
+        "target": "tac-task-0002_bg_14",
+        "relation": "AttachedWith",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [],
+        "condition": null,
+        "metadata": {}
+      },
+      {
+        "source": "tac-task-0002_bg_15",
+        "target": "tac-task-0002_bg_1",
+        "relation": "AttachedWith",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [],
+        "condition": null,
+        "metadata": {}
+      },
+      {
+        "source": "tac-task-0002_bg_16",
+        "target": "tac-task-0002_bg_1",
+        "relation": "AttachedWith",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [],
+        "condition": null,
+        "metadata": {}
+      },
+      {
+        "source": "tac-task-0002_bg_17",
+        "target": "tac-task-0002_bg_14",
+        "relation": "AttachedWith",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [],
+        "condition": null,
+        "metadata": {}
+      },
+      {
+        "source": "tac-task-0002_bg_19",
+        "target": "tac-task-0002_bg_11",
+        "relation": "ActsOn",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [
+          "s3:GetObject"
+        ],
+        "condition": null,
+        "metadata": {}
+      }
+    ]
+  },
+  "ground_truth_graph": {
+    "graph_id": "tac-task-0002_graph",
+    "metadata": {},
+    "num_nodes": 24,
+    "num_edges": 15,
+    "nodes": [
+      {
+        "id": "tac-task-0002_partner_role",
+        "node_type": "Role",
+        "arn": "arn:aws:iam::222233334444:role/partner-analyst-role",
+        "name": "partner-analyst-role",
+        "account_id": "222233334444",
+        "department": "Analytics",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_gateway_role",
+        "node_type": "Role",
+        "arn": "arn:aws:iam::555566667777:role/internal-gateway-role",
+        "name": "internal-gateway-role",
+        "account_id": "555566667777",
+        "department": "CoreServices",
+        "is_high_value": false,
+        "is_admin": true,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_finance_bucket",
+        "node_type": "Resource",
+        "arn": "arn:aws:s3:::partner-finance-records-tac-task-0002",
+        "name": "partner-finance-records-tac-task-0002",
+        "account_id": "555566667777",
+        "department": "CoreServices",
+        "is_high_value": true,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_gateway_pol",
+        "node_type": "Policy",
+        "arn": "arn:aws:iam::555566667777:policy/GatewayDataAccess",
+        "name": "GatewayDataAccess",
+        "account_id": "555566667777",
+        "department": "CoreServices",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_0",
+        "node_type": "User",
+        "arn": "arn:aws:iam::222233334444:user/bg-user-0",
+        "name": "bg-user-0",
+        "account_id": "222233334444",
+        "department": "Operations",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_1",
+        "node_type": "Policy",
+        "arn": "arn:aws:iam::222233334444:policy/bg-policy-1",
+        "name": "bg-policy-1",
+        "account_id": "222233334444",
+        "department": "Engineering",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_2",
+        "node_type": "Role",
+        "arn": "arn:aws:iam::222233334444:role/bg-role-2",
+        "name": "bg-role-2",
+        "account_id": "222233334444",
+        "department": "Analytics",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_3",
+        "node_type": "Role",
+        "arn": "arn:aws:iam::222233334444:role/bg-role-3",
+        "name": "bg-role-3",
+        "account_id": "222233334444",
+        "department": "Engineering",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_4",
+        "node_type": "User",
+        "arn": "arn:aws:iam::222233334444:user/bg-user-4",
+        "name": "bg-user-4",
+        "account_id": "222233334444",
+        "department": "Engineering",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_5",
+        "node_type": "User",
+        "arn": "arn:aws:iam::222233334444:user/bg-user-5",
+        "name": "bg-user-5",
+        "account_id": "222233334444",
+        "department": "Operations",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_6",
+        "node_type": "Role",
+        "arn": "arn:aws:iam::222233334444:role/bg-role-6",
+        "name": "bg-role-6",
+        "account_id": "222233334444",
+        "department": "Product",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_7",
+        "node_type": "Role",
+        "arn": "arn:aws:iam::222233334444:role/bg-role-7",
+        "name": "bg-role-7",
+        "account_id": "222233334444",
+        "department": "Operations",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_8",
+        "node_type": "Resource",
+        "arn": "arn:aws:s3:::bg-bucket-8",
+        "name": "bg-bucket-8",
+        "account_id": "222233334444",
+        "department": "Analytics",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_9",
+        "node_type": "Role",
+        "arn": "arn:aws:iam::222233334444:role/bg-role-9",
+        "name": "bg-role-9",
+        "account_id": "222233334444",
+        "department": "Product",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_10",
+        "node_type": "Resource",
+        "arn": "arn:aws:s3:::bg-bucket-10",
+        "name": "bg-bucket-10",
+        "account_id": "222233334444",
+        "department": "Analytics",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_11",
+        "node_type": "Resource",
+        "arn": "arn:aws:s3:::bg-bucket-11",
+        "name": "bg-bucket-11",
+        "account_id": "222233334444",
+        "department": "Analytics",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_12",
+        "node_type": "User",
+        "arn": "arn:aws:iam::222233334444:user/bg-user-12",
+        "name": "bg-user-12",
+        "account_id": "222233334444",
+        "department": "Operations",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_13",
+        "node_type": "Role",
+        "arn": "arn:aws:iam::222233334444:role/bg-role-13",
+        "name": "bg-role-13",
+        "account_id": "222233334444",
+        "department": "Product",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_14",
+        "node_type": "Policy",
+        "arn": "arn:aws:iam::222233334444:policy/bg-policy-14",
+        "name": "bg-policy-14",
+        "account_id": "222233334444",
+        "department": "Engineering",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_15",
+        "node_type": "Role",
+        "arn": "arn:aws:iam::222233334444:role/bg-role-15",
+        "name": "bg-role-15",
+        "account_id": "222233334444",
+        "department": "Engineering",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_16",
+        "node_type": "User",
+        "arn": "arn:aws:iam::222233334444:user/bg-user-16",
+        "name": "bg-user-16",
+        "account_id": "222233334444",
+        "department": "Product",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_17",
+        "node_type": "User",
+        "arn": "arn:aws:iam::222233334444:user/bg-user-17",
+        "name": "bg-user-17",
+        "account_id": "222233334444",
+        "department": "Engineering",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_18",
+        "node_type": "User",
+        "arn": "arn:aws:iam::222233334444:user/bg-user-18",
+        "name": "bg-user-18",
+        "account_id": "222233334444",
+        "department": "Product",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      },
+      {
+        "id": "tac-task-0002_bg_19",
+        "node_type": "Policy",
+        "arn": "arn:aws:iam::222233334444:policy/bg-policy-19",
+        "name": "bg-policy-19",
+        "account_id": "222233334444",
+        "department": "Engineering",
+        "is_high_value": false,
+        "is_admin": false,
+        "policy_document": null,
+        "trust_policy": null,
+        "tags": {},
+        "metadata": {}
+      }
+    ],
+    "edges": [
+      {
+        "source": "tac-task-0002_partner_role",
+        "target": "tac-task-0002_gateway_role",
+        "relation": "AssumesRole",
+        "is_bridge": true,
+        "motif_id": null,
+        "actions": [
+          "sts:AssumeRole"
+        ],
+        "condition": null,
+        "metadata": {}
+      },
+      {
+        "source": "tac-task-0002_gateway_role",
+        "target": "tac-task-0002_gateway_pol",
+        "relation": "AttachedWith",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [],
+        "condition": null,
+        "metadata": {}
+      },
+      {
+        "source": "tac-task-0002_gateway_pol",
+        "target": "tac-task-0002_finance_bucket",
+        "relation": "ActsOn",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [
+          "s3:GetObject",
+          "s3:ListBucket"
+        ],
+        "condition": null,
+        "metadata": {}
+      },
+      {
+        "source": "tac-task-0002_bg_0",
+        "target": "tac-task-0002_bg_1",
+        "relation": "AttachedWith",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [],
+        "condition": null,
+        "metadata": {}
+      },
+      {
+        "source": "tac-task-0002_bg_0",
+        "target": "tac-task-0002_bg_7",
+        "relation": "AssumesRole",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [],
+        "condition": null,
+        "metadata": {}
+      },
+      {
+        "source": "tac-task-0002_bg_1",
+        "target": "tac-task-0002_bg_8",
+        "relation": "ActsOn",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [
+          "s3:GetObject"
+        ],
+        "condition": null,
+        "metadata": {}
+      },
+      {
+        "source": "tac-task-0002_bg_3",
+        "target": "tac-task-0002_bg_14",
+        "relation": "AttachedWith",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [],
+        "condition": null,
+        "metadata": {}
+      },
+      {
+        "source": "tac-task-0002_bg_4",
+        "target": "tac-task-0002_bg_1",
+        "relation": "AttachedWith",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [],
+        "condition": null,
+        "metadata": {}
+      },
+      {
+        "source": "tac-task-0002_bg_9",
+        "target": "tac-task-0002_bg_1",
+        "relation": "AttachedWith",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [],
+        "condition": null,
+        "metadata": {}
+      },
+      {
+        "source": "tac-task-0002_bg_12",
+        "target": "tac-task-0002_bg_14",
+        "relation": "AttachedWith",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [],
+        "condition": null,
+        "metadata": {}
+      },
+      {
+        "source": "tac-task-0002_bg_13",
+        "target": "tac-task-0002_bg_14",
+        "relation": "AttachedWith",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [],
+        "condition": null,
+        "metadata": {}
+      },
+      {
+        "source": "tac-task-0002_bg_15",
+        "target": "tac-task-0002_bg_1",
+        "relation": "AttachedWith",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [],
+        "condition": null,
+        "metadata": {}
+      },
+      {
+        "source": "tac-task-0002_bg_16",
+        "target": "tac-task-0002_bg_1",
+        "relation": "AttachedWith",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [],
+        "condition": null,
+        "metadata": {}
+      },
+      {
+        "source": "tac-task-0002_bg_17",
+        "target": "tac-task-0002_bg_14",
+        "relation": "AttachedWith",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [],
+        "condition": null,
+        "metadata": {}
+      },
+      {
+        "source": "tac-task-0002_bg_19",
+        "target": "tac-task-0002_bg_11",
+        "relation": "ActsOn",
+        "is_bridge": false,
+        "motif_id": null,
+        "actions": [
+          "s3:GetObject"
+        ],
+        "condition": null,
+        "metadata": {}
+      }
+    ]
+  },
+  "hidden_bridge": [
+    "tac-task-0002_partner_role",
+    "AssumesRole",
+    "tac-task-0002_gateway_role"
+  ],
+  "source_principal": "tac-task-0002_partner_role",
+  "target_crown_jewel": "tac-task-0002_finance_bucket",
+  "pos_pairs": [
+    [
+      "tac-task-0002_partner_role",
+      "tac-task-0002_gateway_role"
+    ]
+  ],
+  "neg_pairs": [
+    [
+      "tac-task-0002_bg_2",
+      "tac-task-0002_bg_3"
+    ],
+    [
+      "tac-task-0002_partner_role",
+      "tac-task-0002_bg_9"
+    ],
+    [
+      "tac-task-0002_bg_9",
+      "tac-task-0002_bg_13"
+    ],
+    [
+      "tac-task-0002_bg_2",
+      "tac-task-0002_partner_role"
+    ],
+    [
+      "tac-task-0002_bg_15",
+      "tac-task-0002_bg_6"
+    ],
+    [
+      "tac-task-0002_bg_13",
+      "tac-task-0002_gateway_role"
+    ],
+    [
+      "tac-task-0002_bg_6",
+      "tac-task-0002_bg_9"
+    ],
+    [
+      "tac-task-0002_bg_2",
+      "tac-task-0002_bg_15"
+    ],
+    [
+      "tac-task-0002_gateway_role",
+      "tac-task-0002_bg_2"
+    ],
+    [
+      "tac-task-0002_bg_15",
+      "tac-task-0002_bg_9"
+    ],
+    [
+      "tac-task-0002_bg_13",
+      "tac-task-0002_bg_6"
+    ],
+    [
+      "tac-task-0002_bg_7",
+      "tac-task-0002_partner_role"
+    ],
+    [
+      "tac-task-0002_bg_9",
+      "tac-task-0002_bg_15"
+    ],
+    [
+      "tac-task-0002_gateway_role",
+      "tac-task-0002_bg_15"
+    ],
+    [
+      "tac-task-0002_bg_7",
+      "tac-task-0002_bg_15"
+    ]
+  ],
+  "metadata": {
+    "accounts": [
+      "222233334444",
+      "555566667777"
+    ],
+    "vector": "sts:AssumeRole"
+  }
+}

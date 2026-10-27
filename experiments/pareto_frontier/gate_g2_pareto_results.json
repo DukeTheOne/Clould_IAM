@@ -1,0 +1,532 @@
+{
+  "gate_g2_status": "CONDITIONAL PASS",
+  "gate_g2_rationale": "Method 4b satisfied Gate G2 criteria in 1/4 environments.",
+  "total_duration_sec": 1.0007,
+  "macro_metrics": {
+    "oracle": {
+      "level3_risk": 0.75,
+      "t1_breakage": 0.0,
+      "t2_breakage": 0.0,
+      "transformation_cost": 0.25,
+      "latency_ms": 23.47
+    },
+    "no_action": {
+      "level3_risk": 1.0,
+      "t1_breakage": 0.0,
+      "t2_breakage": 0.0,
+      "transformation_cost": 0.0,
+      "latency_ms": 0.5
+    },
+    "coarse_deletion": {
+      "level3_risk": 0.25,
+      "t1_breakage": 0.4655,
+      "t2_breakage": 0.4688,
+      "transformation_cost": 8.75,
+      "latency_ms": 0.65
+    },
+    "log_only_tightening": {
+      "level3_risk": 0.5,
+      "t1_breakage": 0.0,
+      "t2_breakage": 0.0,
+      "transformation_cost": 6.75,
+      "latency_ms": 1.7
+    },
+    "point_estimate": {
+      "level3_risk": 0.75,
+      "t1_breakage": 0.0,
+      "t2_breakage": 0.0,
+      "transformation_cost": 0.25,
+      "latency_ms": 24.75
+    },
+    "uncertainty_aware": {
+      "level3_risk": 0.75,
+      "t1_breakage": 0.0,
+      "t2_breakage": 0.0,
+      "transformation_cost": 0.25,
+      "latency_ms": 16.61
+    }
+  },
+  "environments": [
+    {
+      "environment_name": "canonical_passrole_lambda",
+      "solutions": {
+        "Method 0: Oracle (G*)": {
+          "method": "oracle",
+          "method_name": "Method 0: Oracle (G*)",
+          "level1_risk": 0.0,
+          "level2_risk": 0.0,
+          "level3_risk": 0.0,
+          "t1_breakage": 0.0,
+          "t2_breakage": 0.0,
+          "transformation_cost": 1.0,
+          "execution_time_sec": 0.035742,
+          "is_safe_gt": true,
+          "is_misleading": false,
+          "num_transformations": 1,
+          "details": "Theoretical upper bound with zero-unobservability assumptions."
+        },
+        "Method 1: No Action (Identity)": {
+          "method": "no_action",
+          "method_name": "Method 1: No Action (Identity)",
+          "level1_risk": 0.0,
+          "level2_risk": 0.8667,
+          "level3_risk": 1.0,
+          "t1_breakage": 0.0,
+          "t2_breakage": 0.0,
+          "transformation_cost": 0.0,
+          "execution_time_sec": 8.4e-05,
+          "is_safe_gt": false,
+          "is_misleading": true,
+          "num_transformations": 0,
+          "details": "Identity baseline: demonstrates deceptive safety on Go (Condition E)."
+        },
+        "Method 2: Coarse Deletion (IAMPERE)": {
+          "method": "coarse_deletion",
+          "method_name": "Method 2: Coarse Deletion (IAMPERE)",
+          "level1_risk": 0.0,
+          "level2_risk": 0.0,
+          "level3_risk": 0.0,
+          "t1_breakage": 0.3063,
+          "t2_breakage": 0.2418,
+          "transformation_cost": 10.0,
+          "execution_time_sec": 0.000139,
+          "is_safe_gt": true,
+          "is_misleading": false,
+          "num_transformations": 2,
+          "details": "Coarse action removal: blocks attack but breaks benign workload using the action."
+        },
+        "Method 3: Log-Only Tightening (PolicyRefiner)": {
+          "method": "log_only_tightening",
+          "method_name": "Method 3: Log-Only Tightening (PolicyRefiner)",
+          "level1_risk": 0.0,
+          "level2_risk": 0.0,
+          "level3_risk": 0.0,
+          "t1_breakage": 0.0,
+          "t2_breakage": 0.0,
+          "transformation_cost": 8.0,
+          "execution_time_sec": 0.002297,
+          "is_safe_gt": true,
+          "is_misleading": false,
+          "num_transformations": 4,
+          "details": "Log-only tightening: 0% T1 breakage, high T2 breakage on operational drift."
+        },
+        "Method 4a: Point-Estimate (p >= 0.50)": {
+          "method": "point_estimate",
+          "method_name": "Method 4a: Point-Estimate (p >= 0.50)",
+          "level1_risk": 0.0,
+          "level2_risk": 0.0,
+          "level3_risk": 0.0,
+          "t1_breakage": 0.0,
+          "t2_breakage": 0.0,
+          "transformation_cost": 1.0,
+          "execution_time_sec": 0.034594,
+          "is_safe_gt": true,
+          "is_misleading": false,
+          "num_transformations": 1,
+          "details": "Point-estimate repair: brittle when probability falls below hard threshold."
+        },
+        "Method 4b: Uncertainty-Aware (Ours)": {
+          "method": "uncertainty_aware",
+          "method_name": "Method 4b: Uncertainty-Aware (Ours)",
+          "level1_risk": 0.0,
+          "level2_risk": 0.0,
+          "level3_risk": 0.0,
+          "t1_breakage": 0.0,
+          "t2_breakage": 0.0,
+          "transformation_cost": 1.0,
+          "execution_time_sec": 0.023756,
+          "is_safe_gt": true,
+          "is_misleading": false,
+          "num_transformations": 1,
+          "details": "Uncertainty-aware repair: cuts latent attack distribution while preserving 100% T1."
+        }
+      },
+      "pareto_frontier": [
+        "Method 0: Oracle (G*)",
+        "Method 1: No Action (Identity)",
+        "Method 4a: Point-Estimate (p >= 0.50)",
+        "Method 4b: Uncertainty-Aware (Ours)"
+      ],
+      "dominates_map": {
+        "Method 0: Oracle (G*)": [
+          "Method 2: Coarse Deletion (IAMPERE)",
+          "Method 3: Log-Only Tightening (PolicyRefiner)"
+        ],
+        "Method 1: No Action (Identity)": [],
+        "Method 2: Coarse Deletion (IAMPERE)": [],
+        "Method 3: Log-Only Tightening (PolicyRefiner)": [
+          "Method 2: Coarse Deletion (IAMPERE)"
+        ],
+        "Method 4a: Point-Estimate (p >= 0.50)": [
+          "Method 2: Coarse Deletion (IAMPERE)",
+          "Method 3: Log-Only Tightening (PolicyRefiner)"
+        ],
+        "Method 4b: Uncertainty-Aware (Ours)": [
+          "Method 2: Coarse Deletion (IAMPERE)",
+          "Method 3: Log-Only Tightening (PolicyRefiner)"
+        ]
+      },
+      "gate_g2_satisfied": true,
+      "evaluation_time_sec": 0.1442
+    },
+    {
+      "environment_name": "multi_account_jump",
+      "solutions": {
+        "Method 0: Oracle (G*)": {
+          "method": "oracle",
+          "method_name": "Method 0: Oracle (G*)",
+          "level1_risk": 0.0,
+          "level2_risk": 0.7333,
+          "level3_risk": 1.0,
+          "t1_breakage": 0.0,
+          "t2_breakage": 0.0,
+          "transformation_cost": 0.0,
+          "execution_time_sec": 0.005362,
+          "is_safe_gt": false,
+          "is_misleading": true,
+          "num_transformations": 0,
+          "details": "Theoretical upper bound with zero-unobservability assumptions."
+        },
+        "Method 1: No Action (Identity)": {
+          "method": "no_action",
+          "method_name": "Method 1: No Action (Identity)",
+          "level1_risk": 0.0,
+          "level2_risk": 0.7333,
+          "level3_risk": 1.0,
+          "t1_breakage": 0.0,
+          "t2_breakage": 0.0,
+          "transformation_cost": 0.0,
+          "execution_time_sec": 6e-05,
+          "is_safe_gt": false,
+          "is_misleading": true,
+          "num_transformations": 0,
+          "details": "Identity baseline: demonstrates deceptive safety on Go (Condition E)."
+        },
+        "Method 2: Coarse Deletion (IAMPERE)": {
+          "method": "coarse_deletion",
+          "method_name": "Method 2: Coarse Deletion (IAMPERE)",
+          "level1_risk": 0.0,
+          "level2_risk": 0.7333,
+          "level3_risk": 1.0,
+          "t1_breakage": 1.0,
+          "t2_breakage": 1.0,
+          "transformation_cost": 5.0,
+          "execution_time_sec": 0.000213,
+          "is_safe_gt": false,
+          "is_misleading": true,
+          "num_transformations": 1,
+          "details": "Coarse action removal: blocks attack but breaks benign workload using the action."
+        },
+        "Method 3: Log-Only Tightening (PolicyRefiner)": {
+          "method": "log_only_tightening",
+          "method_name": "Method 3: Log-Only Tightening (PolicyRefiner)",
+          "level1_risk": 0.0,
+          "level2_risk": 0.7333,
+          "level3_risk": 1.0,
+          "t1_breakage": 0.0,
+          "t2_breakage": 0.0,
+          "transformation_cost": 1.0,
+          "execution_time_sec": 0.001794,
+          "is_safe_gt": false,
+          "is_misleading": true,
+          "num_transformations": 1,
+          "details": "Log-only tightening: 0% T1 breakage, high T2 breakage on operational drift."
+        },
+        "Method 4a: Point-Estimate (p >= 0.50)": {
+          "method": "point_estimate",
+          "method_name": "Method 4a: Point-Estimate (p >= 0.50)",
+          "level1_risk": 0.0,
+          "level2_risk": 0.7333,
+          "level3_risk": 1.0,
+          "t1_breakage": 0.0,
+          "t2_breakage": 0.0,
+          "transformation_cost": 0.0,
+          "execution_time_sec": 0.010705,
+          "is_safe_gt": false,
+          "is_misleading": true,
+          "num_transformations": 0,
+          "details": "Point-estimate repair: brittle when probability falls below hard threshold."
+        },
+        "Method 4b: Uncertainty-Aware (Ours)": {
+          "method": "uncertainty_aware",
+          "method_name": "Method 4b: Uncertainty-Aware (Ours)",
+          "level1_risk": 0.0,
+          "level2_risk": 0.7333,
+          "level3_risk": 1.0,
+          "t1_breakage": 0.0,
+          "t2_breakage": 0.0,
+          "transformation_cost": 0.0,
+          "execution_time_sec": 0.005031,
+          "is_safe_gt": false,
+          "is_misleading": true,
+          "num_transformations": 0,
+          "details": "Uncertainty-aware repair: cuts latent attack distribution while preserving 100% T1."
+        }
+      },
+      "pareto_frontier": [
+        "Method 0: Oracle (G*)",
+        "Method 1: No Action (Identity)",
+        "Method 4a: Point-Estimate (p >= 0.50)",
+        "Method 4b: Uncertainty-Aware (Ours)"
+      ],
+      "dominates_map": {
+        "Method 0: Oracle (G*)": [
+          "Method 2: Coarse Deletion (IAMPERE)",
+          "Method 3: Log-Only Tightening (PolicyRefiner)"
+        ],
+        "Method 1: No Action (Identity)": [
+          "Method 2: Coarse Deletion (IAMPERE)",
+          "Method 3: Log-Only Tightening (PolicyRefiner)"
+        ],
+        "Method 2: Coarse Deletion (IAMPERE)": [],
+        "Method 3: Log-Only Tightening (PolicyRefiner)": [
+          "Method 2: Coarse Deletion (IAMPERE)"
+        ],
+        "Method 4a: Point-Estimate (p >= 0.50)": [
+          "Method 2: Coarse Deletion (IAMPERE)",
+          "Method 3: Log-Only Tightening (PolicyRefiner)"
+        ],
+        "Method 4b: Uncertainty-Aware (Ours)": [
+          "Method 2: Coarse Deletion (IAMPERE)",
+          "Method 3: Log-Only Tightening (PolicyRefiner)"
+        ]
+      },
+      "gate_g2_satisfied": false,
+      "evaluation_time_sec": 0.0502
+    },
+    {
+      "environment_name": "enterprise_150_nodes",
+      "solutions": {
+        "Method 0: Oracle (G*)": {
+          "method": "oracle",
+          "method_name": "Method 0: Oracle (G*)",
+          "level1_risk": 0.0,
+          "level2_risk": 0.8,
+          "level3_risk": 1.0,
+          "t1_breakage": 0.0,
+          "t2_breakage": 0.0,
+          "transformation_cost": 0.0,
+          "execution_time_sec": 0.047285,
+          "is_safe_gt": false,
+          "is_misleading": true,
+          "num_transformations": 0,
+          "details": "Theoretical upper bound with zero-unobservability assumptions."
+        },
+        "Method 1: No Action (Identity)": {
+          "method": "no_action",
+          "method_name": "Method 1: No Action (Identity)",
+          "level1_risk": 0.0,
+          "level2_risk": 0.8,
+          "level3_risk": 1.0,
+          "t1_breakage": 0.0,
+          "t2_breakage": 0.0,
+          "transformation_cost": 0.0,
+          "execution_time_sec": 0.00178,
+          "is_safe_gt": false,
+          "is_misleading": true,
+          "num_transformations": 0,
+          "details": "Identity baseline: demonstrates deceptive safety on Go (Condition E)."
+        },
+        "Method 2: Coarse Deletion (IAMPERE)": {
+          "method": "coarse_deletion",
+          "method_name": "Method 2: Coarse Deletion (IAMPERE)",
+          "level1_risk": 0.0,
+          "level2_risk": 0.0,
+          "level3_risk": 0.0,
+          "t1_breakage": 0.0111,
+          "t2_breakage": 0.0,
+          "transformation_cost": 10.0,
+          "execution_time_sec": 0.002171,
+          "is_safe_gt": true,
+          "is_misleading": false,
+          "num_transformations": 2,
+          "details": "Coarse action removal: blocks attack but breaks benign workload using the action."
+        },
+        "Method 3: Log-Only Tightening (PolicyRefiner)": {
+          "method": "log_only_tightening",
+          "method_name": "Method 3: Log-Only Tightening (PolicyRefiner)",
+          "level1_risk": 0.0,
+          "level2_risk": 0.8,
+          "level3_risk": 1.0,
+          "t1_breakage": 0.0,
+          "t2_breakage": 0.0,
+          "transformation_cost": 7.0,
+          "execution_time_sec": 0.002038,
+          "is_safe_gt": false,
+          "is_misleading": true,
+          "num_transformations": 3,
+          "details": "Log-only tightening: 0% T1 breakage, high T2 breakage on operational drift."
+        },
+        "Method 4a: Point-Estimate (p >= 0.50)": {
+          "method": "point_estimate",
+          "method_name": "Method 4a: Point-Estimate (p >= 0.50)",
+          "level1_risk": 0.0,
+          "level2_risk": 0.8,
+          "level3_risk": 1.0,
+          "t1_breakage": 0.0,
+          "t2_breakage": 0.0,
+          "transformation_cost": 0.0,
+          "execution_time_sec": 0.048222,
+          "is_safe_gt": false,
+          "is_misleading": true,
+          "num_transformations": 0,
+          "details": "Point-estimate repair: brittle when probability falls below hard threshold."
+        },
+        "Method 4b: Uncertainty-Aware (Ours)": {
+          "method": "uncertainty_aware",
+          "method_name": "Method 4b: Uncertainty-Aware (Ours)",
+          "level1_risk": 0.0,
+          "level2_risk": 0.8,
+          "level3_risk": 1.0,
+          "t1_breakage": 0.0,
+          "t2_breakage": 0.0,
+          "transformation_cost": 0.0,
+          "execution_time_sec": 0.03056,
+          "is_safe_gt": false,
+          "is_misleading": true,
+          "num_transformations": 0,
+          "details": "Uncertainty-aware repair: cuts latent attack distribution while preserving 100% T1."
+        }
+      },
+      "pareto_frontier": [
+        "Method 0: Oracle (G*)",
+        "Method 1: No Action (Identity)",
+        "Method 2: Coarse Deletion (IAMPERE)",
+        "Method 4a: Point-Estimate (p >= 0.50)",
+        "Method 4b: Uncertainty-Aware (Ours)"
+      ],
+      "dominates_map": {
+        "Method 0: Oracle (G*)": [
+          "Method 3: Log-Only Tightening (PolicyRefiner)"
+        ],
+        "Method 1: No Action (Identity)": [
+          "Method 3: Log-Only Tightening (PolicyRefiner)"
+        ],
+        "Method 2: Coarse Deletion (IAMPERE)": [],
+        "Method 3: Log-Only Tightening (PolicyRefiner)": [],
+        "Method 4a: Point-Estimate (p >= 0.50)": [
+          "Method 3: Log-Only Tightening (PolicyRefiner)"
+        ],
+        "Method 4b: Uncertainty-Aware (Ours)": [
+          "Method 3: Log-Only Tightening (PolicyRefiner)"
+        ]
+      },
+      "gate_g2_satisfied": false,
+      "evaluation_time_sec": 0.3326
+    },
+    {
+      "environment_name": "iac_terraform_privilege_escalation",
+      "solutions": {
+        "Method 0: Oracle (G*)": {
+          "method": "oracle",
+          "method_name": "Method 0: Oracle (G*)",
+          "level1_risk": 1.0,
+          "level2_risk": 1.0,
+          "level3_risk": 1.0,
+          "t1_breakage": 0.0,
+          "t2_breakage": 0.0,
+          "transformation_cost": 0.0,
+          "execution_time_sec": 0.005473,
+          "is_safe_gt": false,
+          "is_misleading": false,
+          "num_transformations": 0,
+          "details": "Theoretical upper bound with zero-unobservability assumptions."
+        },
+        "Method 1: No Action (Identity)": {
+          "method": "no_action",
+          "method_name": "Method 1: No Action (Identity)",
+          "level1_risk": 1.0,
+          "level2_risk": 1.0,
+          "level3_risk": 1.0,
+          "t1_breakage": 0.0,
+          "t2_breakage": 0.0,
+          "transformation_cost": 0.0,
+          "execution_time_sec": 7.2e-05,
+          "is_safe_gt": false,
+          "is_misleading": false,
+          "num_transformations": 0,
+          "details": "Identity baseline: demonstrates deceptive safety on Go (Condition E)."
+        },
+        "Method 2: Coarse Deletion (IAMPERE)": {
+          "method": "coarse_deletion",
+          "method_name": "Method 2: Coarse Deletion (IAMPERE)",
+          "level1_risk": 0.0,
+          "level2_risk": 0.0,
+          "level3_risk": 0.0,
+          "t1_breakage": 0.5444,
+          "t2_breakage": 0.6333,
+          "transformation_cost": 10.0,
+          "execution_time_sec": 9.3e-05,
+          "is_safe_gt": true,
+          "is_misleading": false,
+          "num_transformations": 2,
+          "details": "Coarse action removal: blocks attack but breaks benign workload using the action."
+        },
+        "Method 3: Log-Only Tightening (PolicyRefiner)": {
+          "method": "log_only_tightening",
+          "method_name": "Method 3: Log-Only Tightening (PolicyRefiner)",
+          "level1_risk": 0.0,
+          "level2_risk": 0.0,
+          "level3_risk": 0.0,
+          "t1_breakage": 0.0,
+          "t2_breakage": 0.0,
+          "transformation_cost": 11.0,
+          "execution_time_sec": 0.000666,
+          "is_safe_gt": true,
+          "is_misleading": false,
+          "num_transformations": 3,
+          "details": "Log-only tightening: 0% T1 breakage, high T2 breakage on operational drift."
+        },
+        "Method 4a: Point-Estimate (p >= 0.50)": {
+          "method": "point_estimate",
+          "method_name": "Method 4a: Point-Estimate (p >= 0.50)",
+          "level1_risk": 1.0,
+          "level2_risk": 1.0,
+          "level3_risk": 1.0,
+          "t1_breakage": 0.0,
+          "t2_breakage": 0.0,
+          "transformation_cost": 0.0,
+          "execution_time_sec": 0.005478,
+          "is_safe_gt": false,
+          "is_misleading": false,
+          "num_transformations": 0,
+          "details": "Point-estimate repair: brittle when probability falls below hard threshold."
+        },
+        "Method 4b: Uncertainty-Aware (Ours)": {
+          "method": "uncertainty_aware",
+          "method_name": "Method 4b: Uncertainty-Aware (Ours)",
+          "level1_risk": 1.0,
+          "level2_risk": 1.0,
+          "level3_risk": 1.0,
+          "t1_breakage": 0.0,
+          "t2_breakage": 0.0,
+          "transformation_cost": 0.0,
+          "execution_time_sec": 0.007092,
+          "is_safe_gt": false,
+          "is_misleading": false,
+          "num_transformations": 0,
+          "details": "Uncertainty-aware repair: cuts latent attack distribution while preserving 100% T1."
+        }
+      },
+      "pareto_frontier": [
+        "Method 0: Oracle (G*)",
+        "Method 1: No Action (Identity)",
+        "Method 2: Coarse Deletion (IAMPERE)",
+        "Method 3: Log-Only Tightening (PolicyRefiner)",
+        "Method 4a: Point-Estimate (p >= 0.50)",
+        "Method 4b: Uncertainty-Aware (Ours)"
+      ],
+      "dominates_map": {
+        "Method 0: Oracle (G*)": [],
+        "Method 1: No Action (Identity)": [],
+        "Method 2: Coarse Deletion (IAMPERE)": [],
+        "Method 3: Log-Only Tightening (PolicyRefiner)": [],
+        "Method 4a: Point-Estimate (p >= 0.50)": [],
+        "Method 4b: Uncertainty-Aware (Ours)": []
+      },
+      "gate_g2_satisfied": false,
+      "evaluation_time_sec": 0.0343
+    }
+  ],
+  "output_files": {}
+}

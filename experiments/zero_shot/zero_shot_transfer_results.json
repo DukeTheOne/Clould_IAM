@@ -1,0 +1,393 @@
+{
+  "task_count": 35,
+  "calibrated_temperature": 0.9367,
+  "train_time_sec": 1.8,
+  "eval_time_sec": 1.12,
+  "gate_g1_status": "REFRAME",
+  "gate_g1_rationale": "HeteroRGCN zero-shot ROC-AUC (0.426) fell below the 0.80 threshold. Gate G1 requires narrowing RQ1 to high-density environments or prioritizing RQ2 repair.",
+  "model_metrics": {
+    "HeteroRGCN (Zero-Shot)": {
+      "model_name": "HeteroRGCN (Zero-Shot)",
+      "pr_auc": 0.1217,
+      "roc_auc": 0.4259,
+      "recall_at_1": 0.0286,
+      "recall_at_5": 0.2,
+      "fnr": 0.7143,
+      "mrr": 0.1517,
+      "ece": 0.31,
+      "path_recovery_rate": 0.0286,
+      "avg_latency_ms": 6.93
+    },
+    "TAC-GB": {
+      "model_name": "TAC-GB",
+      "pr_auc": 0.1559,
+      "roc_auc": 0.7859,
+      "recall_at_1": 1.0,
+      "recall_at_5": 1.0,
+      "fnr": 0.0,
+      "mrr": 1.0,
+      "ece": 0.2917,
+      "path_recovery_rate": 1.0,
+      "avg_latency_ms": 2.52
+    },
+    "Random Forest": {
+      "model_name": "Random Forest",
+      "pr_auc": 0.9095,
+      "roc_auc": 0.9914,
+      "recall_at_1": 0.9429,
+      "recall_at_5": 1.0,
+      "fnr": 0.1429,
+      "mrr": 0.9714,
+      "ece": 0.0378,
+      "path_recovery_rate": 0.9429,
+      "avg_latency_ms": 13.64
+    },
+    "IAMPERE SMT": {
+      "model_name": "IAMPERE SMT",
+      "pr_auc": 0.0631,
+      "roc_auc": 0.5,
+      "recall_at_1": 0.0,
+      "recall_at_5": 0.0,
+      "fnr": 1.0,
+      "mrr": 0.0,
+      "ece": 0.0631,
+      "path_recovery_rate": 0.0,
+      "avg_latency_ms": 3.28
+    },
+    "BFS": {
+      "model_name": "BFS",
+      "pr_auc": 0.0631,
+      "roc_auc": 0.5,
+      "recall_at_1": 0.0,
+      "recall_at_5": 0.0,
+      "fnr": 1.0,
+      "mrr": 0.0,
+      "ece": 0.0631,
+      "path_recovery_rate": 0.0,
+      "avg_latency_ms": 0.04
+    },
+    "Oracle": {
+      "model_name": "Oracle",
+      "pr_auc": 1.0,
+      "roc_auc": 1.0,
+      "recall_at_1": 1.0,
+      "recall_at_5": 1.0,
+      "fnr": 0.0,
+      "mrr": 1.0,
+      "ece": 0.0,
+      "path_recovery_rate": 1.0,
+      "avg_latency_ms": 0.0
+    }
+  },
+  "category_breakdown": {
+    "multi_account_pe": {
+      "HeteroRGCN (Zero-Shot)": {
+        "pr_auc": 0.0808,
+        "roc_auc": 0.2267,
+        "recall_at_1": 0.0,
+        "recall_at_5": 0.0,
+        "fnr": 1.0
+      },
+      "TAC-GB": {
+        "pr_auc": 0.1789,
+        "roc_auc": 0.8333,
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "fnr": 0.0
+      },
+      "Random Forest": {
+        "pr_auc": 0.8,
+        "roc_auc": 0.98,
+        "recall_at_1": 0.8,
+        "recall_at_5": 1.0,
+        "fnr": 0.0
+      },
+      "IAMPERE SMT": {
+        "pr_auc": 0.0625,
+        "roc_auc": 0.5,
+        "recall_at_1": 0.0,
+        "recall_at_5": 0.0,
+        "fnr": 1.0
+      },
+      "BFS": {
+        "pr_auc": 0.0625,
+        "roc_auc": 0.5,
+        "recall_at_1": 0.0,
+        "recall_at_5": 0.0,
+        "fnr": 1.0
+      },
+      "Oracle": {
+        "pr_auc": 1.0,
+        "roc_auc": 1.0,
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "fnr": 0.0
+      }
+    },
+    "cross_account_delegation": {
+      "HeteroRGCN (Zero-Shot)": {
+        "pr_auc": 0.0946,
+        "roc_auc": 0.3267,
+        "recall_at_1": 0.0,
+        "recall_at_5": 0.0,
+        "fnr": 1.0
+      },
+      "TAC-GB": {
+        "pr_auc": 0.1636,
+        "roc_auc": 0.8067,
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "fnr": 0.0
+      },
+      "Random Forest": {
+        "pr_auc": 0.9,
+        "roc_auc": 0.9933,
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "fnr": 0.0
+      },
+      "IAMPERE SMT": {
+        "pr_auc": 0.0625,
+        "roc_auc": 0.5,
+        "recall_at_1": 0.0,
+        "recall_at_5": 0.0,
+        "fnr": 1.0
+      },
+      "BFS": {
+        "pr_auc": 0.0625,
+        "roc_auc": 0.5,
+        "recall_at_1": 0.0,
+        "recall_at_5": 0.0,
+        "fnr": 1.0
+      },
+      "Oracle": {
+        "pr_auc": 1.0,
+        "roc_auc": 1.0,
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "fnr": 0.0
+      }
+    },
+    "data_lake_governance": {
+      "HeteroRGCN (Zero-Shot)": {
+        "pr_auc": 0.0779,
+        "roc_auc": 0.22,
+        "recall_at_1": 0.0,
+        "recall_at_5": 0.0,
+        "fnr": 0.0
+      },
+      "TAC-GB": {
+        "pr_auc": 0.1322,
+        "roc_auc": 0.7667,
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "fnr": 0.0
+      },
+      "Random Forest": {
+        "pr_auc": 1.0,
+        "roc_auc": 1.0,
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "fnr": 0.0
+      },
+      "IAMPERE SMT": {
+        "pr_auc": 0.0625,
+        "roc_auc": 0.5,
+        "recall_at_1": 0.0,
+        "recall_at_5": 0.0,
+        "fnr": 1.0
+      },
+      "BFS": {
+        "pr_auc": 0.0625,
+        "roc_auc": 0.5,
+        "recall_at_1": 0.0,
+        "recall_at_5": 0.0,
+        "fnr": 1.0
+      },
+      "Oracle": {
+        "pr_auc": 1.0,
+        "roc_auc": 1.0,
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "fnr": 0.0
+      }
+    },
+    "microservices_zero_trust": {
+      "HeteroRGCN (Zero-Shot)": {
+        "pr_auc": 0.1825,
+        "roc_auc": 0.66,
+        "recall_at_1": 0.2,
+        "recall_at_5": 0.4,
+        "fnr": 0.0
+      },
+      "TAC-GB": {
+        "pr_auc": 0.1576,
+        "roc_auc": 0.7733,
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "fnr": 0.0
+      },
+      "Random Forest": {
+        "pr_auc": 1.0,
+        "roc_auc": 1.0,
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "fnr": 0.0
+      },
+      "IAMPERE SMT": {
+        "pr_auc": 0.0625,
+        "roc_auc": 0.5,
+        "recall_at_1": 0.0,
+        "recall_at_5": 0.0,
+        "fnr": 1.0
+      },
+      "BFS": {
+        "pr_auc": 0.0625,
+        "roc_auc": 0.5,
+        "recall_at_1": 0.0,
+        "recall_at_5": 0.0,
+        "fnr": 1.0
+      },
+      "Oracle": {
+        "pr_auc": 1.0,
+        "roc_auc": 1.0,
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "fnr": 0.0
+      }
+    },
+    "cicd_compromise": {
+      "HeteroRGCN (Zero-Shot)": {
+        "pr_auc": 0.0919,
+        "roc_auc": 0.2812,
+        "recall_at_1": 0.0,
+        "recall_at_5": 0.0,
+        "fnr": 1.0
+      },
+      "TAC-GB": {
+        "pr_auc": 0.1405,
+        "roc_auc": 0.7812,
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "fnr": 0.0
+      },
+      "Random Forest": {
+        "pr_auc": 1.0,
+        "roc_auc": 1.0,
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "fnr": 0.0
+      },
+      "IAMPERE SMT": {
+        "pr_auc": 0.0667,
+        "roc_auc": 0.5,
+        "recall_at_1": 0.0,
+        "recall_at_5": 0.0,
+        "fnr": 1.0
+      },
+      "BFS": {
+        "pr_auc": 0.0667,
+        "roc_auc": 0.5,
+        "recall_at_1": 0.0,
+        "recall_at_5": 0.0,
+        "fnr": 1.0
+      },
+      "Oracle": {
+        "pr_auc": 1.0,
+        "roc_auc": 1.0,
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "fnr": 0.0
+      }
+    },
+    "dormant_policy_rollback": {
+      "HeteroRGCN (Zero-Shot)": {
+        "pr_auc": 0.2019,
+        "roc_auc": 0.76,
+        "recall_at_1": 0.0,
+        "recall_at_5": 1.0,
+        "fnr": 1.0
+      },
+      "TAC-GB": {
+        "pr_auc": 0.116,
+        "roc_auc": 0.7333,
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "fnr": 0.0
+      },
+      "Random Forest": {
+        "pr_auc": 0.9,
+        "roc_auc": 0.9933,
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "fnr": 0.0
+      },
+      "IAMPERE SMT": {
+        "pr_auc": 0.0625,
+        "roc_auc": 0.5,
+        "recall_at_1": 0.0,
+        "recall_at_5": 0.0,
+        "fnr": 1.0
+      },
+      "BFS": {
+        "pr_auc": 0.0625,
+        "roc_auc": 0.5,
+        "recall_at_1": 0.0,
+        "recall_at_5": 0.0,
+        "fnr": 1.0
+      },
+      "Oracle": {
+        "pr_auc": 1.0,
+        "roc_auc": 1.0,
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "fnr": 0.0
+      }
+    },
+    "federated_identity_pivot": {
+      "HeteroRGCN (Zero-Shot)": {
+        "pr_auc": 0.1222,
+        "roc_auc": 0.5067,
+        "recall_at_1": 0.0,
+        "recall_at_5": 0.0,
+        "fnr": 1.0
+      },
+      "TAC-GB": {
+        "pr_auc": 0.2025,
+        "roc_auc": 0.8067,
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "fnr": 0.0
+      },
+      "Random Forest": {
+        "pr_auc": 0.7667,
+        "roc_auc": 0.9733,
+        "recall_at_1": 0.8,
+        "recall_at_5": 1.0,
+        "fnr": 1.0
+      },
+      "IAMPERE SMT": {
+        "pr_auc": 0.0625,
+        "roc_auc": 0.5,
+        "recall_at_1": 0.0,
+        "recall_at_5": 0.0,
+        "fnr": 1.0
+      },
+      "BFS": {
+        "pr_auc": 0.0625,
+        "roc_auc": 0.5,
+        "recall_at_1": 0.0,
+        "recall_at_5": 0.0,
+        "fnr": 1.0
+      },
+      "Oracle": {
+        "pr_auc": 1.0,
+        "roc_auc": 1.0,
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "fnr": 0.0
+      }
+    }
+  },
+  "output_files": {}
+}

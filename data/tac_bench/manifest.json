@@ -1,0 +1,457 @@
+[
+  {
+    "task_id": "tac-task-0001",
+    "category": "multi_account_pe",
+    "name": "Multi-Account Cross-Jump Role Assumption Chain",
+    "file": "tac-task-0001.json",
+    "nodes_observed": 25,
+    "edges_observed": 13,
+    "hidden_bridge": [
+      "tac-task-0001_jump_role",
+      "AssumesRole",
+      "tac-task-0001_prod_admin_role"
+    ]
+  },
+  {
+    "task_id": "tac-task-0002",
+    "category": "cross_account_delegation",
+    "name": "Organizational Unit Transitive Cross-Delegation",
+    "file": "tac-task-0002.json",
+    "nodes_observed": 24,
+    "edges_observed": 14,
+    "hidden_bridge": [
+      "tac-task-0002_partner_role",
+      "AssumesRole",
+      "tac-task-0002_gateway_role"
+    ]
+  },
+  {
+    "task_id": "tac-task-0003",
+    "category": "data_lake_governance",
+    "name": "Data Lake Governance & Master KMS Delegation",
+    "file": "tac-task-0003.json",
+    "nodes_observed": 24,
+    "edges_observed": 8,
+    "hidden_bridge": [
+      "tac-task-0003_analyst_user",
+      "PassesTo",
+      "tac-task-0003_lake_role"
+    ]
+  },
+  {
+    "task_id": "tac-task-0004",
+    "category": "microservices_zero_trust",
+    "name": "EKS Pod Identity & Node Role Boundary Breach",
+    "file": "tac-task-0004.json",
+    "nodes_observed": 24,
+    "edges_observed": 12,
+    "hidden_bridge": [
+      "tac-task-0004_pod_role",
+      "PassesTo",
+      "tac-task-0004_cluster_admin_role"
+    ]
+  },
+  {
+    "task_id": "tac-task-0005",
+    "category": "cicd_compromise",
+    "name": "CI/CD Build Runner Privilege Hijacking",
+    "file": "tac-task-0005.json",
+    "nodes_observed": 24,
+    "edges_observed": 8,
+    "hidden_bridge": [
+      "tac-task-0005_github_runner",
+      "AssumesRole",
+      "tac-task-0005_prod_deployer"
+    ]
+  },
+  {
+    "task_id": "tac-task-0006",
+    "category": "dormant_policy_rollback",
+    "name": "Dormant Administrative Policy Version Reversion",
+    "file": "tac-task-0006.json",
+    "nodes_observed": 23,
+    "edges_observed": 15,
+    "hidden_bridge": [
+      "tac-task-0006_maint_user",
+      "AttachedWith",
+      "tac-task-0006_dormant_admin_pol"
+    ]
+  },
+  {
+    "task_id": "tac-task-0007",
+    "category": "federated_identity_pivot",
+    "name": "Federated SAML Identity Provider Pivoting",
+    "file": "tac-task-0007.json",
+    "nodes_observed": 24,
+    "edges_observed": 12,
+    "hidden_bridge": [
+      "tac-task-0007_saml_contractor",
+      "AssumesRole",
+      "tac-task-0007_federated_gateway"
+    ]
+  },
+  {
+    "task_id": "tac-task-0008",
+    "category": "multi_account_pe",
+    "name": "Multi-Account Cross-Jump Role Assumption Chain",
+    "file": "tac-task-0008.json",
+    "nodes_observed": 25,
+    "edges_observed": 10,
+    "hidden_bridge": [
+      "tac-task-0008_jump_role",
+      "AssumesRole",
+      "tac-task-0008_prod_admin_role"
+    ]
+  },
+  {
+    "task_id": "tac-task-0009",
+    "category": "cross_account_delegation",
+    "name": "Organizational Unit Transitive Cross-Delegation",
+    "file": "tac-task-0009.json",
+    "nodes_observed": 24,
+    "edges_observed": 9,
+    "hidden_bridge": [
+      "tac-task-0009_partner_role",
+      "AssumesRole",
+      "tac-task-0009_gateway_role"
+    ]
+  },
+  {
+    "task_id": "tac-task-0010",
+    "category": "data_lake_governance",
+    "name": "Data Lake Governance & Master KMS Delegation",
+    "file": "tac-task-0010.json",
+    "nodes_observed": 24,
+    "edges_observed": 9,
+    "hidden_bridge": [
+      "tac-task-0010_analyst_user",
+      "PassesTo",
+      "tac-task-0010_lake_role"
+    ]
+  },
+  {
+    "task_id": "tac-task-0011",
+    "category": "microservices_zero_trust",
+    "name": "EKS Pod Identity & Node Role Boundary Breach",
+    "file": "tac-task-0011.json",
+    "nodes_observed": 24,
+    "edges_observed": 17,
+    "hidden_bridge": [
+      "tac-task-0011_pod_role",
+      "PassesTo",
+      "tac-task-0011_cluster_admin_role"
+    ]
+  },
+  {
+    "task_id": "tac-task-0012",
+    "category": "cicd_compromise",
+    "name": "CI/CD Build Runner Privilege Hijacking",
+    "file": "tac-task-0012.json",
+    "nodes_observed": 24,
+    "edges_observed": 11,
+    "hidden_bridge": [
+      "tac-task-0012_github_runner",
+      "AssumesRole",
+      "tac-task-0012_prod_deployer"
+    ]
+  },
+  {
+    "task_id": "tac-task-0013",
+    "category": "dormant_policy_rollback",
+    "name": "Dormant Administrative Policy Version Reversion",
+    "file": "tac-task-0013.json",
+    "nodes_observed": 23,
+    "edges_observed": 12,
+    "hidden_bridge": [
+      "tac-task-0013_maint_user",
+      "AttachedWith",
+      "tac-task-0013_dormant_admin_pol"
+    ]
+  },
+  {
+    "task_id": "tac-task-0014",
+    "category": "federated_identity_pivot",
+    "name": "Federated SAML Identity Provider Pivoting",
+    "file": "tac-task-0014.json",
+    "nodes_observed": 24,
+    "edges_observed": 10,
+    "hidden_bridge": [
+      "tac-task-0014_saml_contractor",
+      "AssumesRole",
+      "tac-task-0014_federated_gateway"
+    ]
+  },
+  {
+    "task_id": "tac-task-0015",
+    "category": "multi_account_pe",
+    "name": "Multi-Account Cross-Jump Role Assumption Chain",
+    "file": "tac-task-0015.json",
+    "nodes_observed": 25,
+    "edges_observed": 15,
+    "hidden_bridge": [
+      "tac-task-0015_jump_role",
+      "AssumesRole",
+      "tac-task-0015_prod_admin_role"
+    ]
+  },
+  {
+    "task_id": "tac-task-0016",
+    "category": "cross_account_delegation",
+    "name": "Organizational Unit Transitive Cross-Delegation",
+    "file": "tac-task-0016.json",
+    "nodes_observed": 24,
+    "edges_observed": 5,
+    "hidden_bridge": [
+      "tac-task-0016_partner_role",
+      "AssumesRole",
+      "tac-task-0016_gateway_role"
+    ]
+  },
+  {
+    "task_id": "tac-task-0017",
+    "category": "data_lake_governance",
+    "name": "Data Lake Governance & Master KMS Delegation",
+    "file": "tac-task-0017.json",
+    "nodes_observed": 24,
+    "edges_observed": 12,
+    "hidden_bridge": [
+      "tac-task-0017_analyst_user",
+      "PassesTo",
+      "tac-task-0017_lake_role"
+    ]
+  },
+  {
+    "task_id": "tac-task-0018",
+    "category": "microservices_zero_trust",
+    "name": "EKS Pod Identity & Node Role Boundary Breach",
+    "file": "tac-task-0018.json",
+    "nodes_observed": 24,
+    "edges_observed": 10,
+    "hidden_bridge": [
+      "tac-task-0018_pod_role",
+      "PassesTo",
+      "tac-task-0018_cluster_admin_role"
+    ]
+  },
+  {
+    "task_id": "tac-task-0019",
+    "category": "cicd_compromise",
+    "name": "CI/CD Build Runner Privilege Hijacking",
+    "file": "tac-task-0019.json",
+    "nodes_observed": 24,
+    "edges_observed": 13,
+    "hidden_bridge": [
+      "tac-task-0019_github_runner",
+      "AssumesRole",
+      "tac-task-0019_prod_deployer"
+    ]
+  },
+  {
+    "task_id": "tac-task-0020",
+    "category": "dormant_policy_rollback",
+    "name": "Dormant Administrative Policy Version Reversion",
+    "file": "tac-task-0020.json",
+    "nodes_observed": 23,
+    "edges_observed": 9,
+    "hidden_bridge": [
+      "tac-task-0020_maint_user",
+      "AttachedWith",
+      "tac-task-0020_dormant_admin_pol"
+    ]
+  },
+  {
+    "task_id": "tac-task-0021",
+    "category": "federated_identity_pivot",
+    "name": "Federated SAML Identity Provider Pivoting",
+    "file": "tac-task-0021.json",
+    "nodes_observed": 24,
+    "edges_observed": 9,
+    "hidden_bridge": [
+      "tac-task-0021_saml_contractor",
+      "AssumesRole",
+      "tac-task-0021_federated_gateway"
+    ]
+  },
+  {
+    "task_id": "tac-task-0022",
+    "category": "multi_account_pe",
+    "name": "Multi-Account Cross-Jump Role Assumption Chain",
+    "file": "tac-task-0022.json",
+    "nodes_observed": 25,
+    "edges_observed": 13,
+    "hidden_bridge": [
+      "tac-task-0022_jump_role",
+      "AssumesRole",
+      "tac-task-0022_prod_admin_role"
+    ]
+  },
+  {
+    "task_id": "tac-task-0023",
+    "category": "cross_account_delegation",
+    "name": "Organizational Unit Transitive Cross-Delegation",
+    "file": "tac-task-0023.json",
+    "nodes_observed": 24,
+    "edges_observed": 17,
+    "hidden_bridge": [
+      "tac-task-0023_partner_role",
+      "AssumesRole",
+      "tac-task-0023_gateway_role"
+    ]
+  },
+  {
+    "task_id": "tac-task-0024",
+    "category": "data_lake_governance",
+    "name": "Data Lake Governance & Master KMS Delegation",
+    "file": "tac-task-0024.json",
+    "nodes_observed": 24,
+    "edges_observed": 13,
+    "hidden_bridge": [
+      "tac-task-0024_analyst_user",
+      "PassesTo",
+      "tac-task-0024_lake_role"
+    ]
+  },
+  {
+    "task_id": "tac-task-0025",
+    "category": "microservices_zero_trust",
+    "name": "EKS Pod Identity & Node Role Boundary Breach",
+    "file": "tac-task-0025.json",
+    "nodes_observed": 24,
+    "edges_observed": 12,
+    "hidden_bridge": [
+      "tac-task-0025_pod_role",
+      "PassesTo",
+      "tac-task-0025_cluster_admin_role"
+    ]
+  },
+  {
+    "task_id": "tac-task-0026",
+    "category": "cicd_compromise",
+    "name": "CI/CD Build Runner Privilege Hijacking",
+    "file": "tac-task-0026.json",
+    "nodes_observed": 24,
+    "edges_observed": 8,
+    "hidden_bridge": [
+      "tac-task-0026_github_runner",
+      "AssumesRole",
+      "tac-task-0026_prod_deployer"
+    ]
+  },
+  {
+    "task_id": "tac-task-0027",
+    "category": "dormant_policy_rollback",
+    "name": "Dormant Administrative Policy Version Reversion",
+    "file": "tac-task-0027.json",
+    "nodes_observed": 23,
+    "edges_observed": 10,
+    "hidden_bridge": [
+      "tac-task-0027_maint_user",
+      "AttachedWith",
+      "tac-task-0027_dormant_admin_pol"
+    ]
+  },
+  {
+    "task_id": "tac-task-0028",
+    "category": "federated_identity_pivot",
+    "name": "Federated SAML Identity Provider Pivoting",
+    "file": "tac-task-0028.json",
+    "nodes_observed": 24,
+    "edges_observed": 19,
+    "hidden_bridge": [
+      "tac-task-0028_saml_contractor",
+      "AssumesRole",
+      "tac-task-0028_federated_gateway"
+    ]
+  },
+  {
+    "task_id": "tac-task-0029",
+    "category": "multi_account_pe",
+    "name": "Multi-Account Cross-Jump Role Assumption Chain",
+    "file": "tac-task-0029.json",
+    "nodes_observed": 25,
+    "edges_observed": 15,
+    "hidden_bridge": [
+      "tac-task-0029_jump_role",
+      "AssumesRole",
+      "tac-task-0029_prod_admin_role"
+    ]
+  },
+  {
+    "task_id": "tac-task-0030",
+    "category": "cross_account_delegation",
+    "name": "Organizational Unit Transitive Cross-Delegation",
+    "file": "tac-task-0030.json",
+    "nodes_observed": 24,
+    "edges_observed": 12,
+    "hidden_bridge": [
+      "tac-task-0030_partner_role",
+      "AssumesRole",
+      "tac-task-0030_gateway_role"
+    ]
+  },
+  {
+    "task_id": "tac-task-0031",
+    "category": "data_lake_governance",
+    "name": "Data Lake Governance & Master KMS Delegation",
+    "file": "tac-task-0031.json",
+    "nodes_observed": 24,
+    "edges_observed": 12,
+    "hidden_bridge": [
+      "tac-task-0031_analyst_user",
+      "PassesTo",
+      "tac-task-0031_lake_role"
+    ]
+  },
+  {
+    "task_id": "tac-task-0032",
+    "category": "microservices_zero_trust",
+    "name": "EKS Pod Identity & Node Role Boundary Breach",
+    "file": "tac-task-0032.json",
+    "nodes_observed": 24,
+    "edges_observed": 12,
+    "hidden_bridge": [
+      "tac-task-0032_pod_role",
+      "PassesTo",
+      "tac-task-0032_cluster_admin_role"
+    ]
+  },
+  {
+    "task_id": "tac-task-0033",
+    "category": "cicd_compromise",
+    "name": "CI/CD Build Runner Privilege Hijacking",
+    "file": "tac-task-0033.json",
+    "nodes_observed": 24,
+    "edges_observed": 11,
+    "hidden_bridge": [
+      "tac-task-0033_github_runner",
+      "AssumesRole",
+      "tac-task-0033_prod_deployer"
+    ]
+  },
+  {
+    "task_id": "tac-task-0034",
+    "category": "dormant_policy_rollback",
+    "name": "Dormant Administrative Policy Version Reversion",
+    "file": "tac-task-0034.json",
+    "nodes_observed": 23,
+    "edges_observed": 9,
+    "hidden_bridge": [
+      "tac-task-0034_maint_user",
+      "AttachedWith",
+      "tac-task-0034_dormant_admin_pol"
+    ]
+  },
+  {
+    "task_id": "tac-task-0035",
+    "category": "federated_identity_pivot",
+    "name": "Federated SAML Identity Provider Pivoting",
+    "file": "tac-task-0035.json",
+    "nodes_observed": 24,
+    "edges_observed": 13,
+    "hidden_bridge": [
+      "tac-task-0035_saml_contractor",
+      "AssumesRole",
+      "tac-task-0035_federated_gateway"
+    ]
+  }
+]

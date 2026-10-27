@@ -13,6 +13,7 @@ from iam.dashboard.state import (
     create_demo_dashboard_state,
     create_iac_dashboard_state,
 )
+from iam.optimizer.transformations import ScopeResourceTransformation
 
 
 class TestTriageDataModels:
@@ -144,6 +145,7 @@ class TestIaCDashboardState:
         # Check transformation and verification report
         trans = state.get_selected_transformations()
         assert len(trans) == 1
+        assert isinstance(trans[0], ScopeResourceTransformation)
         assert trans[0].action == "iam:PassRole"
 
         report = state.get_selected_verification_report()

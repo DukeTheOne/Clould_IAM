@@ -11,6 +11,17 @@ from iam.verifier.metrics import (
     ParetoFrontierPoint,
     TradeoffMetrics,
 )
+from iam.verifier.pareto import (
+    ParetoBenchmarkSuiteResult,
+    ParetoBenchmarkSuiteRunner,
+    ParetoEnvironmentResult,
+    ParetoSolution,
+)
+from iam.verifier.scalability import (
+    ScalabilityBenchmarkResult,
+    ScalabilityBenchmarkRunner,
+    ScalabilityDataPoint,
+)
 from iam.verifier.tradeoff import (
     MethodResult,
     RemediationMethod,
@@ -44,10 +55,17 @@ __all__ = [
     "MethodResult",
     "MetricSummary",
     "ObjectiveDirection",
+    "ParetoBenchmarkSuiteResult",
+    "ParetoBenchmarkSuiteRunner",
+    "ParetoEnvironmentResult",
     "ParetoFrontierAnalyzer",
     "ParetoFrontierPoint",
+    "ParetoSolution",
     "RemediationMethod",
     "SafetyStatus",
+    "ScalabilityBenchmarkResult",
+    "ScalabilityBenchmarkRunner",
+    "ScalabilityDataPoint",
     "SideEffectResult",
     "SyntheticWorkloadGenerator",
     "TemporalSplitConfig",
