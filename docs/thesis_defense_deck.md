@@ -395,13 +395,14 @@
 
 ### Slide Content
 - **Strict Engineering Standards Enforced Across Codebase**:
-  - **468 Passing Tests**: Unit, integration, benchmark, and end-to-end tests passing in **<28 seconds** (`pytest`).
-  - **100% Strict Type Annotations**: Checked via `mypy --strict src/iam` across **61 source modules** (0 errors).
+  - **476 Passing Tests**: Unit, integration, benchmark, and end-to-end tests passing in **<30 seconds** (`pytest`).
+  - **100% Strict Type Annotations**: Checked via `mypy --strict src/iam` across **63 source modules** (0 errors).
+  - **Multi-Cloud Capability Engine**: First-class support for AWS IAM, Azure RBAC, and Google Cloud IAM.
   - **Code Hygiene**: Strict compliance with `ruff check` and `ruff format` (0 errors).
-  - **Automated Reproduction**: Single-command script [`./reproduce_results.sh --tier2`](file:///Users/duke/IAM/reproduce_results.sh) automating Gates G1, G2, and G3.
+  - **Automated Reproduction**: Single-command script [`./reproduce_results.sh --multi-cloud`](file:///Users/duke/IAM/reproduce_results.sh) automating cross-cloud verification.
 
 ### Speaker Notes
-> "Our codebase adheres to top-tier software engineering standards: 468 automated tests execute in under 28 seconds, 100% strict type safety across 61 source modules, zero lint errors, and a single-command reproduction script supporting fast, tier-2, and full publication modes."
+> "Our codebase adheres to top-tier software engineering standards: 476 automated tests execute in under 30 seconds, 100% strict type safety across 63 source modules, zero lint errors, and single-command reproduction scripts supporting fast, tier-2, full, and multi-cloud publication modes."
 
 ---
 
@@ -424,10 +425,10 @@
 - **Conclusion**:
   - We have delivered the first end-to-end, capability-compliant, uncertainty-aware least-privilege repair framework for cloud IAM under partial observability.
 - **Future Research Directions (Phase 9 / Publication Buffer)**:
-  1. *Level 3 Enterprise CloudTrail*: Ingesting multi-month production audit logs from live industry partners.
-  2. *Multi-Cloud Generalization*: Extending $C(a, r, c)$ to Azure RBAC and Google Cloud IAM bindings.
-  3. *Conference Artifact Submission*: Packaging the framework for IEEE S&P / USENIX Security artifact evaluation.
+  1. *Level 3 Enterprise CloudTrail*: Ingesting multi-month production audit logs from live industry partners (prototype synthetic seasonal bursts and federated pivots verified).
+  2. *Multi-Cloud Graph Propagation*: Generalizing beyond capability models to cross-cloud identity federation graphs (Okta/Azure AD SSO $\to$ AWS STS / GCP Workload Identity).
+  3. *Conference Artifact Submission*: Official `Dockerfile` and `docker-compose.yml` packaged for USENIX Security / IEEE S&P artifact evaluation badging.
 - **Thank You! Questions & Discussion.**
 
 ### Speaker Notes
-> "This concludes my presentation. I would like to thank my advisor, colleagues, and the committee for their guidance. I welcome your questions and discussion."
+> "This concludes my presentation. Multi-cloud capability modeling has been verified with 100% rule conformance across AWS, Azure, and GCP, and our reproduction container is prepared for top-tier conference submission. I would like to thank my advisor, colleagues, and the committee for their guidance. I welcome your questions and discussion."

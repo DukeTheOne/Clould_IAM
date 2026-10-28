@@ -148,3 +148,34 @@ class TestMultiCloudCapabilityModel:
         assert report_file.is_file()
         assert json_file.is_file()
         assert "Multi-Cloud Authorization Capability" in report_file.read_text(encoding="utf-8")
+
+    def test_synthesize_remediation_patch(self) -> None:
+        """Verify cross-cloud remediation patch synthesis across AWS, Azure, and GCP."""
+        model = load_default_multi_cloud_model()
+
+        # Azure role assignment scoping
+        az_patch = model.synthesize_remediation_patch(
+            provider=CloudProvider.AZURE,
+            principal_id="user:devops-engineer",
+            action_or_role="Microsoft.Compute/virtualMachines/read",
+            original_scope="/",
+            remediated_scope="/subscriptions/sub-1/resourceGroups/rg-1",
+            risk_mitigated="Tenant-level VM discovery escalation cut",
+        )
+        assert az_patch.is_valid is True
+        assert az_patch.provider == CloudProvider.AZURE
+        assert '-  "scope": "/"' in az_patch.policy_diff
+        assert '+  "scope": "/subscriptions/sub-1/resourceGroups/rg-1"' in az_patch.policy_diff
+
+        # GCP IAM project scoping
+        gcp_patch = model.synthesize_remediation_patch(
+            provider=CloudProvider.GCP,
+            principal_id="user:analyst@corp.internal",
+            action_or_role="compute.instances.create",
+            original_scope="organizations/12345",
+            remediated_scope="projects/core-prod",
+            risk_mitigated="Org-level compute takeover privilege cut",
+        )
+        assert gcp_patch.is_valid is True
+        assert gcp_patch.provider == CloudProvider.GCP
+        assert '+  "resource": "projects/core-prod"' in gcp_patch.policy_diff

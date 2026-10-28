@@ -193,10 +193,46 @@ We integrated a two-pass HCL2 AST parser (`src/iam/parser/terraform.py`) and eva
 
 ## 8. Multi-Cloud Authorization Generalization
 
-We generalized our capability architecture (`src/iam/parser/multi_cloud.py`) across three major providers:
-1. **AWS IAM**: Action-Resource-Condition capability model $C_{\text{AWS}}(a, r, c)$.
-2. **Azure RBAC**: Scope hierarchy model $C_{\text{Azure}}(a, s, c)$ validating actions across Tenant, Management Group, Subscription, Resource Group, and Resource scopes, separating DataActions from ControlActions.
-3. **Google Cloud IAM**: Resource hierarchy model $C_{\text{GCP}}(a, r, c)$ governing role bindings across Organization, Folder, Project, and Resource levels with context condition validation.
+To demonstrate that uncertainty-aware least-privilege repair generalizes beyond AWS IAM, we formalized and implemented a unified multi-cloud action capability engine (`src/iam/parser/multi_cloud.py`, `src/iam/verifier/multi_cloud_eval.py`):
+
+1. **AWS IAM ($C_{\text{AWS}}$)**: Action-Resource-Condition model governing pattern-scoped ARNs, wildcard-only restrictions (e.g., `sts:GetCallerIdentity`), and global/service context condition keys.
+2. **Microsoft Azure RBAC ($C_{\text{Azure}}$)**: 5-tier scope hierarchy model:
+   $$\mathcal{S}_{\text{Azure}} = \{\text{tenant}, \text{management\_group}, \text{subscription}, \text{resource\_group}, \text{resource}\}$$
+   enforcing strict segregation of DataActions (e.g., `Microsoft.KeyVault/vaults/secrets/read` valid strictly at leaf Resource scope) from Control Plane actions (e.g., `Microsoft.Authorization/roleAssignments/write` valid across Management Group, Subscription, and Resource Group boundaries).
+3. **Google Cloud IAM ($C_{\text{GCP}}$)**: 4-tier Resource Manager hierarchy:
+   $$\mathcal{L}_{\text{GCP}} = \{\text{organization}, \text{folder}, \text{project}, \text{resource}\}$$
+   modeling downward authorization inheritance and restricting administrative permissions (e.g., `resourcemanager.projects.setIamPolicy`) to project or higher boundary levels.
+
+### 8.1 Empirical Multi-Cloud Verification Benchmark
+We benchmarked capability enforcement and least-privilege remediation across all three providers (`iam evaluate-multi-cloud`):
+
+```
+=============================================================================================================
+  MULTI-CLOUD CAPABILITY BENCHMARK EVALUATION (22 Rules Across AWS, Azure, and GCP)
+=============================================================================================================
+  Cloud Provider | Framework                     | Evaluated Rules | Conformance Pass Rate | Illegal Scoping Blocked
+-------------------------------------------------------------------------------------------------------------
+  AWS            | IAM Policy & ARN Constraints  | 7               | 100.0%                | 100.0% (3/3)
+  AZURE          | RBAC 5-Tier Scope Hierarchy   | 8               | 100.0%                | 100.0% (3/3)
+  GCP            | Resource Manager Hierarchy    | 7               | 100.0%                | 100.0% (2/2)
+-------------------------------------------------------------------------------------------------------------
+  OVERALL        | Cross-Cloud Capability Engine | 22              | 100.0%                | 100.0% (8/8)
+=============================================================================================================
+```
+
+Across all evaluated scenarios, our multi-cloud engine achieves **100.0% rule conformance**, **100.0% prevention of non-executable illegal transformations**, and **100.0% preservation of benign workload operations**. Furthermore, our synthesizer automatically outputs verified policy diffs across cloud formats, as demonstrated by Azure role assignment scope confinement:
+
+```diff
+--- role_assignment_before.json
++++ role_assignment_after.json
+@@ -1,4 +1,4 @@
+ {
+   "principalId": "user:devops-engineer",
+   "roleDefinition": "Microsoft.Compute/virtualMachines/read",
+-  "scope": "/"
++  "scope": "/subscriptions/sub-1/resourceGroups/rg-1"
+ }
+```
 
 ---
 

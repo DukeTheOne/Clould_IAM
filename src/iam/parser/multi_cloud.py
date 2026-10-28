@@ -216,6 +216,91 @@ class MultiCloudCapabilityModel:
 
         return False
 
+    def synthesize_remediation_patch(
+        self,
+        provider: CloudProvider,
+        principal_id: str,
+        action_or_role: str,
+        original_scope: str,
+        remediated_scope: str,
+        risk_mitigated: str = "Privilege Escalation Cut",
+    ) -> MultiCloudRemediationPatch:
+        """Synthesize a capability-checked least-privilege remediation patch with structured diff.
+
+        Args:
+            provider: CloudProvider enum (AWS, AZURE, GCP).
+            principal_id: Identity identifier (e.g. user, role, service account).
+            action_or_role: Action, permission, or role definition name.
+            original_scope: Over-privileged scope or resource pattern.
+            remediated_scope: Narrowed target scope or resource pattern.
+            risk_mitigated: Narrative description of privilege escalation risk cut.
+
+        Returns:
+            MultiCloudRemediationPatch containing validation status and unified diff.
+        """
+        is_valid = self.is_valid_transformation(provider, action_or_role, remediated_scope)
+        if provider == CloudProvider.AZURE:
+            diff = (
+                "--- role_assignment_before.json\n"
+                "+++ role_assignment_after.json\n"
+                "@@ -1,4 +1,4 @@\n"
+                " {\n"
+                f'   "principalId": "{principal_id}",\n'
+                f'   "roleDefinition": "{action_or_role}",\n'
+                f'-  "scope": "{original_scope}"\n'
+                f'+  "scope": "{remediated_scope}"\n'
+                " }\n"
+            )
+        elif provider == CloudProvider.GCP:
+            diff = (
+                "--- iam_binding_before.json\n"
+                "+++ iam_binding_after.json\n"
+                "@@ -1,4 +1,4 @@\n"
+                " {\n"
+                f'   "role": "{action_or_role}",\n'
+                f'-  "resource": "{original_scope}",\n'
+                f'+  "resource": "{remediated_scope}",\n'
+                f'   "members": ["{principal_id}"]\n'
+                " }\n"
+            )
+        else:
+            diff = (
+                "--- aws_policy_before.json\n"
+                "+++ aws_policy_after.json\n"
+                "@@ -1,4 +1,4 @@\n"
+                " {\n"
+                f'   "Action": "{action_or_role}",\n'
+                f'-  "Resource": "{original_scope}"\n'
+                f'+  "Resource": "{remediated_scope}"\n'
+                " }\n"
+            )
+
+        return MultiCloudRemediationPatch(
+            provider=provider,
+            principal_id=principal_id,
+            target_action_or_role=action_or_role,
+            original_scope=original_scope,
+            remediated_scope=remediated_scope,
+            is_valid=is_valid,
+            risk_mitigated=risk_mitigated,
+            policy_diff=diff,
+        )
+
+
+class MultiCloudRemediationPatch(BaseModel):
+    """Specification of a synthesized least-privilege remediation patch across cloud providers."""
+
+    model_config = ConfigDict(frozen=True)
+
+    provider: CloudProvider
+    principal_id: str
+    target_action_or_role: str
+    original_scope: str
+    remediated_scope: str
+    is_valid: bool
+    risk_mitigated: str
+    policy_diff: str
+
 
 def load_default_multi_cloud_model() -> MultiCloudCapabilityModel:
     """Load default MultiCloudCapabilityModel from repository schema snapshot."""

@@ -22,6 +22,7 @@ from iam.parser.multi_cloud import (
     GCPAccessLevel,
     GCPPermissionCapability,
     MultiCloudCapabilityModel,
+    MultiCloudRemediationPatch,
     load_default_multi_cloud_model,
 )
 from iam.parser.repository import (
@@ -63,6 +64,7 @@ __all__ = [
     "IaCRepositoryManager",
     "IaCRepositoryMetadata",
     "MultiCloudCapabilityModel",
+    "MultiCloudRemediationPatch",
     "PolicyDocument",
     "PolicyEvaluator",
     "Principal",
