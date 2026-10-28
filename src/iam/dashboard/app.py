@@ -27,6 +27,7 @@ from iam.dashboard.state import (
     DashboardState,
     create_demo_dashboard_state,
     create_iac_dashboard_state,
+    create_multi_cloud_dashboard_state,
 )
 from iam.parser.multi_cloud import (
     CloudProvider,
@@ -44,7 +45,9 @@ def get_cached_dashboard_state(
     seed: int = 42,
 ) -> DashboardState:
     """Instantiate and cache the immutable DashboardState in process memory."""
-    if topology_type == "IaC: Privilege Escalation Vulnerable":
+    if topology_type == "Multi-Cloud: Cross-Cloud Lateral Movement (Azure -> AWS -> GCP)":
+        return create_multi_cloud_dashboard_state()
+    elif topology_type == "IaC: Privilege Escalation Vulnerable":
         return create_iac_dashboard_state(variant="privilege_escalation_vulnerable")
     elif topology_type == "IaC: TAC-Bench Cross-Account Delegation":
         return create_iac_dashboard_state(variant="tac_bench_reference")
@@ -136,6 +139,7 @@ def main() -> None:
     st.sidebar.header("🌐 Topology Source")
     topology_options = [
         "Synthetic Enterprise (Default)",
+        "Multi-Cloud: Cross-Cloud Lateral Movement (Azure -> AWS -> GCP)",
         "IaC: Privilege Escalation Vulnerable",
         "IaC: TAC-Bench Cross-Account Delegation",
         "IaC: Enterprise Microservices",
@@ -144,10 +148,14 @@ def main() -> None:
         "Select Authorization Topology",
         topology_options,
         index=0,
-        help="Switch between synthetic enterprise multi-account topologies and real-world parsed Terraform IaC infrastructure.",
+        help="Switch between synthetic enterprise multi-account topologies, cross-cloud federation graphs, and real-world parsed Terraform IaC infrastructure.",
     )
     selected_topology: str = str(raw_topology) if raw_topology is not None else topology_options[0]
-    if selected_topology.startswith("IaC:"):
+    if selected_topology.startswith("Multi-Cloud:"):
+        st.sidebar.caption(
+            "🌐 **Multi-Cloud Federation Active**: Unified AWS IAM, Azure RBAC, and GCP IAM multigraph."
+        )
+    elif selected_topology.startswith("IaC:"):
         st.sidebar.caption(
             "📁 **IaC Environment Active**: Parsed from Terraform HCL2 specifications."
         )
@@ -293,6 +301,13 @@ def main() -> None:
                         (current_record.principal_id, "Role_ExecutionEngine", "PassesTo")
                     )
                     severed_set.add(("Role_ExecutionEngine", "Resource_AdminLambda", "ActsOn"))
+                    severed_set.add(
+                        (
+                            "arn:aws:iam::123456789012:role/CrossCloudDeploymentRole",
+                            "arn:aws:iam::123456789012:role/GCPWorkloadIdentityFederator",
+                            "AssumesRole",
+                        )
+                    )
 
             # Render PyVis Canvas
             canvas_html = render_ego_canvas_html(
@@ -455,6 +470,7 @@ def main() -> None:
                 st.selectbox(
                     "Select Cloud Provider Framework",
                     [
+                        "Cross-Cloud Federation (Azure -> AWS -> GCP)",
                         "Microsoft Azure (RBAC 5-Tier Scope Hierarchy)",
                         "Google Cloud (IAM Resource Manager Hierarchy)",
                         "Amazon Web Services (AWS IAM Policy Model)",
@@ -465,7 +481,38 @@ def main() -> None:
 
             multi_model = load_default_multi_cloud_model()
 
-            if "Azure" in selected_provider_str:
+            if "Cross-Cloud Federation" in selected_provider_str:
+                st.markdown("###### Unobserved Lateral Movement Kill-Chain (3 Clouds)")
+                st.code(
+                    "azure:sp-devops-ci (Azure AD SP)\n"
+                    "  ├── [OIDC Trust] ──► arn:aws:iam::123456789012:role/CrossCloudDeploymentRole\n"
+                    "  │     └── [AssumeRole Pivot] ──► arn:aws:iam::123456789012:role/GCPWorkloadIdentityFederator\n"
+                    "  │           └── [Workload Identity] ──► gcp:serviceAccount:deployer@corp-enterprise.iam.gserviceaccount.com\n"
+                    "  │                 └── [roles/resourcemanager.organizationAdmin] ──► gcp:resource:organizations/org-corp-enterprise (HVT)\n",
+                    language="text",
+                )
+                st.html(
+                    render_multi_cloud_capability_badge(
+                        "Multi-Cloud Federation",
+                        True,
+                        "Blast radius eliminated. Severing internal AWS AssumeRole pivot isolates Azure compromise from GCP organization.",
+                    )
+                )
+                cross_diff = (
+                    "--- cross_cloud_federation_before.json\n"
+                    "+++ cross_cloud_federation_after.json\n"
+                    "@@ -1,6 +1,6 @@\n"
+                    " {\n"
+                    '   "Role": "arn:aws:iam::123456789012:role/CrossCloudDeploymentRole",\n'
+                    '   "Action": "sts:AssumeRole",\n'
+                    '-  "Resource": "arn:aws:iam::123456789012:role/GCPWorkloadIdentityFederator",\n'
+                    '+  "Resource": "arn:aws:iam::123456789012:role/UnprivilegedStagingWorker",\n'
+                    '   "RiskMitigated": "Cross-cloud pivot to GCP Organization Admin severed"\n'
+                    " }\n"
+                )
+                st.code(cross_diff, language="diff")
+
+            elif "Azure" in selected_provider_str:
                 scenario = str(
                     st.radio(
                         "Azure Policy Remediation Scenario",

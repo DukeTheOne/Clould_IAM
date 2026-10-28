@@ -12,6 +12,7 @@ from iam.dashboard.state import (
     TriageRecord,
     create_demo_dashboard_state,
     create_iac_dashboard_state,
+    create_multi_cloud_dashboard_state,
 )
 from iam.optimizer.transformations import ScopeResourceTransformation
 
@@ -170,3 +171,30 @@ class TestIaCDashboardState:
         kpis = state.get_posture_kpis()
         assert kpis.total_identities >= 3
         assert kpis.total_policies >= 1
+
+    def test_create_multi_cloud_dashboard_state(self) -> None:
+        state = create_multi_cloud_dashboard_state()
+        assert state.graph.num_nodes >= 6
+        assert state.selected_principal_id == "azure:sp-devops-ci"
+
+        kpis = state.get_posture_kpis()
+        assert kpis.total_identities >= 2
+        assert kpis.flagged_identities_count >= 1
+        assert kpis.critical_risks_count >= 1
+        assert kpis.misleading_safe_count >= 1
+
+        rec = state.get_selected_record()
+        assert rec is not None
+        assert rec.severity == SeverityTier.CRITICAL
+        assert rec.is_misleading is True
+
+        trans = state.get_selected_transformations()
+        assert len(trans) == 1
+        assert trans[0].action == "sts:AssumeRole"
+
+        report = state.get_selected_verification_report()
+        assert report is not None
+        assert report.level1_safe is True
+        assert report.level2_safe is False
+        assert report.level3_safe is False
+        assert report.target_id == "gcp:resource:organizations/org-corp-enterprise"

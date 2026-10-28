@@ -419,7 +419,7 @@ iam dashboard --port 8501
 The codebase enforces strict software engineering standards:
 - **100% Strict Type Annotations**: Checked via `mypy --strict src/iam` across all 64 source modules.
 - **Linting & Formatting**: Strict compliance with `ruff check` and `ruff format`.
-- **Test Coverage**: 500 unit and integration tests passing with **> 91% code coverage** (`pytest --cov=iam`).
+- **Test Coverage**: 503 unit and integration tests passing with **> 91% code coverage** (`pytest --cov=iam`).
 - **High-Throughput Scalability**: In-place edge mutation and rollback eliminates graph copying overhead, achieving sub-30ms greedy repair at $N = 1,000+$ nodes.
 - **Multi-Cloud Capability Engine**: First-class support for AWS IAM, Azure RBAC ($C_{\text{Azure}}$), Google Cloud IAM ($C_{\text{GCP}}$), and Cross-Cloud Identity Federation (OIDC / Workload Identity) with 100% conformance verification.
 - **Containerized Reproducibility**: Official `Dockerfile` and `docker-compose.yml` pre-configured for isolated badging evaluation.

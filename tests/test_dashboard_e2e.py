@@ -155,3 +155,34 @@ class TestEnterpriseScalingAndLatencySafeguards:
         )
         assert "REJECTED: INADMISSIBLE UNDER GCP IAM" in gcp_invalid
         assert "#742A2A" in gcp_invalid
+
+    def test_multi_cloud_dashboard_e2e_pipeline(self) -> None:
+        """Verify end-to-end integration of multi-cloud topology, ego-canvas, and diffs."""
+        from iam.dashboard.state import create_multi_cloud_dashboard_state
+
+        state = create_multi_cloud_dashboard_state()
+        assert state.selected_principal_id == "azure:sp-devops-ci"
+
+        # 1. Canvas generation
+        rec = state.get_selected_record()
+        assert rec is not None
+        html_canvas = render_ego_canvas_html(
+            graph=state.graph,
+            source_id=rec.principal_id,
+            candidate_edges=state.candidate_edges,
+            crown_jewel_arns=set(rec.target_assets),
+        )
+        assert "azure:sp-devops-ci" in html_canvas
+        assert "gcp:resource:organizations/org-corp-enterprise" in html_canvas
+
+        # 2. Diff generation
+        viewer = PolicyDiffViewer()
+        deploy_role = state.graph.get_node(
+            "arn:aws:iam::123456789012:role/CrossCloudDeploymentRole"
+        )
+        assert deploy_role is not None and deploy_role.policy_document is not None
+        diff_res = viewer.generate_diff(
+            deploy_role.policy_document, state.get_selected_transformations()
+        )
+        assert diff_res.capability_valid is True
+        assert "UnprivilegedStagingWorker" in diff_res.repaired_json

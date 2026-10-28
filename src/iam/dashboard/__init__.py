@@ -25,6 +25,7 @@ from iam.dashboard.state import (
     TriageRecord,
     create_demo_dashboard_state,
     create_iac_dashboard_state,
+    create_multi_cloud_dashboard_state,
 )
 
 __all__ = [
@@ -39,6 +40,7 @@ __all__ = [
     "TriageRecord",
     "create_demo_dashboard_state",
     "create_iac_dashboard_state",
+    "create_multi_cloud_dashboard_state",
     "format_posture_markdown_summary",
     "render_capability_badge",
     "render_ego_canvas_html",

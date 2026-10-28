@@ -158,3 +158,16 @@ class TestPyVisGraphSynthesizer:
         )
         assert isinstance(html_out, str)
         assert len(html_out) > 500
+
+    def test_multi_cloud_ego_network_extraction(self) -> None:
+        from iam.parser.multi_cloud import create_canonical_multi_cloud_topology
+
+        graph = create_canonical_multi_cloud_topology()
+        extractor = EgoNetworkExtractor(max_nodes=30)
+        subgraph = extractor.extract(graph, source_id="azure:sp-devops-ci", max_depth=2)
+
+        assert subgraph.num_nodes >= 6
+        assert "gcp:resource:organizations/org-corp-enterprise" in subgraph.nodes
+        assert "gcp:resource:organizations/org-corp-enterprise" in subgraph.crown_jewels
+        target_node = subgraph.nodes["gcp:resource:organizations/org-corp-enterprise"]
+        assert target_node["shape"] == "diamond"

@@ -754,3 +754,129 @@ def create_iac_dashboard_state(
         transformations=transformations,
         selected_principal_id=selected_principal,
     )
+
+
+def create_multi_cloud_dashboard_state() -> DashboardState:
+    """Construct a DashboardState from a canonical 3-Cloud enterprise multigraph.
+
+    Features:
+    - Azure Entra ID Service Principal ('azure:sp-devops-ci')
+    - Cross-cloud OIDC federation trust to AWS IAM role ('arn:aws:iam::123456789012:role/CrossCloudDeploymentRole')
+    - AWS internal AssumeRole privilege pivot to ('arn:aws:iam::123456789012:role/GCPWorkloadIdentityFederator')
+    - Cross-cloud Workload Identity federation trust to GCP SA ('gcp:serviceAccount:deployer@corp-enterprise.iam.gserviceaccount.com')
+    - GCP IAM Binding: GCP SA has 'roles/resourcemanager.organizationAdmin' on 'organizations/org-corp-enterprise' (High Value Target!)
+    """
+    from iam.parser.multi_cloud import create_canonical_multi_cloud_topology
+    from iam.parser.schema import Effect, PolicyDocument, Statement
+    from iam.verifier.verifier import SideEffectResult, WorkloadReplayResult
+
+    graph = create_canonical_multi_cloud_topology()
+    selected_principal = "azure:sp-devops-ci"
+    target_asset = "gcp:resource:organizations/org-corp-enterprise"
+
+    # Define candidate edges for the latent cross-cloud kill-chain
+    candidate_edges = [
+        CandidateEdge(
+            source="azure:sp-devops-ci",
+            target="arn:aws:iam::123456789012:role/CrossCloudDeploymentRole",
+            relation=EdgeRelation.ASSUMES_ROLE,
+            probability=0.96,
+            is_bridge=True,
+        ),
+        CandidateEdge(
+            source="arn:aws:iam::123456789012:role/CrossCloudDeploymentRole",
+            target="arn:aws:iam::123456789012:role/GCPWorkloadIdentityFederator",
+            relation=EdgeRelation.ASSUMES_ROLE,
+            probability=0.91,
+            is_bridge=True,
+        ),
+        CandidateEdge(
+            source="arn:aws:iam::123456789012:role/GCPWorkloadIdentityFederator",
+            target="gcp:serviceAccount:deployer@corp-enterprise.iam.gserviceaccount.com",
+            relation=EdgeRelation.ASSUMES_ROLE,
+            probability=0.94,
+            is_bridge=True,
+        ),
+    ]
+
+    # Attach PolicyDocument to deployment role for AST diff viewer
+    deploy_role = graph.get_node("arn:aws:iam::123456789012:role/CrossCloudDeploymentRole")
+    policy_doc = PolicyDocument(
+        Version="2012-10-17",
+        Id="policy:CrossCloudAssumePolicy",
+        Statement=[
+            Statement(
+                Sid="PermitAssumeInternalFederator",
+                Effect=Effect.ALLOW,
+                Action=["sts:AssumeRole"],
+                Resource=["arn:aws:iam::123456789012:role/GCPWorkloadIdentityFederator"],
+            )
+        ],
+    )
+    if deploy_role:
+        deploy_role.policy_document = policy_doc
+
+    transformations: dict[str, list[PolicyTransformation]] = {
+        selected_principal: [
+            ScopeResourceTransformation(
+                policy_id="policy:CrossCloudAssumePolicy",
+                statement_index=0,
+                action="sts:AssumeRole",
+                target_resources=["arn:aws:iam::123456789012:role/UnprivilegedStagingWorker"],
+                original_resources=["arn:aws:iam::123456789012:role/GCPWorkloadIdentityFederator"],
+                cost=1.5,
+                description="Sever cross-cloud blast radius by constraining AssumeRole to staging worker boundary",
+            )
+        ]
+    }
+
+    verification_reports: dict[str, VerificationReport] = {
+        selected_principal: VerificationReport(
+            source_id=selected_principal,
+            target_id=target_asset,
+            level1_risk_observed=0.0,
+            level2_risk_completion_set=0.96,
+            level3_risk_ground_truth=1.0,
+            level1_safe=True,
+            level2_safe=False,
+            level3_safe=False,
+            overall_status=SafetyStatus.MISLEADING_SAFE,
+            is_misleading=True,
+            side_effects=SideEffectResult(
+                has_side_effects=False,
+                new_escalation_pairs=[],
+                num_pairs_checked=24,
+                details="Zero lateral privilege escalation side-effects across cloud trust boundaries.",
+            ),
+            t1_replay=WorkloadReplayResult(
+                window_name="T1",
+                total_requests=95,
+                allowed_requests=95,
+                denied_requests=0,
+                breakage_rate=0.0,
+                is_conforming=True,
+            ),
+            t2_replay=WorkloadReplayResult(
+                window_name="T2",
+                total_requests=35,
+                allowed_requests=34,
+                denied_requests=1,
+                breakage_rate=0.028,
+                is_conforming=False,
+            ),
+            execution_time_sec=0.0032,
+            metadata={
+                "motif": "CrossCloudFederationKillChain",
+                "source": "MultiCloud_Adapter",
+                "providers": ["azure", "aws", "gcp"],
+            },
+        )
+    }
+
+    return DashboardState(
+        graph=graph,
+        candidate_edges=candidate_edges,
+        verification_reports=verification_reports,
+        transformations=transformations,
+        selected_principal_id=selected_principal,
+    )

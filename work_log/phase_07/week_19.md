@@ -45,7 +45,7 @@ Week 19 advances Phase 9 (Months 19–24: Publication Extension & Multi-Cloud Sc
 
 | Metric | Target | Measured Result | Status |
 | :--- | :---: | :---: | :---: |
-| **Total Automated Unit & Integration Tests** | $\ge 495$ | **500 Passing Tests** | **CERTIFIED** |
+| **Total Automated Unit & Integration Tests** | $\ge 495$ | **503 Passing Tests** | **CERTIFIED** |
 | **Test Suite Code Coverage** | $\ge 85.0\%$ | **91.26% Total Coverage** | **CERTIFIED** |
 | **Strict Type Checking (`mypy --strict`)** | 100% across all modules | **0 errors across 64 source files** | **CERTIFIED** |
 | **Code Quality & Formatting (`ruff`)** | Zero lint/style violations | **0 errors (120 files checked)** | **CERTIFIED** |
@@ -78,7 +78,8 @@ flowchart LR
 - [x] Multi-cloud data models & adapter: [`src/iam/parser/multi_cloud.py`](file:///Users/duke/IAM/src/iam/parser/multi_cloud.py).
 - [x] Cross-cloud escalation evaluation: [`src/iam/verifier/multi_cloud_eval.py`](file:///Users/duke/IAM/src/iam/verifier/multi_cloud_eval.py).
 - [x] CLI command reporting update: [`src/iam/cli.py`](file:///Users/duke/IAM/src/iam/cli.py).
-- [x] Unit and integration test suite (12 tests): [`tests/test_multi_cloud_capability.py`](file:///Users/duke/IAM/tests/test_multi_cloud_capability.py).
+- [x] Streamlit dashboard multi-cloud lateral movement triage & ego-canvas: [`src/iam/dashboard/state.py`](file:///Users/duke/IAM/src/iam/dashboard/state.py), [`src/iam/dashboard/app.py`](file:///Users/duke/IAM/src/iam/dashboard/app.py), [`src/iam/dashboard/ego_graph.py`](file:///Users/duke/IAM/src/iam/dashboard/ego_graph.py).
+- [x] Unit and integration test suite: [`tests/test_multi_cloud_capability.py`](file:///Users/duke/IAM/tests/test_multi_cloud_capability.py), [`tests/test_dashboard_state.py`](file:///Users/duke/IAM/tests/test_dashboard_state.py), [`tests/test_dashboard_e2e.py`](file:///Users/duke/IAM/tests/test_dashboard_e2e.py), [`tests/test_ego_graph.py`](file:///Users/duke/IAM/tests/test_ego_graph.py).
 - [x] CLI test: [`tests/test_cli.py`](file:///Users/duke/IAM/tests/test_cli.py).
-- [x] Module export registration: [`src/iam/parser/__init__.py`](file:///Users/duke/IAM/src/iam/parser/__init__.py).
+- [x] Module export registration: [`src/iam/parser/__init__.py`](file:///Users/duke/IAM/src/iam/parser/__init__.py), [`src/iam/dashboard/__init__.py`](file:///Users/duke/IAM/src/iam/dashboard/__init__.py).
 - [x] Automated reproduction run: `./reproduce_results.sh --multi-cloud` passing in 43 seconds.

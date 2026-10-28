@@ -119,13 +119,16 @@ class EgoNetworkExtractor:
         visited_nodes: set[str] = {source_id}
         current_frontier: set[str] = {source_id}
         depth = 0
+        effective_depth = (
+            max(max_depth, 5) if graph.metadata.get("topology_type") == "multi_cloud" else max_depth
+        )
 
         # Collect outgoing candidate edges to expand frontier across latent bridges
         latent_outgoing: dict[str, list[CandidateEdge]] = {}
         for cand in candidate_edges or []:
             latent_outgoing.setdefault(cand.source, []).append(cand)
 
-        while current_frontier and depth < max_depth:
+        while current_frontier and depth < effective_depth:
             next_frontier: set[str] = set()
             for u in current_frontier:
                 # Static graph neighbors
@@ -161,6 +164,7 @@ class EgoNetworkExtractor:
                 or "admin" in node_id.lower()
                 or "crown" in node_id.lower()
                 or "lake" in arn.lower()
+                or bool(attrs.get("is_high_value", False))
             )
             if is_crown:
                 crown_jewels_found.append(node_id)
