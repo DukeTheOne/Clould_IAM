@@ -283,6 +283,9 @@ iam evaluate-scalability --scales 50 100 250 500 1000 --output-dir experiments/s
 
 # 13. Execute Phase 9 multi-cloud authorization capability & remediation benchmark
 iam evaluate-multi-cloud --output-dir experiments/multi_cloud
+
+# 14. Ingest raw AWS CloudTrail telemetry and resolve canonical identities
+iam ingest-cloudtrail --file data/sample_cloudtrail.json --output-events reports/cloudtrail_events.json
 ```
 
 ---

@@ -2,6 +2,11 @@
 
 from __future__ import annotations
 
+from iam.verifier.cloudtrail_parser import (
+    CloudTrailConformanceReport,
+    CloudTrailParser,
+    CloudTrailParserConfig,
+)
 from iam.verifier.metrics import (
     DominancePairResult,
     DominanceRelation,
@@ -52,6 +57,9 @@ from iam.verifier.workload import (
 )
 
 __all__ = [
+    "CloudTrailConformanceReport",
+    "CloudTrailParser",
+    "CloudTrailParserConfig",
     "CompletionSetVerifier",
     "DominancePairResult",
     "DominanceRelation",

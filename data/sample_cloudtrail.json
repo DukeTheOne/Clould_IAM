@@ -1,0 +1,140 @@
+{
+  "Records": [
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDA1234567890ANALYST",
+        "arn": "arn:aws:iam::123456789012:user/analyst-1",
+        "accountId": "123456789012",
+        "userName": "analyst-1"
+      },
+      "eventTime": "2026-01-01T08:00:00Z",
+      "eventSource": "s3.amazonaws.com",
+      "eventName": "GetObject",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "198.51.100.10",
+      "userAgent": "aws-cli/2.15.0",
+      "requestParameters": {
+        "bucketName": "databi-lake-bucket",
+        "key": "raw/data.csv"
+      },
+      "resources": [
+        {
+          "type": "AWS::S3::Object",
+          "ARN": "arn:aws:s3:::databi-lake-bucket/raw/data.csv"
+        },
+        {
+          "accountId": "123456789012",
+          "type": "AWS::S3::Bucket",
+          "ARN": "arn:aws:s3:::databi-lake-bucket"
+        }
+      ]
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDA1234567890ANALYST",
+        "arn": "arn:aws:iam::123456789012:user/analyst-1",
+        "accountId": "123456789012",
+        "userName": "analyst-1"
+      },
+      "eventTime": "2026-01-02T10:15:00Z",
+      "eventSource": "kms.amazonaws.com",
+      "eventName": "Decrypt",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "198.51.100.10",
+      "requestParameters": {
+        "keyId": "arn:aws:kms:us-east-1:123456789012:key/databi-kms-key-0"
+      },
+      "resources": [
+        {
+          "ARN": "arn:aws:kms:us-east-1:123456789012:key/databi-kms-key-0",
+          "accountId": "123456789012",
+          "type": "AWS::KMS::Key"
+        }
+      ]
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDA1234567890DEV",
+        "arn": "arn:aws:iam::123456789012:user/dev-1",
+        "accountId": "123456789012",
+        "userName": "dev-1"
+      },
+      "eventTime": "2026-01-03T14:30:00Z",
+      "eventSource": "ec2.amazonaws.com",
+      "eventName": "DescribeInstances",
+      "awsRegion": "us-east-1",
+      "requestParameters": {},
+      "resources": []
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "AssumedRole",
+        "principalId": "AROA1234567890WORKER:ci-build-session",
+        "arn": "arn:aws:sts::123456789012:assumed-role/legit-worker/ci-build-session",
+        "accountId": "123456789012",
+        "sessionContext": {
+          "sessionIssuer": {
+            "type": "Role",
+            "principalId": "AROA1234567890WORKER",
+            "arn": "arn:aws:iam::123456789012:role/legit-worker",
+            "accountId": "123456789012",
+            "userName": "legit-worker"
+          }
+        }
+      },
+      "eventTime": "2026-01-04T09:00:00Z",
+      "eventSource": "s3.amazonaws.com",
+      "eventName": "GetObject",
+      "awsRegion": "us-east-1",
+      "requestParameters": {
+        "bucketName": "databi-lake-bucket",
+        "key": "raw/pipeline-manifest.json"
+      },
+      "resources": [
+        {
+          "type": "AWS::S3::Object",
+          "ARN": "arn:aws:s3:::databi-lake-bucket/raw/pipeline-manifest.json"
+        }
+      ]
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDA1234567890ATTACKER",
+        "arn": "arn:aws:iam::123456789012:user/attacker-attempt",
+        "accountId": "123456789012",
+        "userName": "attacker-attempt"
+      },
+      "eventTime": "2026-01-05T03:00:00Z",
+      "eventSource": "iam.amazonaws.com",
+      "eventName": "CreateAccessKey",
+      "errorCode": "AccessDenied",
+      "errorMessage": "User is not authorized to perform iam:CreateAccessKey",
+      "requestParameters": {
+        "userName": "admin"
+      }
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDA1234567890ANALYST",
+        "arn": "arn:aws:iam::123456789012:user/analyst-1",
+        "accountId": "123456789012",
+        "userName": "analyst-1"
+      },
+      "eventTime": "2026-01-06T11:00:00Z",
+      "eventSource": "signin.amazonaws.com",
+      "eventName": "ConsoleLogin",
+      "requestParameters": {}
+    }
+  ]
+}

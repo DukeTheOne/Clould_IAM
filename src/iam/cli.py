@@ -386,6 +386,71 @@ def build_parser() -> argparse.ArgumentParser:
         help="Random seed for reproducibility (default: 42)",
     )
 
+    # 15. iam ingest-cloudtrail
+    p_cloudtrail = subparsers.add_parser(
+        "ingest-cloudtrail",
+        help="Ingest raw AWS CloudTrail telemetry, resolve canonical identities, and partition workload",
+    )
+    p_cloudtrail.add_argument(
+        "--file",
+        type=str,
+        default=None,
+        help="Single CloudTrail log file (.json, .jsonl, .json.gz, .jsonl.gz)",
+    )
+    p_cloudtrail.add_argument(
+        "--dir",
+        type=str,
+        default=None,
+        help="Directory containing CloudTrail log files to parse recursively",
+    )
+    p_cloudtrail.add_argument(
+        "--graph",
+        type=str,
+        default=None,
+        help="Optional serialized IAMGraph JSON to validate empirical log conformance on G_o",
+    )
+    p_cloudtrail.add_argument(
+        "--output-events",
+        type=str,
+        default=None,
+        help="Path to save normalized WorkloadEvents JSON",
+    )
+    p_cloudtrail.add_argument(
+        "--output-split",
+        type=str,
+        default=None,
+        help="Path to save partitioned TemporalWorkloadSplit JSON",
+    )
+    p_cloudtrail.add_argument(
+        "--t1-ratio",
+        type=float,
+        default=0.75,
+        help="Observation window T_1 split ratio (default: 0.75)",
+    )
+    p_cloudtrail.add_argument(
+        "--t1-days",
+        type=float,
+        default=None,
+        help="Observation window T_1 cutoff duration in days",
+    )
+    p_cloudtrail.add_argument(
+        "--include-denied",
+        action="store_true",
+        help="Include unauthorized/denied events in ingestion (default: only successful events)",
+    )
+    p_cloudtrail.add_argument(
+        "--account-id",
+        type=str,
+        default="123456789012",
+        help="Default AWS Account ID (default: 123456789012)",
+    )
+    p_cloudtrail.add_argument(
+        "--region",
+        type=str,
+        default="us-east-1",
+        help="Default AWS region (default: us-east-1)",
+    )
+
     return parser
 
 
@@ -826,6 +891,104 @@ def cmd_evaluate_multi_cloud(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_ingest_cloudtrail(args: argparse.Namespace) -> int:
+    """Execute ingestion and canonical resolution of AWS CloudTrail telemetry."""
+    from iam.generator.graph import IAMGraph
+    from iam.verifier.cloudtrail_parser import CloudTrailParser, CloudTrailParserConfig
+
+    if not args.file and not args.dir:
+        logger.error("Must specify either --file or --dir to ingest CloudTrail logs.")
+        return 1
+
+    config = CloudTrailParserConfig(
+        only_successful=not args.include_denied,
+        default_account_id=args.account_id,
+        default_region=args.region,
+    )
+    parser = CloudTrailParser(config=config)
+
+    logger.info("Ingesting CloudTrail telemetry...")
+    if args.file:
+        file_path = Path(args.file)
+        if not file_path.is_file():
+            logger.error("CloudTrail file not found: %s", file_path)
+            return 1
+        events = parser.parse_file(file_path)
+    else:
+        dir_path = Path(args.dir)
+        if not dir_path.is_dir():
+            logger.error("CloudTrail directory not found: %s", dir_path)
+            return 1
+        events = parser.parse_directory(dir_path)
+
+    unique_principals = {e.principal_arn for e in events}
+    unique_resources = {e.resource_arn for e in events}
+    unique_actions = {e.action for e in events}
+
+    print("\n" + "=" * 70)
+    print(f"  AWS CLOUDTRAIL TELEMETRY INGESTION COMPLETE ({len(events)} Events Ingested)")
+    print("=" * 70)
+    print(f"  Unique Canonical Principals : {len(unique_principals)}")
+    print(f"  Unique Targeted Resources   : {len(unique_resources)}")
+    print(f"  Unique Authorized Actions   : {len(unique_actions)}")
+    if events:
+        min_offset = min(e.day_offset for e in events)
+        max_offset = max(e.day_offset for e in events)
+        print(f"  Trace Observation Window    : {min_offset:.1f} to {max_offset:.1f} days")
+    print("-" * 70)
+
+    # Optional Graph Conformance Validation
+    if args.graph:
+        graph_path = Path(args.graph)
+        if not graph_path.is_file():
+            logger.error("Authorization graph file not found: %s", graph_path)
+            return 1
+        with open(graph_path, encoding="utf-8") as f:
+            graph_data = json.load(f)
+        graph = IAMGraph.from_dict(graph_data)
+        report = parser.evaluate_conformance(graph, events)
+        print("  GRAPH BASELINE CONFORMANCE EVALUATION:")
+        print(f"    Total Events Evaluated    : {report.total_events}")
+        print(f"    Conforming Events (ALLOW) : {report.conforming_events}")
+        print(f"    Denied Events (DENY)      : {report.non_conforming_events}")
+        print(f"    Conformance Pass Rate     : {report.conformance_rate * 100:.1f}%")
+        print("-" * 70)
+
+    # Optional Temporal Split Generation
+    split = parser.create_temporal_split(
+        events,
+        t1_ratio=args.t1_ratio,
+        t1_days=args.t1_days,
+    )
+    print("  TEMPORAL WORKLOAD PARTITIONING (T_1 / T_2):")
+    print(f"    Synthesis Window (T_1)    : {split.num_t1} events")
+    print(f"    Holdout Window (T_2)      : {split.num_t2} events")
+    print(
+        f"    Operational Drift in T_2  : {split.drift_count} events ({split.drift_rate * 100:.1f}%)"
+    )
+    print("=" * 70 + "\n")
+
+    if args.output_events:
+        out_ev = Path(args.output_events)
+        out_ev.parent.mkdir(parents=True, exist_ok=True)
+        out_ev.write_text(json.dumps([e.to_dict() for e in events], indent=2), encoding="utf-8")
+        logger.info("Saved %d normalized events to %s", len(events), out_ev)
+
+    if args.output_split:
+        out_sp = Path(args.output_split)
+        out_sp.parent.mkdir(parents=True, exist_ok=True)
+        split_dict = {
+            "summary": split.summary_dict(),
+            "metadata": split.metadata,
+            "t1_events": [e.to_dict() for e in split.t1_events],
+            "t2_events": [e.to_dict() for e in split.t2_events],
+        }
+        out_sp.write_text(json.dumps(split_dict, indent=2), encoding="utf-8")
+        logger.info("Saved temporal workload split to %s", out_sp)
+
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     """CLI dispatcher entry point."""
     parser = build_parser()
@@ -853,6 +1016,7 @@ def main(argv: list[str] | None = None) -> int:
         "evaluate-pareto": cmd_evaluate_pareto,
         "evaluate-scalability": cmd_evaluate_scalability,
         "evaluate-multi-cloud": cmd_evaluate_multi_cloud,
+        "ingest-cloudtrail": cmd_ingest_cloudtrail,
     }
 
     handler = command_handlers.get(args.command)

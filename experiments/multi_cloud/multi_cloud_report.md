@@ -54,4 +54,4 @@
 2. **Resource Manager Soundness**: GCP IAM policy bindings at Organization or Folder levels inherit downward unconditionally. Least-privilege synthesis under partial observability must recognize that modifying Project-level bindings cannot neutralize Organization-level grant paths.
 3. **Zero-Overfitting Invariance**: Across all three major enterprise cloud architectures, capability models $C(a, r, c)$ provide an orthogonal semantic guardrail preventing solvers from generating syntactically invalid or non-executable policy patches.
 
-*Report automatically generated on 2026-10-28T05:30:55.630182+00:00 by `iam.verifier.multi_cloud_eval`.*
+*Report automatically generated on 2026-10-28T06:07:18.765675+00:00 by `iam.verifier.multi_cloud_eval`.*
