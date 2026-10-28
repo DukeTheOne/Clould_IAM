@@ -1,0 +1,268 @@
+{
+  "timestamp": "2026-10-28T05:30:55.630182+00:00",
+  "total_rules_tested": 22,
+  "conformance_pass_rate": 100.0,
+  "illegal_transformations_blocked_pct": 100.0,
+  "remediation_utility_preserved_pct": 100.0,
+  "provider_metrics": {
+    "aws": {
+      "total_tests": 7,
+      "passed": 7,
+      "conformance_pct": 100.0
+    },
+    "azure": {
+      "total_tests": 8,
+      "passed": 8,
+      "conformance_pct": 100.0
+    },
+    "gcp": {
+      "total_tests": 7,
+      "passed": 7,
+      "conformance_pct": 100.0
+    }
+  },
+  "tests": [
+    {
+      "test_id": "aws-rule-001",
+      "provider": "aws",
+      "action": "s3:GetObject",
+      "target_resource_or_scope": "arn:aws:s3:::production-data-lake/table/data.parquet",
+      "condition_key": null,
+      "expected_admissible": true,
+      "actual_admissible": true,
+      "passed": true,
+      "details": "Valid S3 object resource scoping"
+    },
+    {
+      "test_id": "aws-rule-002",
+      "provider": "aws",
+      "action": "sts:GetCallerIdentity",
+      "target_resource_or_scope": "*",
+      "condition_key": null,
+      "expected_admissible": true,
+      "actual_admissible": true,
+      "passed": true,
+      "details": "Valid STS wildcard-only operation"
+    },
+    {
+      "test_id": "aws-rule-003",
+      "provider": "aws",
+      "action": "sts:GetCallerIdentity",
+      "target_resource_or_scope": "arn:aws:iam::123456789012:user/admin",
+      "condition_key": null,
+      "expected_admissible": false,
+      "actual_admissible": false,
+      "passed": true,
+      "details": "Invalid ARN scoping on wildcard-only STS action"
+    },
+    {
+      "test_id": "aws-rule-004",
+      "provider": "aws",
+      "action": "iam:PassRole",
+      "target_resource_or_scope": "arn:aws:iam::123456789012:role/DataPipelineWorkerRole",
+      "condition_key": null,
+      "expected_admissible": true,
+      "actual_admissible": true,
+      "passed": true,
+      "details": "Valid role ARN scoping on iam:PassRole"
+    },
+    {
+      "test_id": "aws-rule-005",
+      "provider": "aws",
+      "action": "iam:PassRole",
+      "target_resource_or_scope": "arn:aws:s3:::some-bucket",
+      "condition_key": null,
+      "expected_admissible": false,
+      "actual_admissible": false,
+      "passed": true,
+      "details": "Invalid S3 bucket ARN on iam:PassRole"
+    },
+    {
+      "test_id": "aws-rule-006",
+      "provider": "aws",
+      "action": "s3:GetObject",
+      "target_resource_or_scope": "arn:aws:s3:::production-data-lake/table/data.parquet",
+      "condition_key": "aws:PrincipalTag/Department",
+      "expected_admissible": true,
+      "actual_admissible": true,
+      "passed": true,
+      "details": "Valid global context condition key on S3"
+    },
+    {
+      "test_id": "aws-rule-007",
+      "provider": "aws",
+      "action": "s3:GetObject",
+      "target_resource_or_scope": "arn:aws:s3:::production-data-lake/table/data.parquet",
+      "condition_key": "aws:NonExistentFakeConditionKey",
+      "expected_admissible": false,
+      "actual_admissible": false,
+      "passed": true,
+      "details": "Invalid context condition key on S3"
+    },
+    {
+      "test_id": "azure-rule-001",
+      "provider": "azure",
+      "action": "Microsoft.Compute/virtualMachines/read",
+      "target_resource_or_scope": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/production-rg",
+      "condition_key": null,
+      "expected_admissible": true,
+      "actual_admissible": true,
+      "passed": true,
+      "details": "VM read action admissible at Resource Group scope"
+    },
+    {
+      "test_id": "azure-rule-002",
+      "provider": "azure",
+      "action": "Microsoft.Compute/virtualMachines/read",
+      "target_resource_or_scope": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/production-rg/providers/Microsoft.Compute/virtualMachines/worker-vm-01",
+      "condition_key": null,
+      "expected_admissible": true,
+      "actual_admissible": true,
+      "passed": true,
+      "details": "VM read action admissible at Resource scope"
+    },
+    {
+      "test_id": "azure-rule-003",
+      "provider": "azure",
+      "action": "Microsoft.Compute/virtualMachines/read",
+      "target_resource_or_scope": "/",
+      "condition_key": null,
+      "expected_admissible": false,
+      "actual_admissible": false,
+      "passed": true,
+      "details": "VM read action inadmissible at Tenant root scope"
+    },
+    {
+      "test_id": "azure-rule-004",
+      "provider": "azure",
+      "action": "Microsoft.Authorization/roleAssignments/write",
+      "target_resource_or_scope": "/providers/Microsoft.Management/managementGroups/enterprise-root",
+      "condition_key": null,
+      "expected_admissible": true,
+      "actual_admissible": true,
+      "passed": true,
+      "details": "Role assignment write admissible at Management Group scope"
+    },
+    {
+      "test_id": "azure-rule-005",
+      "provider": "azure",
+      "action": "Microsoft.Authorization/roleAssignments/write",
+      "target_resource_or_scope": "/subscriptions/00000000-0000-0000-0000-000000000000",
+      "condition_key": null,
+      "expected_admissible": true,
+      "actual_admissible": true,
+      "passed": true,
+      "details": "Role assignment write admissible at Subscription scope"
+    },
+    {
+      "test_id": "azure-rule-006",
+      "provider": "azure",
+      "action": "Microsoft.Authorization/roleAssignments/write",
+      "target_resource_or_scope": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/production-rg/providers/Microsoft.Compute/virtualMachines/worker-vm-01",
+      "condition_key": null,
+      "expected_admissible": false,
+      "actual_admissible": false,
+      "passed": true,
+      "details": "Role assignment write inadmissible directly on VM resource scope"
+    },
+    {
+      "test_id": "azure-rule-007",
+      "provider": "azure",
+      "action": "Microsoft.KeyVault/vaults/secrets/read/action",
+      "target_resource_or_scope": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/production-rg/providers/Microsoft.KeyVault/vaults/prod-vault/secrets/db-cred",
+      "condition_key": null,
+      "expected_admissible": true,
+      "actual_admissible": true,
+      "passed": true,
+      "details": "KeyVault data action admissible at secret Resource scope"
+    },
+    {
+      "test_id": "azure-rule-008",
+      "provider": "azure",
+      "action": "Microsoft.KeyVault/vaults/secrets/read/action",
+      "target_resource_or_scope": "/subscriptions/00000000-0000-0000-0000-000000000000",
+      "condition_key": null,
+      "expected_admissible": false,
+      "actual_admissible": false,
+      "passed": true,
+      "details": "KeyVault data action inadmissible at naked Subscription scope"
+    },
+    {
+      "test_id": "gcp-rule-001",
+      "provider": "gcp",
+      "action": "resourcemanager.projects.setIamPolicy",
+      "target_resource_or_scope": "projects/enterprise-core-prod",
+      "condition_key": null,
+      "expected_admissible": true,
+      "actual_admissible": true,
+      "passed": true,
+      "details": "setIamPolicy admissible at Project level"
+    },
+    {
+      "test_id": "gcp-rule-002",
+      "provider": "gcp",
+      "action": "resourcemanager.projects.setIamPolicy",
+      "target_resource_or_scope": "folders/9876543210",
+      "condition_key": null,
+      "expected_admissible": true,
+      "actual_admissible": true,
+      "passed": true,
+      "details": "setIamPolicy admissible at Folder level"
+    },
+    {
+      "test_id": "gcp-rule-003",
+      "provider": "gcp",
+      "action": "resourcemanager.projects.setIamPolicy",
+      "target_resource_or_scope": "organizations/123456789012",
+      "condition_key": null,
+      "expected_admissible": true,
+      "actual_admissible": true,
+      "passed": true,
+      "details": "setIamPolicy admissible at Organization level"
+    },
+    {
+      "test_id": "gcp-rule-004",
+      "provider": "gcp",
+      "action": "resourcemanager.projects.setIamPolicy",
+      "target_resource_or_scope": "projects/enterprise-core-prod/locations/us-central1/keyRings/ring-1/cryptoKeys/key-1",
+      "condition_key": null,
+      "expected_admissible": false,
+      "actual_admissible": false,
+      "passed": true,
+      "details": "setIamPolicy inadmissible at sub-resource level"
+    },
+    {
+      "test_id": "gcp-rule-005",
+      "provider": "gcp",
+      "action": "secretmanager.secrets.getPayload",
+      "target_resource_or_scope": "projects/enterprise-core-prod/locations/us-central1/keyRings/ring-1/cryptoKeys/key-1",
+      "condition_key": null,
+      "expected_admissible": true,
+      "actual_admissible": true,
+      "passed": true,
+      "details": "Secret payload access admissible at Resource level"
+    },
+    {
+      "test_id": "gcp-rule-006",
+      "provider": "gcp",
+      "action": "secretmanager.secrets.getPayload",
+      "target_resource_or_scope": "organizations/123456789012",
+      "condition_key": null,
+      "expected_admissible": false,
+      "actual_admissible": false,
+      "passed": true,
+      "details": "Secret payload access inadmissible at Organization root level"
+    },
+    {
+      "test_id": "gcp-rule-007",
+      "provider": "gcp",
+      "action": "compute.instances.create",
+      "target_resource_or_scope": "projects/enterprise-core-prod",
+      "condition_key": null,
+      "expected_admissible": true,
+      "actual_admissible": true,
+      "passed": true,
+      "details": "Compute instance creation admissible at Project level"
+    }
+  ]
+}

@@ -43,14 +43,19 @@ while [[ $# -gt 0 ]]; do
       MODE="tier2"
       shift
       ;;
+    --multi-cloud)
+      MODE="multi-cloud"
+      shift
+      ;;
     -h|--help)
       echo -e "${BOLD}Usage:${NC} ./reproduce_results.sh [OPTIONS]"
       echo ""
       echo -e "${BOLD}Options:${NC}"
-      echo "  --fast    Run fast verification smoke suite (scales 50..100, ~30s)"
-      echo "  --full    Run full publication benchmark suite (scales 500..5000, multi-seed)"
-      echo "  --tier2   Run Tier 2 Master's Thesis Gate Milestones (G1 Zero-Shot, G2 Pareto, G3 Scalability)"
-      echo "  -h, --help Show this help message and exit"
+      echo "  --fast        Run fast verification smoke suite (scales 50..100, ~30s)"
+      echo "  --full        Run full publication benchmark suite (scales 500..5000, multi-seed)"
+      echo "  --tier2       Run Tier 2 Master's Thesis Gate Milestones (G1 Zero-Shot, G2 Pareto, G3 Scalability)"
+      echo "  --multi-cloud Run Phase 9 Multi-Cloud Verification Suite (AWS, Azure RBAC, GCP IAM)"
+      echo "  -h, --help    Show this help message and exit"
       exit 0
       ;;
     *)
@@ -125,6 +130,13 @@ if [[ "$MODE" == "tier2" ]]; then
   $PYTHON -m iam.cli evaluate-scalability --scales 50 100 250 500 --output-dir experiments/scalability --seed 42
   echo -e "${GREEN}✓ Gate G3 scalability artifacts generated in experiments/scalability/.${NC}"
 
+elif [[ "$MODE" == "multi-cloud" ]]; then
+  # Step 3 (Multi-Cloud): Phase 9 Multi-Cloud Authorization Capability & Remediation Benchmark
+  echo -e "\n${BOLD}${BLUE}[Step 3/3] Phase 9: Multi-Cloud Authorization Capability Benchmark${NC}"
+  echo "Evaluating capability constraints and remediation across AWS, Azure, and GCP..."
+  $PYTHON -m iam.cli evaluate-multi-cloud --output-dir experiments/multi_cloud --seed 42
+  echo -e "${GREEN}✓ Multi-cloud benchmark artifacts generated in experiments/multi_cloud/.${NC}"
+
 else
   # Step 3: RQ1 Structured Masking Benchmark Sweep
   echo -e "\n${BOLD}${BLUE}[Step 3/6] RQ1: Structured Masking Benchmark Sweep${NC}"
@@ -179,6 +191,9 @@ if [[ "$MODE" == "tier2" ]]; then
   echo -e "  • Gate G3 Scalability Rep. : ${BLUE}experiments/scalability/scalability_report.md${NC}"
   echo -e "  • Benchmark Task Manifest  : ${BLUE}data/tac_bench/manifest.json${NC}"
   echo -e "  • IaC Benchmark Catalog    : ${BLUE}data/schemas/iac_repo_catalog.json${NC}"
+elif [[ "$MODE" == "multi-cloud" ]]; then
+  echo -e "  • Multi-Cloud Report       : ${BLUE}experiments/multi_cloud/multi_cloud_report.md${NC}"
+  echo -e "  • Multi-Cloud Summary JSON : ${BLUE}experiments/multi_cloud/multi_cloud_summary.json${NC}"
 else
   echo -e "  • RQ1 Sweep Report         : ${BLUE}experiments/sweep/sweep_report.md${NC}"
   echo -e "  • RQ2 Tradeoff Report      : ${BLUE}experiments/tradeoff/tradeoff_report.md${NC}"

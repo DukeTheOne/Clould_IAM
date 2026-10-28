@@ -37,6 +37,8 @@ class DriftType(str, Enum):
 
     RESOURCE_DRIFT = "resource_drift"
     ACTION_DRIFT = "action_drift"
+    SEASONAL_BURST = "seasonal_burst"
+    FEDERATED_PIVOT = "federated_pivot"
 
 
 class WorkloadEvent(BaseModel):
@@ -80,6 +82,7 @@ class WorkloadEvent(BaseModel):
             "service": self.service,
             "is_drift": self.is_drift,
             "drift_type": self.drift_type.value if self.drift_type else None,
+            "context": self.context,
         }
 
 
@@ -102,6 +105,18 @@ class DriftConfig(BaseModel):
         ge=0.0,
         le=1.0,
         description="Proportion of drift representing infrequent actions",
+    )
+    seasonal_burst_ratio: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+        description="Proportion of drift representing seasonal audit or traffic surges",
+    )
+    federated_pivot_ratio: float = Field(
+        default=0.0,
+        ge=0.0,
+        le=1.0,
+        description="Proportion of drift representing federated identity/SSO pivots",
     )
     new_resources_per_principal: int = Field(
         default=3, ge=1, description="Number of novel resource ARNs synthesized per principal"
@@ -482,6 +497,8 @@ class SyntheticWorkloadGenerator:
         rate = self.config.events_per_day
         drift_rate = self.config.drift_config.drift_rate
         res_drift_ratio = self.config.drift_config.resource_drift_ratio
+        seasonal_ratio = self.config.drift_config.seasonal_burst_ratio
+        federated_ratio = self.config.drift_config.federated_pivot_ratio
 
         # 2. Generate Observation Window T_1: Days [0, t1_days)
         total_t1_target = max(10, t1_days * rate)
@@ -523,24 +540,52 @@ class SyntheticWorkloadGenerator:
             should_drift = bool(rng.random() < drift_rate)
             drift_type: DriftType | None = None
             is_drift = False
+            context: dict[str, Any] = {}
 
             if should_drift:
-                is_drift_resource = bool(rng.random() < res_drift_ratio)
-                if is_drift_resource and prof["drift_ops"]:
-                    d_idx = int(rng.integers(0, len(prof["drift_ops"])))
-                    act, res = prof["drift_ops"][d_idx]
-                    drift_type = DriftType.RESOURCE_DRIFT
+                drift_dice = float(rng.random())
+                if seasonal_ratio > 0.0 and drift_dice < seasonal_ratio:
+                    # Seasonal audit or traffic surge
+                    ops = prof["routine_ops"] or prof["infrequent_ops"]
+                    if not ops:
+                        continue
+                    r_idx = int(rng.integers(0, len(ops)))
+                    act, res = ops[r_idx]
+                    drift_type = DriftType.SEASONAL_BURST
                     is_drift = True
-                elif prof["infrequent_ops"]:
-                    i_idx = int(rng.integers(0, len(prof["infrequent_ops"])))
-                    act, res = prof["infrequent_ops"][i_idx]
-                    drift_type = DriftType.ACTION_DRIFT
+                    context = {"eventCategory": "SeasonalAuditBurst", "surgeFactor": 3.5}
+                elif federated_ratio > 0.0 and drift_dice < (seasonal_ratio + federated_ratio):
+                    # Federated identity / SSO pivot
+                    ops = prof["routine_ops"] or prof["infrequent_ops"]
+                    if not ops:
+                        continue
+                    r_idx = int(rng.integers(0, len(ops)))
+                    act, res = ops[r_idx]
+                    drift_type = DriftType.FEDERATED_PIVOT
                     is_drift = True
-                elif prof["routine_ops"]:
-                    r_idx = int(rng.integers(0, len(prof["routine_ops"])))
-                    act, res = prof["routine_ops"][r_idx]
+                    context = {
+                        "userIdentity": {
+                            "type": "AssumedRole",
+                            "sessionContext": {"issuer": "CorporateOktaSSO"},
+                        }
+                    }
                 else:
-                    continue
+                    is_drift_resource = bool(rng.random() < res_drift_ratio)
+                    if is_drift_resource and prof["drift_ops"]:
+                        d_idx = int(rng.integers(0, len(prof["drift_ops"])))
+                        act, res = prof["drift_ops"][d_idx]
+                        drift_type = DriftType.RESOURCE_DRIFT
+                        is_drift = True
+                    elif prof["infrequent_ops"]:
+                        i_idx = int(rng.integers(0, len(prof["infrequent_ops"])))
+                        act, res = prof["infrequent_ops"][i_idx]
+                        drift_type = DriftType.ACTION_DRIFT
+                        is_drift = True
+                    elif prof["routine_ops"]:
+                        r_idx = int(rng.integers(0, len(prof["routine_ops"])))
+                        act, res = prof["routine_ops"][r_idx]
+                    else:
+                        continue
             else:
                 ops = prof["routine_ops"] or prof["infrequent_ops"]
                 if not ops:
@@ -561,6 +606,7 @@ class SyntheticWorkloadGenerator:
                     service=act.split(":")[0],
                     is_drift=is_drift,
                     drift_type=drift_type,
+                    context=context,
                 )
             )
 

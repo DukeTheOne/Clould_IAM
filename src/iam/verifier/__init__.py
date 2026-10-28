@@ -11,6 +11,11 @@ from iam.verifier.metrics import (
     ParetoFrontierPoint,
     TradeoffMetrics,
 )
+from iam.verifier.multi_cloud_eval import (
+    MultiCloudEvaluationResult,
+    MultiCloudEvaluationRunner,
+    MultiCloudRuleTest,
+)
 from iam.verifier.pareto import (
     ParetoBenchmarkSuiteResult,
     ParetoBenchmarkSuiteRunner,
@@ -54,6 +59,9 @@ __all__ = [
     "DriftType",
     "MethodResult",
     "MetricSummary",
+    "MultiCloudEvaluationResult",
+    "MultiCloudEvaluationRunner",
+    "MultiCloudRuleTest",
     "ObjectiveDirection",
     "ParetoBenchmarkSuiteResult",
     "ParetoBenchmarkSuiteRunner",

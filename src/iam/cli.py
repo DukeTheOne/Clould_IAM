@@ -368,6 +368,24 @@ def build_parser() -> argparse.ArgumentParser:
         help="Random seed for reproducibility (default: 42)",
     )
 
+    # 14. iam evaluate-multi-cloud
+    p_eval_multi = subparsers.add_parser(
+        "evaluate-multi-cloud",
+        help="Execute Phase 9 multi-cloud capability verification and remediation benchmark",
+    )
+    p_eval_multi.add_argument(
+        "--output-dir",
+        type=str,
+        default="experiments/multi_cloud",
+        help="Directory to save multi-cloud report and JSON results (default: experiments/multi_cloud)",
+    )
+    p_eval_multi.add_argument(
+        "--seed",
+        type=int,
+        default=42,
+        help="Random seed for reproducibility (default: 42)",
+    )
+
     return parser
 
 
@@ -781,6 +799,33 @@ def cmd_evaluate_scalability(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_evaluate_multi_cloud(args: argparse.Namespace) -> int:
+    """Execute Phase 9 multi-cloud capability verification and remediation benchmark."""
+    from iam.verifier.multi_cloud_eval import MultiCloudEvaluationRunner
+
+    output_dir = Path(args.output_dir)
+    logger.info("Executing multi-cloud capability benchmark suite...")
+    runner = MultiCloudEvaluationRunner()
+    res = runner.run_suite(output_dir=output_dir, seed=args.seed)
+
+    print("\n" + "=" * 70)
+    print(f"  MULTI-CLOUD CAPABILITY BENCHMARK COMPLETE ({res.total_rules_tested} Rules Evaluated)")
+    print("=" * 70)
+    print(f"  Overall Conformance Pass Rate : {res.conformance_pass_rate:.1f}%")
+    print(f"  Illegal Scoping Blocked Rate  : {res.illegal_transformations_blocked_pct:.1f}%")
+    print(f"  Benign Utility Preserved Rate : {res.remediation_utility_preserved_pct:.1f}%")
+    print("-" * 70)
+    for p_name, m in res.provider_metrics.items():
+        print(
+            f"  {p_name.upper():6s} | Tests: {m['total_tests']:2d} | Passed: {m['passed']:2d} | Rate: {m['conformance_pct']:.1f}%"
+        )
+    print("-" * 70)
+    if res.output_report_path:
+        print(f"  Report: {res.output_report_path}")
+    print("=" * 70 + "\n")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     """CLI dispatcher entry point."""
     parser = build_parser()
@@ -807,6 +852,7 @@ def main(argv: list[str] | None = None) -> int:
         "evaluate-transfer": cmd_evaluate_transfer,
         "evaluate-pareto": cmd_evaluate_pareto,
         "evaluate-scalability": cmd_evaluate_scalability,
+        "evaluate-multi-cloud": cmd_evaluate_multi_cloud,
     }
 
     handler = command_handlers.get(args.command)

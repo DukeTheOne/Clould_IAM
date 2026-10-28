@@ -551,12 +551,14 @@ The thesis answers one research question rigorously, rather than accumulating fe
 * **Milestone Sign-Off (Phase 8 Complete):** All thesis core deliverables completed, verified with 468 passing tests, strict typing across 61 modules, and defense-ready.
 
 ### 6.6 Months 19–24: Publication Extension & Multi-Cloud Scaling (Buffer - ACTIVE)
-* **Objective:** Prepare top-tier security conference submission (IEEE S&P / USENIX Security / ACM CCS), extend capability modeling to multi-cloud environments, and pursue industrial Level 3 CloudTrail partnerships.
+* **Objective:** Prepare top-tier security conference submission (IEEE S&P / USENIX Security / ACM CCS), extend capability modeling to multi-cloud environments, and complete automated multi-cloud benchmarking and Level 3 workload synthesis.
 * **Work Packages:**
   - [x] **Conference paper drafting:** Authored publication-ready conference manuscript in [`docs/conference_paper.md`](file:///Users/duke/IAM/docs/conference_paper.md) (11 sections formatted for IEEE S&P / USENIX Security).
-  - [x] **Multi-cloud authorization generalization:** Implemented Azure RBAC ($C_{\text{Azure}}$) and Google Cloud IAM ($C_{\text{GCP}}$) capability models in [`src/iam/parser/multi_cloud.py`](file:///Users/duke/IAM/src/iam/parser/multi_cloud.py) and [`data/schemas/multi_cloud_capability.json`](file:///Users/duke/IAM/data/schemas/multi_cloud_capability.json), verified by 6 new unit tests.
+  - [x] **Multi-cloud authorization generalization:** Implemented Azure RBAC ($C_{\text{Azure}}$) and Google Cloud IAM ($C_{\text{GCP}}$) capability models in [`src/iam/parser/multi_cloud.py`](file:///Users/duke/IAM/src/iam/parser/multi_cloud.py) and [`data/schemas/multi_cloud_capability.json`](file:///Users/duke/IAM/data/schemas/multi_cloud_capability.json).
+  - [x] **Multi-cloud capability verification runner & CLI:** Built [`src/iam/verifier/multi_cloud_eval.py`](file:///Users/duke/IAM/src/iam/verifier/multi_cloud_eval.py), CLI command `iam evaluate-multi-cloud`, and automated shell reproduction `./reproduce_results.sh --multi-cloud` producing certified reports ([`experiments/multi_cloud/multi_cloud_report.md`](file:///Users/duke/IAM/experiments/multi_cloud/multi_cloud_report.md)) with 100% rule conformance and 100% illegal scoping prevention across AWS, Azure, and GCP.
+  - [x] **Level 3 industry trace evaluation & synthesis:** Implemented seasonal audit/traffic surges (`DriftType.SEASONAL_BURST`) and federated SaaS/SSO identity transitions (`DriftType.FEDERATED_PIVOT`) in [`src/iam/verifier/workload.py`](file:///Users/duke/IAM/src/iam/verifier/workload.py) under the 100% baseline conformance invariant.
   - [x] **Containerized artifact evaluation package:** Provided official [`Dockerfile`](file:///Users/duke/IAM/Dockerfile) and [`docker-compose.yml`](file:///Users/duke/IAM/docker-compose.yml) for zero-dependency isolated artifact reproduction.
-  - [/] **Level 3 industry trace evaluation:** Ongoing engagement with enterprise cloud partners for production multi-month CloudTrail logs.
+  - [/] **Production trace data partnership:** Ongoing industrial engagement for multi-month raw telemetry ingestion.
 
 ### 6.7 Data Strategy and Optional Items
 * **Workload data is hierarchical:** Level 1 synthetic IAM plus synthetic workload; Level 2 real IaC/IAM plus synthetic workload; Level 3 real IaC/IAM plus real CloudTrail, only if a lab or industry partner provides it. The thesis does not collapse if Level 3 is unavailable.

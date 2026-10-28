@@ -469,3 +469,40 @@ class TestEnterpriseWorkloadGeneration:
         assert split.num_t2 == 0
         assert split.total_events == 0
         assert split.metadata["status"] == "empty"
+
+    def test_seasonal_burst_and_federated_pivot_drift(
+        self,
+        sample_workload_graph: IAMGraph,
+        capability_model: CapabilityModel,
+    ) -> None:
+        """Verify Level 3 trace synthesis with seasonal burst and federated identity drift."""
+        drift_cfg = DriftConfig(
+            drift_rate=0.8,
+            seasonal_burst_ratio=0.5,
+            federated_pivot_ratio=0.5,
+        )
+        split_cfg = TemporalSplitConfig(
+            t1_days=30,
+            t2_days=15,
+            events_per_day=10,
+            seed=42,
+            drift_config=drift_cfg,
+        )
+        gen = SyntheticWorkloadGenerator(config=split_cfg, capability_model=capability_model)
+        split = gen.generate(sample_workload_graph)
+
+        assert split.num_t2 > 0
+        drift_events = split.drift_events
+        assert len(drift_events) > 0
+
+        drift_types = {e.drift_type for e in drift_events if e.drift_type}
+        # Check that either seasonal burst or federated pivot is generated
+        assert DriftType.SEASONAL_BURST in drift_types or DriftType.FEDERATED_PIVOT in drift_types
+
+        # Baseline Conformance Invariant: All drift events evaluate to ALLOW on G_o
+        checker = WorkloadConformanceChecker(capability_model)
+        conforming, denied = checker.check_conformance(
+            sample_workload_graph, [e.to_auth_request() for e in drift_events]
+        )
+        assert conforming is True
+        assert len(denied) == 0

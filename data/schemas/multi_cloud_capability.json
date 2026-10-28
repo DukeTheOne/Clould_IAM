@@ -22,14 +22,25 @@
           "tenant",
           "management_group",
           "subscription",
-          "resource_group",
-          "resource"
+          "resource_group"
         ],
         "wildcard_only": false,
         "condition_keys": [
           "Microsoft.Authorization/roleAssignments:PrincipalId",
           "Microsoft.Authorization/roleAssignments:RoleDefinitionId"
         ]
+      },
+      "Microsoft.Compute/virtualMachines/read": {
+        "action": "Microsoft.Compute/virtualMachines/read",
+        "service": "Microsoft.Compute",
+        "is_data_action": false,
+        "supported_scopes": [
+          "subscription",
+          "resource_group",
+          "resource"
+        ],
+        "wildcard_only": false,
+        "condition_keys": []
       },
       "Microsoft.Compute/virtualMachines/write": {
         "action": "Microsoft.Compute/virtualMachines/write",
@@ -69,6 +80,16 @@
       },
       "Microsoft.KeyVault/vaults/secrets/read": {
         "action": "Microsoft.KeyVault/vaults/secrets/read",
+        "service": "Microsoft.KeyVault",
+        "is_data_action": true,
+        "supported_scopes": [
+          "resource"
+        ],
+        "wildcard_only": false,
+        "condition_keys": []
+      },
+      "Microsoft.KeyVault/vaults/secrets/read/action": {
+        "action": "Microsoft.KeyVault/vaults/secrets/read/action",
         "service": "Microsoft.KeyVault",
         "is_data_action": true,
         "supported_scopes": [
@@ -137,6 +158,18 @@
       "storage.objects.get": {
         "permission": "storage.objects.get",
         "service": "storage",
+        "supported_levels": [
+          "project",
+          "resource"
+        ],
+        "wildcard_only": false,
+        "condition_keys": [
+          "resource.name"
+        ]
+      },
+      "secretmanager.secrets.getPayload": {
+        "permission": "secretmanager.secrets.getPayload",
+        "service": "secretmanager",
         "supported_levels": [
           "project",
           "resource"

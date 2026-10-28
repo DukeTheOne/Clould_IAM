@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 from iam.parser.multi_cloud import (
     AzureScopeLevel,
     CloudProvider,
@@ -125,3 +127,24 @@ class TestMultiCloudCapabilityModel:
             )
             is False
         )
+
+    def test_multi_cloud_evaluation_runner(self, tmp_path: Path) -> None:
+        """Verify automated execution and artifact generation of MultiCloudEvaluationRunner."""
+        from iam.verifier.multi_cloud_eval import MultiCloudEvaluationRunner
+
+        runner = MultiCloudEvaluationRunner()
+        res = runner.run_suite(output_dir=tmp_path, seed=42)
+
+        assert res.total_rules_tested >= 20
+        assert res.conformance_pass_rate == 100.0
+        assert res.illegal_transformations_blocked_pct == 100.0
+        assert res.remediation_utility_preserved_pct == 100.0
+        assert "aws" in res.provider_metrics
+        assert "azure" in res.provider_metrics
+        assert "gcp" in res.provider_metrics
+
+        report_file = tmp_path / "multi_cloud_report.md"
+        json_file = tmp_path / "multi_cloud_summary.json"
+        assert report_file.is_file()
+        assert json_file.is_file()
+        assert "Multi-Cloud Authorization Capability" in report_file.read_text(encoding="utf-8")
