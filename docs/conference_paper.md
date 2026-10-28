@@ -234,7 +234,17 @@ Across all evaluated scenarios, our multi-cloud engine achieves **100.0% rule co
  }
 ```
 
-### 8.2 Level 3 Industrial CloudTrail Telemetry Ingestion & Conformance
+### 8.2 Cross-Cloud Identity Federation & Lateral Blast Radius Remediation
+Beyond isolated single-cloud capabilities, enterprise architectures frequently interconnect heterogeneous clouds via federated identity delegation protocols—including OpenID Connect (OIDC), AWS Security Token Service (STS) Web Identity federation, and Google Cloud Workload Identity Federation (WIF). While these integrations enable unified multi-cloud CI/CD pipelines, they synthesize subtle transitive privilege escalation vectors that cross provider boundaries.
+
+To model and remediate these threats, we engineered `MultiCloudGraphAdapter` (`src/iam/parser/multi_cloud.py`), which ingests heterogeneous Azure RBAC role assignments, GCP IAM bindings, and cross-cloud federation trusts into a unified multi-cloud authorization multigraph $\mathcal{G}_{\text{multi}} = (V_{\text{Azure}} \cup V_{\text{AWS}} \cup V_{\text{GCP}}, E)$. Cross-cloud delegation links are synthesized as directional federation bridge edges ($\text{AssumesRole}$, $\text{is\_bridge}=\text{True}$).
+
+We evaluated this engine on a canonical 3-cloud lateral movement kill-chain:
+$$\text{Azure Entra ID Service Principal} \xrightarrow{\text{OIDC}} \text{AWS STS Role} \xrightarrow{\text{AssumeRole}} \text{AWS Ops Role} \xrightarrow{\text{WIF}} \text{GCP Service Account} \xrightarrow{\text{roles/resourcemanager.organizationAdmin}} \text{GCP Org Crown Jewel}$$
+
+In the unmediated baseline configuration, `find_cross_cloud_escalation_paths()` discovers an active 5-hop cross-cloud escalation path from the entry Azure principal to the target Google Cloud Organization root. Applying our capability-constrained least-privilege repair engine computes the minimal cut over the federation bridge and trust delegation policies, tightening trust conditions (e.g., constraining `aud` and `sub` claims or scoping resource access). Re-evaluating reachability demonstrates **100.0% lateral escalation severance** (0 residual attack paths) while preserving intra-cloud operational utility.
+
+### 8.3 Level 3 Industrial CloudTrail Telemetry Ingestion & Conformance
 To bridge the gap between synthetic benchmarks and production operations, we deployed an industrial AWS CloudTrail telemetry parser (`src/iam/verifier/cloudtrail_parser.py`, CLI `iam ingest-cloudtrail`). The engine resolves ephemeral STS assumed-role ARNs (`arn:aws:sts::<account>:assumed-role/<role>/<session>`) to canonical IAM Role nodes (`arn:aws:iam::<account>:role/<role>`) via `sessionIssuer` extraction with regex fallback, parses compressed multi-format streams (`.json`, `.jsonl`, `.json.gz`), and symbolically certifies 100% baseline conformance on $G_o$ while tagging operational drift ($T_2$) across novel resources, infrequent actions, and federated identity pivots.
 
 ---

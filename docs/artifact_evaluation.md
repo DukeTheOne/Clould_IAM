@@ -4,7 +4,7 @@
 **Target Badges**: **Artifact Available** | **Artifact Evaluated – Functional** | **Results Replicated**
 **Associated Publications / Thesis**: Duke, Master of Science Thesis, October 2026
 **Artifact Repository**: `DukeTheOne/IAM_GNN` (`https://github.com/DukeTheOne/IAM_GNN`)
-**Certified Test Coverage**: **495 unit and integration tests passing** across 64 modules
+**Certified Test Coverage**: **503 unit and integration tests passing** across 64 modules
 
 ---
 
@@ -46,7 +46,7 @@ uv run ruff check src tests scripts
 uv run mypy --strict src/iam
 uv run pytest -q
 ```
-*Expected Output*: `495 passed, 0 errors, 100% strict typing certified.`
+*Expected Output*: `503 passed, 0 errors, 100% strict typing certified.`
 
 ---
 
@@ -59,8 +59,8 @@ uv run pytest -q
 | **C3** | **Gate G2: Multi-Objective Pareto Dominance** (Method 4b strictly dominates IAMPERE coarse deletion with 0% breakage vs. 30.6% breakage). | Chapter 6, Sec 6.2 | `iam evaluate-pareto --output-dir experiments/pareto_frontier` | `experiments/pareto_frontier/gate_g2_pareto_report.md` |
 | **C4** | **Gate G3: Runtime Scalability & Optimality** (<50ms greedy repair at $N=5,000$ with 0.00% optimality gap vs Z3 MaxSAT). | Chapter 6, Sec 6.3 | `iam evaluate-scalability --scales 50 100 250 500 1000` | `experiments/scalability/scalability_report.md` |
 | **C5** | **Real-World Infrastructure-as-Code** ingestion and capability-compliant diff synthesis on 35 open-source Terraform repos. | Chapter 6, Sec 6.4 | `iam ingest-iac --input-path data/iac_repositories/...` | Console AST & Policy Diff Output |
-| **C6** | **Phase 9: Multi-Cloud Capability Generalization** across AWS IAM, Azure RBAC (5-tier scope hierarchy), and Google Cloud IAM (100% rule conformance, 100% illegal scoping blocked). | Chapter 6, Sec 6.5 | `iam evaluate-multi-cloud --output-dir experiments/multi_cloud` | `experiments/multi_cloud/multi_cloud_report.md` |
-| **C7** | **Phase 9: Industrial Telemetry Ingestion Pipeline** resolving STS assumed roles & federated identities to canonical graph nodes with empirical baseline conformance. | Chapter 6, Sec 6.6 | `iam ingest-cloudtrail --file data/sample_cloudtrail.json` | Console Conformance & Temporal Split JSON |
+| **C6** | **Phase 9: Multi-Cloud Authorization & Federation** across AWS IAM, Azure RBAC, and Google Cloud IAM (100% rule conformance, 100% lateral escalation severed). | Chapter 6, Sec 6.5–6.6 | `iam evaluate-multi-cloud --output-dir experiments/multi_cloud` | `experiments/multi_cloud/multi_cloud_report.md` |
+| **C7** | **Phase 9: Industrial Telemetry Ingestion Pipeline** resolving STS assumed roles & federated identities to canonical graph nodes with empirical baseline conformance. | Chapter 6, Sec 6.7 | `iam ingest-cloudtrail --file data/sample_cloudtrail.json` | Console Conformance & Temporal Split JSON |
 
 ---
 
@@ -154,11 +154,11 @@ iam evaluate-scalability --scales 50 100 250 500 1000 --output-dir experiments/s
 iam ingest-iac --input-path data/_benchmarks/pareto_iac_env/pe_vulnerable.tf
 ```
 
-### 5.5 Phase 9 Multi-Cloud Authorization Capability Evaluation
+### 5.5 Phase 9 Multi-Cloud Authorization Capability & Federation Evaluation
 ```bash
 iam evaluate-multi-cloud --output-dir experiments/multi_cloud --seed 42
 ```
-*Inspection*: Open `experiments/multi_cloud/multi_cloud_report.md` to verify 100% rule conformance across AWS IAM, Azure RBAC, and Google Cloud IAM.
+*Inspection*: Open `experiments/multi_cloud/multi_cloud_report.md` to verify 100% rule conformance across AWS IAM, Azure RBAC, and Google Cloud IAM, as well as 100% blast radius severance on the cross-cloud kill-chain.
 
 ### 5.6 Ingesting AWS CloudTrail Industrial Telemetry & Conformance
 ```bash
@@ -176,9 +176,9 @@ iam dashboard --port 8501
 ```
 Navigate to `http://localhost:8501` in any modern web browser:
 1. **Global Security Posture**: View real-time KPIs of scanned identities, evaluated policies, and latent risk discoveries.
-2. **Ego-Network Canvas**: Explore physics-based authorization graphs with force-directed layouts scoped to the $k \le 2$ hop neighborhood around high-risk identities.
-3. **Policy Diff Inspector**: Inspect side-by-side JSON diffs comparing original policies against capability-compliant repairs with AWS authorization badges.
-4. **Multi-Cloud Remediation Playground**: Cross-cloud policy repair playground for AWS, Azure RBAC, and GCP IAM with instant capability conformance validation badges.
+2. **Ego-Network Canvas**: Explore physics-based authorization graphs with force-directed layouts scoped to the $k \le 2$ hop neighborhood around high-risk identities (automatically expanded to 5 hops for cross-cloud lateral movement topologies).
+3. **Policy Diff Inspector**: Inspect side-by-side JSON diffs comparing original policies against capability-compliant repairs with cloud authorization badges.
+4. **Multi-Cloud Lateral Movement & Remediation Playground**: Interactive multi-cloud playground supporting AWS IAM, Azure RBAC, and GCP IAM, including full cross-cloud kill-chain simulation (`Azure Entra ID SP -> AWS STS -> GCP Workload Identity -> GCP Org Admin`) and instant capability conformance validation badges.
 5. **What-If Verification Simulator**: Toggle proposed patches to verify immediate severance of latent attack reachability across sampled completions.
 
 ---
@@ -205,7 +205,7 @@ IAM_GNN/
 │   ├── scalability/                         # Gate G3 runtime scalability reports & JSON results
 │   └── zero_shot/                           # Gate G1 zero-shot transfer reports & JSON results
 ├── src/iam/                                 # 64 source modules (parser, models, optimizer, verifier, dashboard)
-├── tests/                                   # 495 unit and integration tests (100% passing)
+├── tests/                                   # 503 unit and integration tests (100% passing)
 ├── Dockerfile                               # Zero-dependency isolated reproduction container
 ├── docker-compose.yml                       # Multi-service reproduction orchestration
 └── reproduce_results.sh                     # Automated reproduction script (--fast, --tier2, --multi-cloud, --full)

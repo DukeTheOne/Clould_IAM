@@ -398,7 +398,22 @@ The multi-cloud capability model achieves **100.0% conformance pass rate**, **10
 
 ---
 
-### 6.6 Level 3 Industrial CloudTrail Telemetry Ingestion & Conformance Pipeline
+### 6.6 Heterogeneous Cross-Cloud Identity Federation Multigraph & Blast Radius Remediation
+Modern enterprise deployments rarely operate within an isolated single-cloud silo; instead, organizations frequently establish cross-cloud CI/CD automation and single-sign-on trust delegations linking Microsoft Azure (Entra ID), Amazon Web Services (AWS), and Google Cloud Platform (GCP). Identity federation protocols such as OpenID Connect (OIDC), AWS STS `AssumeRoleWithWebIdentity`, and GCP Workload Identity Federation (WIF) eliminate long-lived cloud credentials, but they inadvertently establish stealthy transitive privilege escalation vectors that cross cloud boundaries.
+
+To represent and reason over these interconnected environments, we developed the unified `MultiCloudGraphAdapter` (`src/iam/parser/multi_cloud.py`). The engine translates native cross-cloud primitives:
+1. **Azure RBAC Role Assignments**: $\alpha = (p, d, s)$ where $p$ is the principal, $d$ is the role definition, and $s \in \mathcal{S}_{\text{Azure}}$ is the scope URI, verified via `is_azure_scope_contained()`.
+2. **Google Cloud IAM Bindings**: $\beta = (r, m, c)$ where $r \in \mathcal{L}_{\text{GCP}}$ is the resource hierarchy node, $m$ is the member set (`user:`, `serviceAccount:`, `group:`), and $c$ is an optional CEL conditional expression, verified via `is_gcp_resource_contained()`.
+3. **Cross-Cloud Federation Trusts**: $\tau = (s_{\text{source}}, p_{\text{proto}}, t_{\text{target}}, c_{\text{claims}})$ formalizing cross-cloud identity bridging into directional multigraph edges ($e \in E_{\text{AssumesRole}}, \text{is\_bridge}=\text{True}$).
+
+We evaluated our framework on a canonical enterprise 3-cloud lateral movement kill-chain:
+$$\text{Azure Entra ID SP} \xrightarrow{\text{OIDC}} \text{AWS STS Deploy Role} \xrightarrow{\text{AssumeRole}} \text{AWS Ops Role} \xrightarrow{\text{WIF}} \text{GCP Service Account} \xrightarrow{\text{OrgAdmin}} \text{GCP Org Root (Crown Jewel)}$$
+
+In the unmediated baseline configuration, `find_cross_cloud_escalation_paths()` detects an active 5-hop lateral kill-chain spanning three distinct cloud providers. Applying capability-constrained least-privilege repair to the cross-cloud federation policies synthesizes claim constraints and scoped role assignments, eliminating the attack path. Post-repair reachability verification confirms **100.0% lateral blast radius severance** (0 residual traversal paths to the crown jewel) with zero disruption to intra-cloud workload operations.
+
+---
+
+### 6.7 Level 3 Industrial CloudTrail Telemetry Ingestion & Conformance Pipeline
 To bridge the gap between synthetic workload generators and production cloud telemetry, we engineered an industrial AWS CloudTrail ingestion engine (`src/iam/verifier/cloudtrail_parser.py`) and integrated it into the unified CLI (`iam ingest-cloudtrail`).
 
 The engine addresses three fundamental operational challenges in enterprise telemetry:
@@ -424,7 +439,7 @@ The verifier is **sound relative to the evaluated completion set $\mathcal{H}_M$
 
 ### 7.2 Limitations & Future Work
 1. **Level 3 Industrial Ingestion**: We implemented production-grade AWS CloudTrail ingestion with canonical STS assumed-role and federated identity resolution; expanding continuous streaming ingestion across multi-cloud audit streams (Azure Activity Logs, GCP Cloud Audit Logs) represents a natural scaling progression.
-2. **Multi-Cloud Graph Propagation**: Having formalized action capabilities across AWS, Azure RBAC, and GCP IAM (achieving 100% capability conformance across 22 benchmark rules), future work will investigate heterogeneous cross-cloud identity federation graphs (e.g. Azure AD/Entra ID SSO federation into AWS STS and GCP Workload Identity pools).
+2. **Streaming Multi-Cloud Telemetry**: Having formalized multi-cloud action capabilities (100% pass rate across 22 benchmark rules) and modeled heterogeneous cross-cloud identity federation multigraphs (OIDC and Workload Identity bridging with 100% blast radius elimination), future research will focus on high-throughput, real-time distributed streaming ingestion of multi-cloud audit logs (Azure Event Hubs, GCP Pub/Sub) with dynamic incremental graph updates.
 
 ### 7.3 Conclusion
 This thesis resolves a longstanding dilemma in cloud security: the choice between blind deterministic traversal under partial observability and devastating operational breakage from coarse policy excision. By marrying relational inductive learning with calibrated uncertainty, an AWS Action Capability Model, and chance-constrained min-cut repair, we demonstrate that enterprise cloud authorization can be safely and scalably repaired under incomplete telemetry.
