@@ -74,4 +74,4 @@ flowchart LR
 3. **Zero-Overfitting Invariance**: Across all three major enterprise cloud architectures, capability models $C(a, r, c)$ provide an orthogonal semantic guardrail preventing solvers from generating syntactically invalid or non-executable policy patches.
 4. **Cross-Cloud Blast Radius Containment**: Without unified cross-cloud multigraph modeling, enterprise defenders cannot perceive that compromising an unprivileged CI/CD service principal in Azure AD yields direct administrative control over a Google Cloud organization via AWS STS trust pivots.
 
-*Report automatically generated on 2026-10-28T07:14:03.196043+00:00 by `iam.verifier.multi_cloud_eval`.*
+*Report automatically generated on 2026-10-28T07:33:46.033586+00:00 by `iam.verifier.multi_cloud_eval`.*
