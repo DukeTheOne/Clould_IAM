@@ -1,0 +1,151 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "snapshot_date": "2026-10-28",
+    "providers": ["aws", "azure", "gcp"],
+    "description": "Multi-Cloud Action Capability Specification for AWS, Azure RBAC, and Google Cloud IAM"
+  },
+  "azure": {
+    "scope_levels": [
+      "tenant",
+      "management_group",
+      "subscription",
+      "resource_group",
+      "resource"
+    ],
+    "actions": {
+      "Microsoft.Authorization/roleAssignments/write": {
+        "action": "Microsoft.Authorization/roleAssignments/write",
+        "service": "Microsoft.Authorization",
+        "is_data_action": false,
+        "supported_scopes": [
+          "tenant",
+          "management_group",
+          "subscription",
+          "resource_group",
+          "resource"
+        ],
+        "wildcard_only": false,
+        "condition_keys": [
+          "Microsoft.Authorization/roleAssignments:PrincipalId",
+          "Microsoft.Authorization/roleAssignments:RoleDefinitionId"
+        ]
+      },
+      "Microsoft.Compute/virtualMachines/write": {
+        "action": "Microsoft.Compute/virtualMachines/write",
+        "service": "Microsoft.Compute",
+        "is_data_action": false,
+        "supported_scopes": [
+          "subscription",
+          "resource_group",
+          "resource"
+        ],
+        "wildcard_only": false,
+        "condition_keys": [
+          "Microsoft.Compute/virtualMachines:ImagePublisher"
+        ]
+      },
+      "Microsoft.Compute/virtualMachines/runCommand/action": {
+        "action": "Microsoft.Compute/virtualMachines/runCommand/action",
+        "service": "Microsoft.Compute",
+        "is_data_action": false,
+        "supported_scopes": [
+          "resource_group",
+          "resource"
+        ],
+        "wildcard_only": false,
+        "condition_keys": []
+      },
+      "Microsoft.ManagedIdentity/userAssignedIdentities/assign/action": {
+        "action": "Microsoft.ManagedIdentity/userAssignedIdentities/assign/action",
+        "service": "Microsoft.ManagedIdentity",
+        "is_data_action": false,
+        "supported_scopes": [
+          "resource_group",
+          "resource"
+        ],
+        "wildcard_only": false,
+        "condition_keys": []
+      },
+      "Microsoft.KeyVault/vaults/secrets/read": {
+        "action": "Microsoft.KeyVault/vaults/secrets/read",
+        "service": "Microsoft.KeyVault",
+        "is_data_action": true,
+        "supported_scopes": [
+          "resource"
+        ],
+        "wildcard_only": false,
+        "condition_keys": []
+      }
+    }
+  },
+  "gcp": {
+    "hierarchy_levels": [
+      "organization",
+      "folder",
+      "project",
+      "resource"
+    ],
+    "permissions": {
+      "resourcemanager.projects.setIamPolicy": {
+        "permission": "resourcemanager.projects.setIamPolicy",
+        "service": "resourcemanager",
+        "supported_levels": [
+          "organization",
+          "folder",
+          "project"
+        ],
+        "wildcard_only": false,
+        "condition_keys": [
+          "request.time",
+          "request.auth.claims"
+        ]
+      },
+      "iam.serviceAccounts.actAs": {
+        "permission": "iam.serviceAccounts.actAs",
+        "service": "iam",
+        "supported_levels": [
+          "project",
+          "resource"
+        ],
+        "wildcard_only": false,
+        "condition_keys": [
+          "resource.type",
+          "resource.name"
+        ]
+      },
+      "compute.instances.create": {
+        "permission": "compute.instances.create",
+        "service": "compute",
+        "supported_levels": [
+          "project"
+        ],
+        "wildcard_only": false,
+        "condition_keys": [
+          "compute.googleapis.com/subnetwork"
+        ]
+      },
+      "cloudfunctions.functions.create": {
+        "permission": "cloudfunctions.functions.create",
+        "service": "cloudfunctions",
+        "supported_levels": [
+          "project"
+        ],
+        "wildcard_only": false,
+        "condition_keys": []
+      },
+      "storage.objects.get": {
+        "permission": "storage.objects.get",
+        "service": "storage",
+        "supported_levels": [
+          "project",
+          "resource"
+        ],
+        "wildcard_only": false,
+        "condition_keys": [
+          "resource.name"
+        ]
+      }
+    }
+  }
+}

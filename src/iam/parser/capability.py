@@ -135,6 +135,11 @@ class CapabilityModel:
         """Return all canonical registered action names."""
         return {cap.action for cap in self._actions.values()}
 
+    @property
+    def global_condition_keys(self) -> set[str]:
+        """Return all global condition keys."""
+        return set(self._global_keys)
+
     def get_action_capability(self, action: str) -> ActionCapability | None:
         """Retrieve capability record for an action (case-insensitive)."""
         return self._actions.get(normalize_action_name(action))

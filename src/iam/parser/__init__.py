@@ -15,6 +15,15 @@ from iam.parser.evaluator import (
     PolicyEvaluator,
     statement_matches_request,
 )
+from iam.parser.multi_cloud import (
+    AzureActionCapability,
+    AzureScopeLevel,
+    CloudProvider,
+    GCPAccessLevel,
+    GCPPermissionCapability,
+    MultiCloudCapabilityModel,
+    load_default_multi_cloud_model,
+)
 from iam.parser.repository import (
     IaCRepositoryCatalog,
     IaCRepositoryManager,
@@ -41,13 +50,19 @@ from iam.parser.wildcard import (
 __all__ = [
     "ActionCapability",
     "AuthRequest",
+    "AzureActionCapability",
+    "AzureScopeLevel",
     "CapabilityModel",
+    "CloudProvider",
     "Effect",
     "EvalDecision",
     "EvalResult",
+    "GCPAccessLevel",
+    "GCPPermissionCapability",
     "IaCRepositoryCatalog",
     "IaCRepositoryManager",
     "IaCRepositoryMetadata",
+    "MultiCloudCapabilityModel",
     "PolicyDocument",
     "PolicyEvaluator",
     "Principal",
@@ -66,6 +81,7 @@ __all__ = [
     "evaluate_condition_block",
     "is_valid_transformation",
     "load_default_capability_model",
+    "load_default_multi_cloud_model",
     "normalize_action_name",
     "resource_matches_pattern",
     "statement_matches_request",

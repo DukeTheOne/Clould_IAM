@@ -553,9 +553,10 @@ The thesis answers one research question rigorously, rather than accumulating fe
 ### 6.6 Months 19–24: Publication Extension & Multi-Cloud Scaling (Buffer - ACTIVE)
 * **Objective:** Prepare top-tier security conference submission (IEEE S&P / USENIX Security / ACM CCS), extend capability modeling to multi-cloud environments, and pursue industrial Level 3 CloudTrail partnerships.
 * **Work Packages:**
-  - [/] **Conference paper drafting:** Compiling camera-ready conference manuscript from thesis chapters.
-  - [ ] **Multi-cloud authorization generalization:** Scoping $C(a, r, c)$ principles to Azure Role-Based Access Control (RBAC) and Google Cloud IAM bindings.
-  - [ ] **Level 3 industry trace evaluation:** Ingesting multi-month production CloudTrail logs if partner agreements permit.
+  - [x] **Conference paper drafting:** Authored publication-ready conference manuscript in [`docs/conference_paper.md`](file:///Users/duke/IAM/docs/conference_paper.md) (11 sections formatted for IEEE S&P / USENIX Security).
+  - [x] **Multi-cloud authorization generalization:** Implemented Azure RBAC ($C_{\text{Azure}}$) and Google Cloud IAM ($C_{\text{GCP}}$) capability models in [`src/iam/parser/multi_cloud.py`](file:///Users/duke/IAM/src/iam/parser/multi_cloud.py) and [`data/schemas/multi_cloud_capability.json`](file:///Users/duke/IAM/data/schemas/multi_cloud_capability.json), verified by 6 new unit tests.
+  - [x] **Containerized artifact evaluation package:** Provided official [`Dockerfile`](file:///Users/duke/IAM/Dockerfile) and [`docker-compose.yml`](file:///Users/duke/IAM/docker-compose.yml) for zero-dependency isolated artifact reproduction.
+  - [/] **Level 3 industry trace evaluation:** Ongoing engagement with enterprise cloud partners for production multi-month CloudTrail logs.
 
 ### 6.7 Data Strategy and Optional Items
 * **Workload data is hierarchical:** Level 1 synthetic IAM plus synthetic workload; Level 2 real IaC/IAM plus synthetic workload; Level 3 real IaC/IAM plus real CloudTrail, only if a lab or industry partner provides it. The thesis does not collapse if Level 3 is unavailable.

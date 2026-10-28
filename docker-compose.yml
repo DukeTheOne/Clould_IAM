@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  smoke:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["--fast"]
+    volumes:
+      - ./experiments:/app/experiments
+      - ./reports:/app/reports
+
+  tier2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["--tier2"]
+    volumes:
+      - ./experiments:/app/experiments
+      - ./reports:/app/reports
+
+  full:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["--full"]
+    volumes:
+      - ./experiments:/app/experiments
+      - ./reports:/app/reports
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    entrypoint: ["uv", "run", "iam", "dashboard", "--host", "0.0.0.0", "--port", "8501"]
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./data:/app/data
+      - ./experiments:/app/experiments
