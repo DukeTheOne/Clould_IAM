@@ -28,6 +28,15 @@ services:
       - ./experiments:/app/experiments
       - ./reports:/app/reports
 
+  multi-cloud:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["--multi-cloud"]
+    volumes:
+      - ./experiments:/app/experiments
+      - ./reports:/app/reports
+
   dashboard:
     build:
       context: .
