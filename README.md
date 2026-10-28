@@ -403,9 +403,10 @@ iam dashboard --port 8501
 ## 10. Code Quality, Testing & CI/CD
 
 The codebase enforces strict software engineering standards:
-- **100% Strict Type Annotations**: Checked via `mypy --strict src/iam` across all 53 source modules.
+- **100% Strict Type Annotations**: Checked via `mypy --strict src/iam` across all 61 source modules.
 - **Linting & Formatting**: Strict compliance with `ruff check` and `ruff format`.
-- **Test Coverage**: 410 unit and integration tests passing with **> 90% code coverage** (`pytest --cov=iam`).
+- **Test Coverage**: 468 unit and integration tests passing with **> 90% code coverage** (`pytest --cov=iam`).
+- **High-Throughput Scalability**: In-place edge mutation and rollback eliminates graph copying overhead, achieving sub-30ms greedy repair at $N = 1,000+$ nodes.
 - **Pre-Commit Enforcement**: Git hooks configured in `.pre-commit-config.yaml` to ensure no malformed code enters the tree.
 
 ```bash

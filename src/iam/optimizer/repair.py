@@ -448,11 +448,28 @@ class CapabilityGreedyRepairEngine:
 
         reachable_count = 0
         for comp in completions:
-            nx_g = graph.nx_graph.copy()
+            nodes_added: list[str] = []
+            edges_added: list[tuple[str, str, str]] = []
             for ce in comp.sampled_edges:
-                nx_g.add_edge(ce.source, ce.target, key=ce.relation.value)
-            if nx.has_path(nx_g, source_id, target_id):
-                reachable_count += 1
+                if ce.source not in graph.nx_graph:
+                    nodes_added.append(ce.source)
+                if ce.target not in graph.nx_graph:
+                    nodes_added.append(ce.target)
+                if not graph.nx_graph.has_edge(ce.source, ce.target, key=ce.relation.value):
+                    graph.nx_graph.add_edge(ce.source, ce.target, key=ce.relation.value)
+                    edges_added.append((ce.source, ce.target, ce.relation.value))
+            try:
+                if (
+                    source_id in graph.nx_graph
+                    and target_id in graph.nx_graph
+                    and nx.has_path(graph.nx_graph, source_id, target_id)
+                ):
+                    reachable_count += 1
+            finally:
+                for u, v, k in edges_added:
+                    graph.nx_graph.remove_edge(u, v, key=k)
+                for n in nodes_added:
+                    graph.nx_graph.remove_node(n)
 
         return float(reachable_count / len(completions))
 
@@ -717,33 +734,50 @@ class CapabilityGreedyRepairEngine:
             seen_edge_triples: set[tuple[str, str, str]] = set()
 
             for comp in eval_completions:
-                nx_union = graph.nx_graph.copy()
+                nodes_added: list[str] = []
+                edges_added: list[tuple[str, str, str]] = []
                 for ce in comp.sampled_edges:
-                    nx_union.add_edge(ce.source, ce.target, key=ce.relation.value)
+                    if ce.source not in graph.nx_graph:
+                        nodes_added.append(ce.source)
+                    if ce.target not in graph.nx_graph:
+                        nodes_added.append(ce.target)
+                    if not graph.nx_graph.has_edge(ce.source, ce.target, key=ce.relation.value):
+                        graph.nx_graph.add_edge(ce.source, ce.target, key=ce.relation.value)
+                        edges_added.append((ce.source, ce.target, ce.relation.value))
 
-                if nx.has_path(nx_union, s_id, t_id):
-                    path_nodes = nx.shortest_path(nx_union, s_id, t_id)
-                    for i in range(len(path_nodes) - 1):
-                        u, v = path_nodes[i], path_nodes[i + 1]
+                try:
+                    if (
+                        s_id in graph.nx_graph
+                        and t_id in graph.nx_graph
+                        and nx.has_path(graph.nx_graph, s_id, t_id)
+                    ):
+                        path_nodes = nx.shortest_path(graph.nx_graph, s_id, t_id)
+                        for i in range(len(path_nodes) - 1):
+                            u, v = path_nodes[i], path_nodes[i + 1]
 
-                        # Check if edge is in G_o
-                        for edge in graph.get_edges(source=u, target=v):
-                            trip = (u, v, edge.relation.value)
-                            if trip not in seen_edge_triples:
-                                seen_edge_triples.add(trip)
-                                cut_edge_candidates.append(
-                                    (u, v, edge.relation, list(edge.actions))
-                                )
-
-                        # Check if edge is in sampled completion
-                        for ce in comp.sampled_edges:
-                            if ce.source == u and ce.target == v:
-                                trip = (u, v, ce.relation.value)
+                            # Check if edge is in G_o
+                            for edge in graph.get_edges(source=u, target=v):
+                                trip = (u, v, edge.relation.value)
                                 if trip not in seen_edge_triples:
                                     seen_edge_triples.add(trip)
                                     cut_edge_candidates.append(
-                                        (u, v, ce.relation, list(ce.actions))
+                                        (u, v, edge.relation, list(edge.actions))
                                     )
+
+                            # Check if edge is in sampled completion
+                            for ce in comp.sampled_edges:
+                                if ce.source == u and ce.target == v:
+                                    trip = (u, v, ce.relation.value)
+                                    if trip not in seen_edge_triples:
+                                        seen_edge_triples.add(trip)
+                                        cut_edge_candidates.append(
+                                            (u, v, ce.relation, list(ce.actions))
+                                        )
+                finally:
+                    for u, v, k in edges_added:
+                        graph.nx_graph.remove_edge(u, v, key=k)
+                    for n in nodes_added:
+                        graph.nx_graph.remove_node(n)
 
         # 4. Greedy Repair Loop
         current_graph = graph.clone()

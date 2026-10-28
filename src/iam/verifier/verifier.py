@@ -424,12 +424,34 @@ class CompletionSetVerifier:
         else:
             comp_reachable_count = 0
             for comp in comp_list:
-                # Instantiate (G_o ⊕ P) ∪ H_i
-                comp_nx = repaired_graph.nx_graph.copy()
+                nodes_added: list[str] = []
+                edges_added: list[tuple[str, str, str]] = []
                 for ce in comp.sampled_edges:
-                    comp_nx.add_edge(ce.source, ce.target, key=ce.relation.value)
-                if nx.has_path(comp_nx, s_id, t_id):
-                    comp_reachable_count += 1
+                    if ce.source not in repaired_graph.nx_graph:
+                        nodes_added.append(ce.source)
+                    if ce.target not in repaired_graph.nx_graph:
+                        nodes_added.append(ce.target)
+                    if not repaired_graph.nx_graph.has_edge(
+                        ce.source, ce.target, key=ce.relation.value
+                    ):
+                        repaired_graph.nx_graph.add_edge(
+                            ce.source, ce.target, key=ce.relation.value
+                        )
+                        edges_added.append((ce.source, ce.target, ce.relation.value))
+
+                try:
+                    if (
+                        s_id in repaired_graph.nx_graph
+                        and t_id in repaired_graph.nx_graph
+                        and nx.has_path(repaired_graph.nx_graph, s_id, t_id)
+                    ):
+                        comp_reachable_count += 1
+                finally:
+                    for u, v, k in edges_added:
+                        repaired_graph.nx_graph.remove_edge(u, v, key=k)
+                    for n in nodes_added:
+                        repaired_graph.nx_graph.remove_node(n)
+
             level2_risk = float(comp_reachable_count / len(comp_list))
             level2_safe = level2_risk <= risk_threshold
 

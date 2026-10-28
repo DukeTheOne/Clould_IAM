@@ -227,7 +227,8 @@ class IAMGraph:
                 continue
             if relation is not None and key != relation.value:
                 continue
-            edges.append(data["obj"])
+            if "obj" in data:
+                edges.append(data["obj"])
         return edges
 
     def get_bridge_edges(self) -> list[GraphEdge]:
