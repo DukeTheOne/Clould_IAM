@@ -139,3 +139,19 @@ class TestEnterpriseScalingAndLatencySafeguards:
         assert isinstance(html_canvas, str)
         # Bounded k<=2 extraction must be strictly faster than 100ms
         assert elapsed < 0.100, f"Ego-network rendering took {elapsed:.4f}s (budget: <0.100s)"
+
+    def test_multi_cloud_remediation_badge_rendering(self) -> None:
+        """Verify HTML capability badge rendering across AWS, Azure, and GCP."""
+        from iam.dashboard.diff_viewer import render_multi_cloud_capability_badge
+
+        az_valid = render_multi_cloud_capability_badge(
+            "Azure RBAC", True, "Valid at ResourceGroup scope."
+        )
+        assert "VALIDATED: ADMISSIBLE UNDER AZURE RBAC" in az_valid
+        assert "#1C4532" in az_valid
+
+        gcp_invalid = render_multi_cloud_capability_badge(
+            "GCP IAM", False, "Inadmissible at Organization root."
+        )
+        assert "REJECTED: INADMISSIBLE UNDER GCP IAM" in gcp_invalid
+        assert "#742A2A" in gcp_invalid

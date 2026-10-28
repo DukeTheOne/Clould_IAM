@@ -327,6 +327,46 @@ def render_capability_badge(is_valid: bool, reason: str = "") -> str:
     ).strip()
 
 
+def render_multi_cloud_capability_badge(
+    provider_name: str,
+    is_valid: bool,
+    reason: str = "",
+) -> str:
+    """Render HTML capability badge for AWS, Azure, or GCP framework validation."""
+    if is_valid:
+        bg = "#1C4532"
+        border = "#38A169"
+        text_color = "#9AE6B4"
+        icon = "✓"
+        status_label = f"VALIDATED: ADMISSIBLE UNDER {provider_name.upper()} CAPABILITY CONSTRAINTS"
+    else:
+        bg = "#742A2A"
+        border = "#E53E3E"
+        text_color = "#FEB2B2"
+        icon = "✗"
+        status_label = (
+            f"REJECTED: INADMISSIBLE UNDER {provider_name.upper()} CAPABILITY CONSTRAINTS"
+        )
+
+    details_html = (
+        f"<div style='font-size: 11px; color: #CBD5E0; margin-top: 4px;'>{html.escape(reason)}</div>"
+        if reason
+        else ""
+    )
+
+    return textwrap.dedent(
+        f"""
+        <div style="background-color: {bg}; border: 1px solid {border}; border-radius: 6px; padding: 10px 14px; margin-top: 8px; margin-bottom: 8px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 16px; font-weight: bold; color: {text_color};">{icon}</span>
+                <span style="font-size: 12px; font-weight: 700; color: {text_color}; letter-spacing: 0.5px;">{status_label}</span>
+            </div>
+            {details_html}
+        </div>
+        """
+    ).strip()
+
+
 def render_impact_summary(
     report: VerificationReport | None,
     num_transformations: int = 1,
