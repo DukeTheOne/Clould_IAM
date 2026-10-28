@@ -48,10 +48,30 @@
 | `gcp-rule-006` | GCP | `secretmanager.secrets.getPayload` | `organizations/123456789012` | Blocked | Blocked | **PASS** | Secret payload access inadmissible at Organization root level |
 | `gcp-rule-007` | GCP | `compute.instances.create` | `projects/enterprise-core-prod` | Admissible | Admissible | **PASS** | Compute instance creation admissible at Project level |
 
-## 4. Key Architectural Insights for Top-Tier Publication
+## 4. Cross-Cloud Lateral Movement & Federation Remediation Analysis
+
+Enterprise multi-cloud topologies link cloud boundaries via federated trust mechanisms (e.g., Azure Entra ID
+OIDC federation to AWS STS, and AWS IAM role federation to GCP Workload Identity).
+
+- **Cross-Cloud Topology Nodes Ingested**: `6`
+- **Lateral Privilege Escalation Path Detected**: `YES`
+- **Remediation Cut Verification Status**: `VERIFIED (100% Severed)`
+
+### Detected Lateral Movement Kill-Chain (Azure $\to$ AWS $\to$ GCP):
+```mermaid
+flowchart LR
+    n0["azure:sp-devops-ci"] --> n1["arn:aws:iam::123456789012:role/CrossCloudDeploymentRole"]
+    n1["arn:aws:iam::123456789012:role/CrossCloudDeploymentRole"] --> n2["arn:aws:iam::123456789012:role/GCPWorkloadIdentityFederator"]
+    n2["arn:aws:iam::123456789012:role/GCPWorkloadIdentityFederator"] --> n3["gcp:serviceAccount:deployer@corp-enterprise.iam.gserviceaccount.com"]
+    n3["gcp:serviceAccount:deployer@corp-enterprise.iam.gserviceaccount.com"] --> n4["gcp:role:roles/resourcemanager.organizationAdmin"]
+    n4["gcp:role:roles/resourcemanager.organizationAdmin"] --> n5["gcp:resource:organizations/org-corp-enterprise"]
+```
+
+## 5. Key Architectural Insights for Top-Tier Publication
 
 1. **Hierarchical Scope Confinement**: In Azure RBAC, coarse role assignments at Subscription or Management Group levels represent the primary privilege escalation vector. Capability-aware repair must restrict actions like `Microsoft.Authorization/roleAssignments/write` to Resource Group boundaries, whereas Data Actions (`Microsoft.KeyVault/*`) must be strictly bound to individual Vault resource endpoints.
 2. **Resource Manager Soundness**: GCP IAM policy bindings at Organization or Folder levels inherit downward unconditionally. Least-privilege synthesis under partial observability must recognize that modifying Project-level bindings cannot neutralize Organization-level grant paths.
 3. **Zero-Overfitting Invariance**: Across all three major enterprise cloud architectures, capability models $C(a, r, c)$ provide an orthogonal semantic guardrail preventing solvers from generating syntactically invalid or non-executable policy patches.
+4. **Cross-Cloud Blast Radius Containment**: Without unified cross-cloud multigraph modeling, enterprise defenders cannot perceive that compromising an unprivileged CI/CD service principal in Azure AD yields direct administrative control over a Google Cloud organization via AWS STS trust pivots.
 
-*Report automatically generated on 2026-10-28T06:07:18.765675+00:00 by `iam.verifier.multi_cloud_eval`.*
+*Report automatically generated on 2026-10-28T07:14:03.196043+00:00 by `iam.verifier.multi_cloud_eval`.*

@@ -885,6 +885,11 @@ def cmd_evaluate_multi_cloud(args: argparse.Namespace) -> int:
             f"  {p_name.upper():6s} | Tests: {m['total_tests']:2d} | Passed: {m['passed']:2d} | Rate: {m['conformance_pct']:.1f}%"
         )
     print("-" * 70)
+    fed_status = "DETECTED (Azure -> AWS -> GCP)" if res.cross_cloud_path_nodes else "NONE"
+    rem_status = "VERIFIED (100% Severed)" if res.cross_cloud_remediation_verified else "FAILED"
+    print(f"  Cross-Cloud Federation Attack Path  : {fed_status}")
+    print(f"  Cross-Cloud Blast Radius Remediation: {rem_status}")
+    print("-" * 70)
     if res.output_report_path:
         print(f"  Report: {res.output_report_path}")
     print("=" * 70 + "\n")

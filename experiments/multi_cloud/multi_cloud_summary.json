@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-28T06:07:18.765675+00:00",
+  "timestamp": "2026-10-28T07:14:03.196043+00:00",
   "total_rules_tested": 22,
   "conformance_pass_rate": 100.0,
   "illegal_transformations_blocked_pct": 100.0,
@@ -20,6 +20,17 @@
       "passed": 7,
       "conformance_pct": 100.0
     }
+  },
+  "cross_cloud_federation": {
+    "path_detected": [
+      "azure:sp-devops-ci",
+      "arn:aws:iam::123456789012:role/CrossCloudDeploymentRole",
+      "arn:aws:iam::123456789012:role/GCPWorkloadIdentityFederator",
+      "gcp:serviceAccount:deployer@corp-enterprise.iam.gserviceaccount.com",
+      "gcp:role:roles/resourcemanager.organizationAdmin",
+      "gcp:resource:organizations/org-corp-enterprise"
+    ],
+    "remediation_verified": true
   },
   "tests": [
     {

@@ -159,6 +159,20 @@ class TestIAMCommandLineInterface:
         assert data["num_nodes"] >= 4
         assert any(n["id"] == "user:security-auditor" for n in data["nodes"])
 
+    def test_cli_evaluate_multi_cloud(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        out_dir = tmp_path / "multi_cloud_cli"
+        exit_code = main(["evaluate-multi-cloud", "--output-dir", str(out_dir), "--seed", "42"])
+        assert exit_code == 0
+        assert (out_dir / "multi_cloud_report.md").exists()
+        assert (out_dir / "multi_cloud_summary.json").exists()
+
+        captured = capsys.readouterr()
+        assert "MULTI-CLOUD CAPABILITY BENCHMARK COMPLETE" in captured.out
+        assert "Cross-Cloud Federation Attack Path" in captured.out
+        assert "VERIFIED (100% Severed)" in captured.out
+
 
 class TestRunDashboardScript:
     """Tests for scripts/run_dashboard.py argument parsing and streamlit invocation."""
