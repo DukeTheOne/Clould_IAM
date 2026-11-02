@@ -9,9 +9,9 @@
 | Evaluation Metric | Measured Result | Benchmark Target | Conformance Status |
 | :--- | :---: | :---: | :---: |
 | **Total Capability Rules Evaluated** | `22` | $\ge 20$ | PASSED |
-| **Overall Conformance Pass Rate** | `100.0%` | $100.0\%$ | PASSED |
-| **Illegal Scoping Prevention Rate** | `100.0%` | $100.0\%$ | PASSED |
-| **Benign Workload Utility Preservation** | `100.0%` | $100.0\%$ | PASSED |
+| **Overall Conformance Pass Rate** | `100.0%` | 100.0% | PASSED |
+| **Illegal Scoping Prevention Rate** | `100.0%` | 100.0% | PASSED |
+| **Benign Workload Utility Preservation** | `100.0%` | 100.0% | PASSED |
 
 ## 2. Cloud Provider Conformance Breakdown
 

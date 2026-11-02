@@ -35,7 +35,7 @@ Before beginning implementation, consider the core architectural requirements de
 5. **Extensible Masking Architecture (Industrial Blind Spots)**:
    - Masking removes **authorization evidence and delegation relationships**, not merely random edges.
    - Use the Strategy Pattern (`BaseMaskingOperator`) with modular implementations for all five conditions defined in the [proposal.md](file:///c:/Users/jack6/IAM/IAM_GNN/proposal.md):
-     - **Condition A (Random Masking - P0 Baseline)**: Random edge dropout ($p \in \{10\%, 20\%, 30\%, 40\%\}$).
+     - **Condition A (Random Masking - P0 Baseline)**: Random edge dropout ($p \in \lbrace 10\\%, 20\\%, 30\\%, 40\\% \rbrace$).
      - **Condition E (Adversarial Bridge Masking - P0 Core)**: Masking the critical bottleneck relation along active PE attack paths.
      - **Condition B (Cross-Account Masking - P1)**: Complete configuration blindness inside unobserved account silos.
      - **Condition C (Federated IdP Masking - P2 / Tier 2 Foundation)**: Cloud trust policy visible, external IdP group delegation hidden.

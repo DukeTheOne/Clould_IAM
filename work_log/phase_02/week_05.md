@@ -26,7 +26,7 @@ $$
 h_i^{(l+1)} = \sigma \left( W_0^{(l)} h_i^{(l)} + \sum_{r \in \mathcal{R}} \sum_{j \in \mathcal{N}_i^r} \frac{1}{c_{i,r}} W_r^{(l)} h_j^{(l)} \right)
 $$
 
-   - This reduces layer parameter count from $425{,}984$ to $131{,}280$ (~$70\%$ reduction) while enabling cross-relation knowledge transfer (e.g., sharing structural representations between forward delegation `AssumesRole` and reverse message-passing `RevAssumesRole`).
+   - This reduces layer parameter count from $425{,}984$ to $131{,}280$ (~70% reduction) while enabling cross-relation knowledge transfer (e.g., sharing structural representations between forward delegation `AssumesRole` and reverse message-passing `RevAssumesRole`).
 
 3. **Inductive Invariance Across Organizations**:
    - Models must never memorize absolute entity IDs or environment-specific graph topologies.
@@ -155,7 +155,7 @@ $$
    - [x] Dataclass parameterizing optimizer hyper-parameters (`lr = 1e-3`, `weight_decay = 1e-4`, `gradient_clip = 1.0`), focal loss hyperparameters ($\gamma = 2.0, \alpha = 0.25$), training schedule (`max_epochs = 50`, `patience = 10`, `lr_scheduler_type = "cosine"`), and negative sampling ratio (`negative_ratio = 1.0`).
 4. **Inductive Multi-Environment Trainer (`InductiveLinkPredictionTrainer`)**:
    - [x] **Inductive Multi-Graph Epoch Execution**: Trains across batches of distinct enterprise cloud environments ($\mathcal{O}_1, \dots, \mathcal{O}_M$), ensuring model weights never overfit to specific node ID spaces or static topologies.
-   - [x] **Dynamic Uniform Negative Sampling**: For every true edge triple $(u, r, v)$, synthesizes negative corrupted edges $(u, r, v')$ where $v' \sim \text{Uniform}(\mathcal{V}_{\text{dst}} \setminus \{v\})$, filtering self-loops.
+   - [x] **Dynamic Uniform Negative Sampling**: For every true edge triple $(u, r, v)$, synthesizes negative corrupted edges $(u, r, v')$ where $v' \sim \text{Uniform}(\mathcal{V}_{\text{dst}} \setminus \lbrace v \rbrace)$, filtering self-loops.
    - [x] **Evaluation & Metric Tracking**: Computes Loss, ROC-AUC, PR-AUC, Accuracy, and Expected Calibration Error (ECE) across training and held-out validation environments.
    - [x] **Validation Early Stopping**: Tracks validation PR-AUC, performs patience-based early termination, and restores the best performing checkpoint weights.
    - [x] **Post-Hoc Calibration Integration**: Incorporates `TemperatureScalingCalibrator` directly into the validation phase for automated ECE optimization.

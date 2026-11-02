@@ -40,8 +40,8 @@ Week 20 concludes the finalization of Phase 9 (Publication Extension & Multi-Clo
 | **Test Suite Execution Latency** | $< 35\text{s}$ | **30.16 seconds** (`pytest -q`) | **CERTIFIED** |
 | **Strict Type Checking (`mypy --strict src/iam`)** | 100% across all modules | **0 errors across 64 source files** | **CERTIFIED** |
 | **Code Formatting & Linting (`ruff`)** | Zero violations | **0 errors across 120 files** | **CERTIFIED** |
-| **Multi-Cloud Capability Conformance Rate** | $100.0\%$ | **100.0% (22/22 Rules Evaluated)** | **CERTIFIED** |
-| **Cross-Cloud Attack Path Remediation** | $100.0\%$ | **100.0% Severed (0 Residual Paths)** | **CERTIFIED** |
+| **Multi-Cloud Capability Conformance Rate** | 100.0% | **100.0% (22/22 Rules Evaluated)** | **CERTIFIED** |
+| **Cross-Cloud Attack Path Remediation** | 100.0% | **100.0% Severed (0 Residual Paths)** | **CERTIFIED** |
 | **Automated Reproduction (`reproduce_results.sh --multi-cloud`)** | $< 45\text{s}$ | **42 seconds** (including full coverage report) | **CERTIFIED** |
 
 ---

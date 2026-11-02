@@ -170,7 +170,7 @@ flowchart TD
    - **Theoretical & Empirical Proof**: Proved and verified in unit tests that under complete observability ($G^*$), IAMPERE computes sound, exact reachability (`SAT`); but under partial observability (Condition E: masked bridge), the SMT formula is strictly `UNSAT` (0.0 reachability score, 0% recall). This confirms the central thesis hypothesis: static symbolic verification suffers zero recall on hidden bridges without statistical link prediction $\mathbb{P}(H \mid G_o)$.
 2. **TAC-GB Gradient-Boosted Decision Tree Baseline (`src/iam/baselines/tac_gb.py`)**:
    - Implemented `TACGBLinkPredictor` modeling the gradient-boosted baseline from TAC-Bench (2025/2026).
-   - Utilizes `HistGradientBoostingClassifier` with balanced class weighting to handle severe positive class sparsity ($< 0.1\%$).
+   - Utilizes `HistGradientBoostingClassifier` with balanced class weighting to handle severe positive class sparsity (< 0.1%).
    - Trained on high-dimensional topological and access-control features extracted by `EdgePairFeaturizer` (degree, common neighbors, Jaccard, Adamic-Adar, preferential attachment, shortest path in $G_o$, admin privileges, action overlap).
    - Computes PR-AUC, ROC-AUC, Recall@K, FNR, and MRR.
 3. **Public API & Integration (`src/iam/baselines/__init__.py`)**:

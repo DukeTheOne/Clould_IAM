@@ -187,7 +187,7 @@ The effort estimates are uncertain, mainly because of AWS semantics and the defi
 
 #### Step 3.4: Structured Masking Framework Setup (4.0h)
 - [x] Masking removes **authorization evidence and delegation relationships**, not necessarily literal static IAM edges. For every operator, document in code which AWS object is hidden and how it is represented in the graph.
-  - **Condition A (P0, Random):** Randomly drop $p \in \{10\text{\%}, 20\text{\%}, 30\text{\%}, 40\text{\%}\}$ of intermediate trust/delegation relations.
+  - **Condition A (P0, Random):** Randomly drop $p \in \lbrace 10\\%, 20\\%, 30\\%, 40\\% \rbrace$ of intermediate trust/delegation relations.
   - **Condition E (P0, Adversarial Bridge):** Hide the bridge relation of the ground-truth escalation path.
   - **Condition B (P1, Cross-Account):** Hide all relations whose evidence lives in a designated unobservable account.
   - **Condition C (P2, Federated IdP):** The cloud-side OIDC/SAML trust policy stays visible; hide the external-principal-to-role delegation evidence, modeled as a distinct federated-delegation relation.
@@ -269,7 +269,7 @@ The effort estimates are uncertain, mainly because of AWS semantics and the defi
 * **Estimated Effort**: 18 Hours
 
 #### Step 6.1: Experimental Sweep (6.0h)
-- [x] Run 5 random seeds. **P0:** Conditions A ($p \in \{0.0, 0.1, 0.2, 0.3, 0.4\}$) and E. **P1:** Condition B. **P2:** Conditions C and D.
+- [x] Run 5 random seeds. **P0:** Conditions A ($p \in \lbrace 0.0, 0.1, 0.2, 0.3, 0.4 \rbrace$) and E. **P1:** Condition B. **P2:** Conditions C and D.
 - [x] Models: exact oracle (reference), BFS, Random Forest, motif-completion heuristic, RGCN. Evaluate on held-out environments only.
 
 #### Step 6.2: Metrics Compilation (4.0h)

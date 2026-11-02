@@ -21,7 +21,7 @@ Before executing the full sweep, we synthesized the rigorous empirical protocols
      - **NEGATIVE RESULT**: Classical baselines consistently outperform RGCN across all masking conditions. Report transparently as an academic negative finding; decouple Phase 3 by driving the repair solver with a synthetic calibrated predictor.
 
 3. **Multi-Condition Degradation Analysis Across 5 Masking Regimes**:
-   - **Condition A (Random Masking - P0)**: Edge dropout across $p \in \{0.0, 0.1, 0.2, 0.3, 0.4\}$, plotting degradation curves of recall and PR-AUC.
+   - **Condition A (Random Masking - P0)**: Edge dropout across $p \in \lbrace 0.0, 0.1, 0.2, 0.3, 0.4 \rbrace$, plotting degradation curves of recall and PR-AUC.
    - **Condition E (Adversarial Bridge Masking - P0 Core)**: Selective masking of the critical bottleneck authorization relation along privilege escalation attack paths.
    - **Condition B (Cross-Account Masking - P1)**: Configuration blindness in external AWS account boundaries.
    - **Condition C (Federated IdP Masking - P2)**: External IdP trust delegation hidden; cloud trust policy visible.
@@ -36,7 +36,7 @@ Before executing the full sweep, we synthesized the rigorous empirical protocols
 
 ## Step 6.1: Multi-Seed Experimental Sweep (6.0h) - [COMPLETED]
 
-**Objective**: Build and execute the automated multi-seed experiment runner across 5 random seeds ($s \in \{101, 202, 303, 404, 505\}$) on held-out environments, comparing Exact Oracle, Deterministic BFS, Tabular Random Forest, Motif Heuristic, and HeteroRGCN across all 5 structured masking conditions.
+**Objective**: Build and execute the automated multi-seed experiment runner across 5 random seeds ($s \in \lbrace 101, 202, 303, 404, 505 \rbrace$) on held-out environments, comparing Exact Oracle, Deterministic BFS, Tabular Random Forest, Motif Heuristic, and HeteroRGCN across all 5 structured masking conditions.
 
 **Implementation Details**:
 1. **Sweep Configuration & Data Pipeline ([`src/iam/models/sweep.py`](file:///c:/Users/jack6/IAM/IAM_GNN/src/iam/models/sweep.py))**:
@@ -62,7 +62,7 @@ Before executing the full sweep, we synthesized the rigorous empirical protocols
    - [x] Implemented `compute_confidence_interval` with small-sample Student's $t$ critical values ($N=5, \text{df}=4 \implies t_{0.975} = 2.776$) and standard error scaling.
    - [x] Aggregated raw seed metric lists into `MetricSummary` objects reporting `mean ± 95% CI` across all evaluation dimensions.
 2. **Degradation Curve Tracking**:
-   - [x] Tracked monotonic performance degradation under Condition A across dropout ratios $p \in \{0.0, 0.1, 0.2, 0.3, 0.4\}$.
+   - [x] Tracked monotonic performance degradation under Condition A across dropout ratios $p \in \lbrace 0.0, 0.1, 0.2, 0.3, 0.4 \rbrace$.
    - [x] Verified degradation dynamics: Oracle Recall@10 monotonically drops ($1.000 \to 0.749 \to 0.531 \to 0.350$), Random Forest drops ($0.760 \to 0.457 \to 0.276 \to 0.168$), and RGCN maintains superior balanced recall ($0.530 \to 0.395 \to 0.285 \to 0.182$) with drastically lower FNR ($0.49 \text{ vs } 0.88$).
 
 ---

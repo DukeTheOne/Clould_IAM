@@ -63,7 +63,7 @@ Rather than treating latent link prediction and policy repair as disconnected mo
 
 $$
 \begin{aligned}
-G_o &\xrightarrow{\text{Calibrated RGCN}} \mathbb{P}(H \mid G_o) \xrightarrow{\text{Sample}} \{H_1, \dots, H_M\} \\
+G_o &\xrightarrow{\text{Calibrated RGCN}} \mathbb{P}(H \mid G_o) \xrightarrow{\text{Sample}} \lbrace H_1, \dots, H_M \rbrace \\
     &\xrightarrow{\text{Uncertainty-Aware Repair}} \mathcal{P}^* \xrightarrow{\text{Verify on } G_o \cup H_i \text{ \& Replay}} \text{Repaired Policy + Guarantee}
 \end{aligned}
 $$
@@ -205,7 +205,7 @@ $$
 
 Random edge deletion is a controlled baseline but not a model of how visibility is actually lost. We therefore mask **authorization evidence and delegation relationships**, not only literal static IAM edges, and document for each condition exactly which AWS object is hidden and how it is represented in the graph:
 
-* **Condition A (Random Masking - Baseline):** Randomly drop $p \in \{10\text{\%}, 20\text{\%}, 30\text{\%}, 40\text{\%}\}$ of intermediate trust/delegation relations.
+* **Condition A (Random Masking - Baseline):** Randomly drop $p \in \lbrace 10\\%, 20\\%, 30\\%, 40\\% \rbrace$ of intermediate trust/delegation relations.
 * **Condition B (Cross-Account Masking):** Hide all relations whose evidence lives in a designated unobservable account (its role trust policies and identity policies cannot be read).
 * **Condition C (Federated IdP Masking):** The cloud-side OIDC/SAML trust policy remains visible; what is hidden is the external-principal-to-role delegation evidence, modeled as a distinct federated-delegation relation rather than as an `AssumesRole` edge.
 * **Condition D (Ephemeral STS Masking):** Hide runtime, session-derived delegation (e.g., role-chaining sessions). This is runtime authorization state, modeled in the workload layer rather than as a persistent configuration edge.

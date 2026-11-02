@@ -99,7 +99,7 @@ $$
 
 where:
 - Node entity types: $V = V_{\text{User}} \cup V_{\text{Role}} \cup V_{\text{Policy}} \cup V_{\text{Group}} \cup V_{\text{Resource}} \cup V_{\text{Condition}}$.
-- Edge relation types: $\mathcal{R} = \{\text{AttachedTo}, \text{AssumesRole}, \text{HasPolicy}, \text{TargetsResource}, \text{PassesRoleTo}, \text{AppliesCondition}, \dots\}$.
+- Edge relation types: $\mathcal{R} = \lbrace \text{AttachedTo}, \text{AssumesRole}, \text{HasPolicy}, \text{TargetsResource}, \text{PassesRoleTo}, \text{AppliesCondition}, \dots \rbrace$.
 
 ### 3.2 AWS Action Capability Model $C(a, r, c)$
 AWS authorization enforcement is heterogeneous: applying resource constraints to actions that AWS forbids resource-level permissions causes immediate deployment errors. We formalize this constraint via the capability mapping:

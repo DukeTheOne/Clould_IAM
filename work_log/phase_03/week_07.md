@@ -41,7 +41,7 @@ Following the formal Gate G0 **GO** verdict established in [week_06.md](file:///
 
 ### 1. Separation of Edge Probabilities vs. Latent Graph Uncertainty (Monte Carlo Sampling)
 - **The Pitfall of Path Multiplications**: In multi-relational access control graphs, hidden relations are rarely conditionally independent ($\mathbb{P}(e_1 \wedge e_2) \neq \mathbb{P}(e_1) \cdot \mathbb{P}(e_2)$). A single external departmental boundary, federated IdP mapping, or dynamic STS delegation mechanism often masks an entire cluster of interconnected permissions. Multiplying raw edge probabilities along a path introduces compounding errors and fails to model joint topological reachability.
-- **Monte Carlo Completion Sampling**: We model missing authorization evidence as a latent set $H$ and sample $M$ plausible completions $\{H_1, \dots, H_M\}$ from calibrated edge probabilities $\hat{p}_{uv}^r = \sigma(z_{uv}^r / T^*)$:
+- **Monte Carlo Completion Sampling**: We model missing authorization evidence as a latent set $H$ and sample $M$ plausible completions $\lbrace H_1, \dots, H_M \rbrace$ from calibrated edge probabilities $\hat{p}_{uv}^r = \sigma(z_{uv}^r / T^*)$:
 
 $$
 \widehat{\mathbb{P}}\big[\text{Attack}(s, t) \mid G_o\big] = \frac{1}{M}\sum_{i=1}^M \mathbf{1}\big[\text{Attack}(s, t; G_o \cup H_i)\big]
@@ -71,7 +71,7 @@ Unlike naive solvers that treat IAM policies as generic strings (e.g., scoping a
 
 ### 4. Candidate Space Pruning & Scalability Bounds (RQ3 Foundation)
 - In enterprise environments containing $500$ to $5{,}000$ identities and resources, solving exact reachability cuts over the entire graph multigraph is computationally intractable.
-- Candidate pruning identifies edges that appear along active escalation paths across the sampled completions $\{H_i\}$, ranking them by expected risk reduction.
+- Candidate pruning identifies edges that appear along active escalation paths across the sampled completions $\lbrace H_i \rbrace$, ranking them by expected risk reduction.
 - We restrict the downstream solver search space to a candidate subgraph ($\le 50$ edges). Pruning quality is evaluated along three dimensions: **candidate recall**, **optimality gap versus unpruned greedy repair**, and **runtime latency** (tracking interactive target $< 3\text{ s}$).
 
 ---
@@ -115,7 +115,7 @@ $$
 
 ## Step 7.2: Uncertainty-Guided Candidate Pruning (P1) (4.0h) - [COMPLETED]
 
-**Objective**: Implement the `CandidatePruner` module that analyzes sampled completions $\{H_1, \dots, H_M\}$ to identify, score, and filter candidate cut relations, reducing the repair search space to a focused candidate subgraph ($\le 50$ edges) while tracking candidate recall and the optimality gap.
+**Objective**: Implement the `CandidatePruner` module that analyzes sampled completions $\lbrace H_1, \dots, H_M \rbrace$ to identify, score, and filter candidate cut relations, reducing the repair search space to a focused candidate subgraph ($\le 50$ edges) while tracking candidate recall and the optimality gap.
 
 **Implementation Details**:
 1. **Attack Path Contribution Profiler**:
@@ -167,7 +167,7 @@ $$
 
 ## Step 7.3: Capability-Aware Greedy Repair Engine (P1) (5.0h) - [COMPLETED]
 
-**Objective**: Implement the `CapabilityGreedyRepairEngine` that synthesizes minimal, capability-compliant IAM policy patches by selecting admissible transformations (resource ARN scoping vs. action subtraction) governed by $C(a, r, c)$ that eliminate escalation paths across $\{H_i\}$ while preserving 100% of legitimate observed workload operations ($\mathcal{D}^{T_1}$).
+**Objective**: Implement the `CapabilityGreedyRepairEngine` that synthesizes minimal, capability-compliant IAM policy patches by selecting admissible transformations (resource ARN scoping vs. action subtraction) governed by $C(a, r, c)$ that eliminate escalation paths across $\lbrace H_i \rbrace$ while preserving 100% of legitimate observed workload operations ($\mathcal{D}^{T_1}$).
 
 **Implementation Details**:
 1. **Policy Transformation Primitives (`PolicyTransformation`)**:
@@ -206,7 +206,7 @@ $$
   2. `CreateAccessKeyMotif`: Scopes `iam:CreateAccessKey` to legitimate principal ($w=1.0$), preventing admin account takeover.
   3. `AttachPolicyMotif`: Excises `iam:AttachUserPolicy` ($w=5.0$), blocking unrestricted admin policy self-attachment.
   4. `AssumeRoleChainMotif`: Severs multi-hop role assumption trust path to high-value targets.
-- **Multi-Completion Uncertainty Repair**: Reduces Monte Carlo attack risk from 0.8 to 0.0 across completion sets $\{H_1, \dots, H_M\}$.
+- **Multi-Completion Uncertainty Repair**: Reduces Monte Carlo attack risk from 0.8 to 0.0 across completion sets $\lbrace H_1, \dots, H_M \rbrace$.
 
 **Delivered Artifacts**:
 - [`src/iam/optimizer/transformations.py`](file:///Users/duke/IAM/src/iam/optimizer/transformations.py): `PolicyTransformation`, `ScopeResourceTransformation`, `RemoveActionTransformation`, and `generate_policy_diff`.
@@ -221,7 +221,7 @@ $$
 
 **Implementation Details**:
 1. **SMT Decision Encoding (`Z3CanonicalRepairSolver`)**:
-   - [x] Models policy statements as boolean decision variables: $x_{\text{action\_keep}} \in \{0, 1\}$, $x_{\text{scoped\_arn}} \in \{0, 1\}$.
+   - [x] Models policy statements as boolean decision variables: $x_{\text{action\_keep}} \in \lbrace 0, 1 \rbrace$, $x_{\text{scoped\_arn}} \in \lbrace 0, 1 \rbrace$.
    - [x] Encodes structural consistency invariants: $x_{\text{scoped\_arn}} \implies x_{\text{action\_keep}}$ (scoping requires keeping the action).
    - [x] Encodes hard capability constraints: $x_{\text{scoped\_arn}} \implies \text{SupportsResourceArn}(\text{action})$; wildcard-only actions or actions with no evidenced ARNs assert $\neg x_{\text{scoped\_arn}}$.
    - [x] Encodes hard log preservation constraints: $\bigwedge_{e \in \mathcal{D}^{T_1}} x_{\text{action\_keep}} = \text{True}$; if an observed event targets a non-evidenced resource, asserts $\neg x_{\text{scoped\_arn}}$.

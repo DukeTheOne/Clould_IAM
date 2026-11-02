@@ -197,10 +197,10 @@ To demonstrate that uncertainty-aware least-privilege repair generalizes beyond 
 
 1. **AWS IAM ($C_{\text{AWS}}$)**: Action-Resource-Condition model governing pattern-scoped ARNs, wildcard-only restrictions (e.g., `sts:GetCallerIdentity`), and global/service context condition keys.
 2. **Microsoft Azure RBAC ($C_{\text{Azure}}$)**: 5-tier scope hierarchy model:
-   $$\mathcal{S}_{\text{Azure}} = \{\text{tenant}, \text{management\_group}, \text{subscription}, \text{resource\_group}, \text{resource}\}$$
+   $$\mathcal{S}_{\text{Azure}} = \lbrace \text{tenant}, \text{management\_group}, \text{subscription}, \text{resource\_group}, \text{resource} \rbrace$$
    enforcing strict segregation of DataActions (e.g., `Microsoft.KeyVault/vaults/secrets/read` valid strictly at leaf Resource scope) from Control Plane actions (e.g., `Microsoft.Authorization/roleAssignments/write` valid across Management Group, Subscription, and Resource Group boundaries).
 3. **Google Cloud IAM ($C_{\text{GCP}}$)**: 4-tier Resource Manager hierarchy:
-   $$\mathcal{L}_{\text{GCP}} = \{\text{organization}, \text{folder}, \text{project}, \text{resource}\}$$
+   $$\mathcal{L}_{\text{GCP}} = \lbrace \text{organization}, \text{folder}, \text{project}, \text{resource} \rbrace$$
    modeling downward authorization inheritance and restricting administrative permissions (e.g., `resourcemanager.projects.setIamPolicy`) to project or higher boundary levels.
 
 ### 8.1 Empirical Multi-Cloud Verification Benchmark

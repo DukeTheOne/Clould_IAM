@@ -10,7 +10,7 @@
 ## 1. Algorithmic Optimization & Future Scaling Possibility
 
 ### The Deep-Copy Bottleneck at Scale
-During Monte Carlo reachability analysis over $M$ sampled completions $\{H_1, \dots, H_M\}$, both the greedy repair engine (`CapabilityGreedyRepairEngine._evaluate_attack_risk`, `_find_authorizing_statements`) and the three-level verifier (`CompletionSetVerifier.verify_patch`) previously performed full NetworkX multigraph copies:
+During Monte Carlo reachability analysis over $M$ sampled completions $\lbrace H_1, \dots, H_M \rbrace$, both the greedy repair engine (`CapabilityGreedyRepairEngine._evaluate_attack_risk`, `_find_authorizing_statements`) and the three-level verifier (`CompletionSetVerifier.verify_patch`) previously performed full NetworkX multigraph copies:
 ```python
 # PREVIOUS PATTERN: O(|V| + |E|) memory allocation and edge dictionary copy M times
 comp_nx = graph.nx_graph.copy()

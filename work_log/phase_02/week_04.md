@@ -11,8 +11,8 @@
 Before beginning implementation, consider the core architectural requirements designed to ensure this subsystem scales seamlessly from the Tier 1 prototype (500–5,000 nodes) into Tier 2 Master's Thesis research (50,000+ nodes, real-world Terraform/CloudFormation IaC parsing, and zero-shot TAC-Bench transfer):
 
 1. **Rigorous Separation Between Unmasked Ground Truth and Partially Observed Views**:
-   - The **Exact Symbolic Reachability Oracle** operates with omniscient access to the complete unmasked authorization graph $G = (V, E)$, establishing the theoretical detection upper bound ($100\%$ recall by definition) and formal ground-truth witnesses for all $(s, t)$ privilege escalation pairs.
-   - The **Deterministic BFS Engine (PMapper Proxy)** operates strictly on the partially observed graph $G_o = (V, E_{\text{obs}})$, simulating current commercial IAM graph audit tools (e.g., NCC Group PMapper, BloodHound, AWS IAM Access Analyzer). Under Condition E (Adversarial Bridge Masking), BFS must fail by construction ($0\%$ reachability to severed crown jewels), serving as the empirical baseline to demonstrate the fundamental limit of deterministic graph traversal under missing configuration evidence.
+   - The **Exact Symbolic Reachability Oracle** operates with omniscient access to the complete unmasked authorization graph $G = (V, E)$, establishing the theoretical detection upper bound (100% recall by definition) and formal ground-truth witnesses for all $(s, t)$ privilege escalation pairs.
+   - The **Deterministic BFS Engine (PMapper Proxy)** operates strictly on the partially observed graph $G_o = (V, E_{\text{obs}})$, simulating current commercial IAM graph audit tools (e.g., NCC Group PMapper, BloodHound, AWS IAM Access Analyzer). Under Condition E (Adversarial Bridge Masking), BFS must fail by construction (0% reachability to severed crown jewels), serving as the empirical baseline to demonstrate the fundamental limit of deterministic graph traversal under missing configuration evidence.
 
 2. **Topological Feature Engineering for Link Prediction ($O(|V| + |E|)$ Efficiency)**:
    - Classical link prediction baselines require featurizing candidate node pairs $(u, v)$ without dense $N \times N$ matrix instantiation, which would explode at $N = 50{,}000$ (requiring $2.5 \times 10^9$ entries and ~10 GB RAM).
@@ -27,7 +27,7 @@ Before beginning implementation, consider the core architectural requirements de
 
 4. **Severe Class Imbalance & Evaluation Protocols (PR-AUC as Primary)**:
    - True hidden authorization edges are extremely sparse ($< 1:1{,}000$ positive-to-negative ratio). ROC-AUC is misleadingly optimistic under severe class imbalance because a large number of true negatives keeps the False Positive Rate artificially low.
-   - We enforce **Precision-Recall AUC (PR-AUC)** as the primary evaluation metric, supplemented by Recall@K ($K \in \{10, 50, 100\}$), False Negative Rate (FNR), and Attack-Path Recovery Rate across held-out environments ($\mathcal{D}_{\text{test}}$).
+   - We enforce **Precision-Recall AUC (PR-AUC)** as the primary evaluation metric, supplemented by Recall@K ($K \in \lbrace 10, 50, 100 \rbrace$), False Negative Rate (FNR), and Attack-Path Recovery Rate across held-out environments ($\mathcal{D}_{\text{test}}$).
 
 ---
 

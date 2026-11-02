@@ -37,8 +37,8 @@ Week 10 marks the formal culmination of **Tier 1 (Course Prototype Deliverable)*
 Every design decision in Week 10 is calibrated to ensure zero architectural refactoring when transitioning to 50,000+ node enterprise multi-account graphs:
 1. **Decoupled Unified CLI (`iam`)**: Subcommands (`generate`, `train`, `evaluate`, `repair`, `dashboard`, `export`) are stateless and interact exclusively through strictly typed schemas (`PolicyDocument`, `IAMGraph`, `PostureKPIs`, `VerificationReport`). Adding Terraform ingestion or TAC-Bench loaders in Tier 2 requires merely adding input adapters without touching core algorithms.
 2. **Sub-Linear Traversal & Ego-Scoping ($\mathcal{O}(d^k)$)**: Both the interactive PyVis engine and the headless triage exporter enforce strictly bounded $k \le 2$ ego-neighborhood extraction ($|V_{\text{ego}}| \le 30$). On enterprise topologies with $N = 50{,}000$ identities, visual and cognitive latency remains $< 5\text{ ms}$.
-3. **Formal Separation of Symbolic Verification vs. Statistical Inference**: The neural link predictor ($\text{RGCN}_\tau$) supplies calibrated probabilities $\hat{p} \in [0, 1]$, while the symbolic verifier (`CompletionSetVerifier`) rigorously enforces hard authorization constraints ($C(a, r, c)$) across completions $\{G_o \cup H_i\}$. This guarantees that statistical uncertainty never contaminates formal authorization guarantees.
-4. **Reproducibility Guarantee**: The automated benchmark suite and single-command runner (`reproduce_results.sh`) utilize fixed multi-seed orchestration ($S \in \{101, 202, 303, 404, 505\}$), ensuring all empirical claims in the paper/thesis are bit-exact reproducible across heterogeneous hardware.
+3. **Formal Separation of Symbolic Verification vs. Statistical Inference**: The neural link predictor ($\text{RGCN}_\tau$) supplies calibrated probabilities $\hat{p} \in [0, 1]$, while the symbolic verifier (`CompletionSetVerifier`) rigorously enforces hard authorization constraints ($C(a, r, c)$) across completions $\lbrace G_o \cup H_i \rbrace$. This guarantees that statistical uncertainty never contaminates formal authorization guarantees.
+4. **Reproducibility Guarantee**: The automated benchmark suite and single-command runner (`reproduce_results.sh`) utilize fixed multi-seed orchestration ($S \in \lbrace 101, 202, 303, 404, 505 \rbrace$), ensuring all empirical claims in the paper/thesis are bit-exact reproducible across heterogeneous hardware.
 
 ---
 
@@ -80,7 +80,7 @@ flowchart TD
 
 **Implementation Details**:
 1. **Automated Multi-Scale Pipeline Benchmark Script (`scripts/run_full_pipeline_benchmarks.py`)**:
-   - Executes multi-seed evaluations ($S \in \{101, 202, 303\}$) across graph scale points:
+   - Executes multi-seed evaluations ($S \in \lbrace 101, 202, 303 \rbrace$) across graph scale points:
      - Small: $N = 500$ nodes (rapid validation)
      - Medium: $N = 1{,}000$ nodes (standard baseline)
      - Large: $N = 3{,}000$ nodes (enterprise scale)
@@ -88,7 +88,7 @@ flowchart TD
    - Features `--fast` smoke mode (2 seeds, 100–300 nodes) for CI/CD gates and rapid developer verification.
 2. **RQ1: Structured Masking Discovery Compilation**:
    - Benchmarks link recovery across all 5 structured masking conditions:
-     - Condition A: Random Missing Telemetry ($10\%, 20\%, 30\%, 40\%$)
+     - Condition A: Random Missing Telemetry (10%, 20%, 30%, 40%)
      - Condition B: Cross-Account Role Chaining Masking
      - Condition C: Federated Identity Provider (IdP) Masking
      - Condition D: Ephemeral STS Token Masking
@@ -116,7 +116,7 @@ flowchart TD
 
 ## Step 10.2: Codebase Refactoring, Unified CLI & Quality Verification (3.5h) - [COMPLETED]
 
-**Objective**: Architect and implement the unified `iam` production CLI, enforce 100% adherence to `ruff` linting and formatting, verify complete `mypy --strict` type annotations across public APIs, and validate that the unit test suite exceeds the $>85\%$ coverage threshold.
+**Objective**: Architect and implement the unified `iam` production CLI, enforce 100% adherence to `ruff` linting and formatting, verify complete `mypy --strict` type annotations across public APIs, and validate that the unit test suite exceeds the >85% coverage threshold.
 
 **Implementation Details**:
 1. **Unified CLI Architecture (`src/iam/cli.py`)**:
@@ -199,7 +199,7 @@ flowchart TD
 ## Verification & Acceptance Checklist
 
 - [x] Full automated test suite passes: **410 / 410 tests passing**.
-- [x] Code test coverage strictly validated at **93%** (target $>85\%$).
+- [x] Code test coverage strictly validated at **93%** (target >85%).
 - [x] Strict static type checking passed: `mypy --strict src/iam`.
 - [x] Linting and formatting 100% compliant: `ruff check` and `ruff format`.
 - [x] Unified CLI engine implemented: `iam` entry point with 6 subcommands.

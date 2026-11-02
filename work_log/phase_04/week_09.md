@@ -51,7 +51,7 @@ As established in [proposal.md](file:///Users/duke/IAM/proposal.md) and [bluepri
 
 ### 1. The Explainability & Safety Claim Boundary
 A graphical interface can illustrate an attack path, but it cannot certify security. We maintain strict separation of responsibilities:
-1. **The Symbolic Verifier is the Safety Authority**: All safety claims, residual attack reachability probabilities, and zero-regression guarantees are computed exclusively by the `CompletionSetVerifier` ([`src/iam/verifier/verifier.py`](file:///Users/duke/IAM/src/iam/verifier/verifier.py)) across the three verification boundaries ($G_o$, $\{G_o \cup H_i\}_{i=1}^M$, and $G^*$).
+1. **The Symbolic Verifier is the Safety Authority**: All safety claims, residual attack reachability probabilities, and zero-regression guarantees are computed exclusively by the `CompletionSetVerifier` ([`src/iam/verifier/verifier.py`](file:///Users/duke/IAM/src/iam/verifier/verifier.py)) across the three verification boundaries ($G_o$, $\lbrace G_o \cup H_i \rbrace_{i=1}^M$, and $G^*$).
 2. **The Dashboard is an Operational Explainability Tool**: Its purpose is cognitive triage—translating complex multi-hop relational dependencies into clear, intuitive ego-networks that allow cloud security operators to understand *why* a latent path was flagged, *what* capability-compliant patch is proposed, and *how* the patch severs the bottleneck without disrupting business operations.
 
 ### 2. Ego-Network Scoping as a Fundamental Scaling Invariant ($k \le 2$)
@@ -199,8 +199,8 @@ To ensure full resilience against headless server environments, containerized ev
      - Applicable condition keys are validated against the capability snapshot.
 3. **Security–Utility Impact Metrics Display**:
    - [x] Displays concise remediation impact statistics derived from the `CompletionSetVerifier`:
-     - **Blast Radius Reduction**: $\Delta \text{Risk} = \text{Reachability}(G^*) - \text{Reachability}(G^* \oplus \mathcal{P}^*)$ ($100\% \to 0\%$).
-     - **Observed Historical Breakage**: $0.0\%$ broken requests on $\mathcal{D}^{T_1}$ (guaranteed log conformance).
+     - **Blast Radius Reduction**: $\Delta \text{Risk} = \text{Reachability}(G^*) - \text{Reachability}(G^* \oplus \mathcal{P}^*)$ (100% $	o$ 0%).
+     - **Observed Historical Breakage**: 0.0% broken requests on $\mathcal{D}^{T_1}$ (guaranteed log conformance).
      - **Temporal Holdout Conformance**: Quantified operational breakage rate on drifted workload $\mathcal{D}^{T_2}$ (1.33%).
      - **AST Complexity Penalty**: Exact count of mutated statements.
 4. **Interactive "Simulate Patch" Toggle**:
@@ -210,7 +210,7 @@ To ensure full resilience against headless server environments, containerized ev
      - Visualizes the severed edge as a muted dashed line with `SEVERED` text label.
 
 **Future Scaling & Dynamic Simulation Optimization Considerations**:
-- **In-Memory Graph Masking**: Patch simulation does not re-parse JSON or re-instantiate NetworkX graphs from disk; it applies an ephemeral boolean edge mask $\mathbf{m} \in \{0, 1\}^{|E_{\text{ego}}|}$ in memory, recomputing reachability in $<1\text{ ms}$.
+- **In-Memory Graph Masking**: Patch simulation does not re-parse JSON or re-instantiate NetworkX graphs from disk; it applies an ephemeral boolean edge mask $\mathbf{m} \in \lbrace 0, 1 \rbrace^{|E_{\text{ego}}|}$ in memory, recomputing reachability in $<1\text{ ms}$.
 - **Differential Diff Generation**: Policy AST diffs are computed directly on Pydantic AST representations in $<1\text{ ms}$.
 
 **Target File Artifacts**:

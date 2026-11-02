@@ -29,7 +29,7 @@ In [`src/iam/verifier/scalability.py`](file:///Users/duke/IAM/src/iam/verifier/s
 - `ScalabilityBenchmarkResult`: Aggregates multi-scale runs, evaluates scalability hypotheses, and generates Markdown and JSON artifact summaries.
 
 ### Step 2: High-Resolution Profiling & Z3 Timeout
-- Built `ScalabilityBenchmarkRunner` to evaluate procedural topologies ($N \in \{61, 111, 261, 511\}$, scaling to $5,000$).
+- Built `ScalabilityBenchmarkRunner` to evaluate procedural topologies ($N \in \lbrace 61, 111, 261, 511 \rbrace$, scaling to $5,000$).
 - Enforced a 5,000 ms timeout on exact Z3 MaxSAT solving:
   ```python
   z3_solver.set("timeout", 5000)
@@ -69,8 +69,8 @@ In [`src/iam/verifier/scalability.py`](file:///Users/duke/IAM/src/iam/verifier/s
 | Metric | Target | Measured Result | Status |
 | :--- | :---: | :---: | :---: |
 | **Interactive Pipeline Latency ($N \le 500$)** | $< 3.0\text{ s}$ | **0.257 seconds** | **CERTIFIED** |
-| **Optimality Gap vs. Exact MaxSAT** | $\le 2.0\%$ | **0.00%** | **CERTIFIED** |
-| **Pruning Cut Reduction Rate** | $\ge 25.0\%$ | **33.3% cut reduction** | **CERTIFIED** |
+| **Optimality Gap vs. Exact MaxSAT** | $\le$ 2.0% | **0.00%** | **CERTIFIED** |
+| **Pruning Cut Reduction Rate** | $\ge$ 25.0% | **33.3% cut reduction** | **CERTIFIED** |
 | **Automated Test Suite Passing** | 100% | **468 Passing Tests** | **CERTIFIED** |
 
 **Gate G3 Verdict: FULL GO.** Computational scalability is formally established, enabling unconstrained transition to Phase 8 (Formalization, Thesis Manuscript & Defense).

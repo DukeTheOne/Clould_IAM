@@ -1,6 +1,6 @@
 # Week 08: Synthetic Temporal Workload, Completion-Set Verifier & Central Tradeoff Experiment (RQ2)
 
-**Goal**: Formulate and generate synthetic temporal authorization workloads with realistic operational drift ($\mathcal{D}^{T_1}$ for synthesis vs. $\mathcal{D}^{T_2}$ for evaluation), construct the three-level `CompletionSetVerifier` ($G_o$, $\{G_o \cup H_i\}_{i=1}^M$, and ground-truth $G^*$) with side-effect checking, execute the central empirical tradeoff experiment (RQ2) comparing our uncertainty-aware repair against 5 baseline strategies (Oracle, No Action, Coarse Action Deletion / IAMPERE, Log-Only Tightening / PolicyRefiner, and Point-Estimate Repair), and generate multi-dimensional Pareto tradeoff frontiers separating security from operational utility.
+**Goal**: Formulate and generate synthetic temporal authorization workloads with realistic operational drift ($\mathcal{D}^{T_1}$ for synthesis vs. $\mathcal{D}^{T_2}$ for evaluation), construct the three-level `CompletionSetVerifier` ($G_o$, $\lbrace G_o \cup H_i \rbrace_{i=1}^M$, and ground-truth $G^*$) with side-effect checking, execute the central empirical tradeoff experiment (RQ2) comparing our uncertainty-aware repair against 5 baseline strategies (Oracle, No Action, Coarse Action Deletion / IAMPERE, Log-Only Tightening / PolicyRefiner, and Point-Estimate Repair), and generate multi-dimensional Pareto tradeoff frontiers separating security from operational utility.
 **Estimated Effort**: 17 Hours
 **Target Milestone**: **M3: Security–Utility Tradeoff Evaluation (RQ2)**
 
@@ -46,7 +46,7 @@ Following the formal completion of the Monte Carlo latent-completion sampler, un
 ### 1. Three-Level Verification Boundary
 A neural model can be wrong; the symbolic verifier establishes the safety and claim boundary:
 1. **Level 1 (Observed Graph $G_o \oplus \mathcal{P}$)**: Traditional static analysis verification. Under partial observability, passing Level 1 gives false confidence because latent bridge relations are completely invisible.
-2. **Level 2 (Completion Set $\{ (G_o \cup H_i) \oplus \mathcal{P} \}_{i=1}^M$)**: Evaluates whether the policy patch eliminates privilege escalation across all plausible Monte Carlo latent completions drawn from the calibrated relational model. Guarantees are formal relative to the completion set.
+2. **Level 2 (Completion Set $\lbrace (G_o \cup H_i) \oplus \mathcal{P} \rbrace_{i=1}^M$)**: Evaluates whether the policy patch eliminates privilege escalation across all plausible Monte Carlo latent completions drawn from the calibrated relational model. Guarantees are formal relative to the completion set.
 3. **Level 3 (Ground Truth $G^* \oplus \mathcal{P}$)**: Available strictly in synthetic benchmarking. Exposes residual risk caused by missing relationships that the neural model failed to infer.
 
 The measured discrepancy between Level 1, Level 2, and Level 3 is a primary research result of RQ2, exposing exactly when and why "safe on $G_o$" fails.
@@ -65,7 +65,7 @@ $$
 - **Utility Metric**: Fraction of legitimate requests in $\mathcal{D}^{T_2}$ denied by $\mathcal{P}$:
 
 $$
-\text{BreakageRate}(\mathcal{P}, \mathcal{D}^{T_2}) = \frac{|\{ e \in \mathcal{D}^{T_2} \mid \text{Authorized}(e, G_o \oplus \mathcal{P}) = 0 \}|}{|\mathcal{D}^{T_2}|}
+\text{BreakageRate}(\mathcal{P}, \mathcal{D}^{T_2}) = \frac{|\lbrace e \in \mathcal{D}^{T_2} \mid \text{Authorized}(e, G_o \oplus \mathcal{P}) = 0 \rbrace|}{|\mathcal{D}^{T_2}|}
 $$
 
 ### 3. The Central Tradeoff Experiment: 6 Remediation Strategies (RQ2)
@@ -78,7 +78,7 @@ Under Condition E (adversarial bridge relation $a \to b$ hidden), we systematica
 | **Method 2: Coarse Deletion** | IAMPERE-style heuristic: excised broad actions (`iam:PassRole`) | Moderate/Low | High breakage (breaks shared build pipelines) |
 | **Method 3: Log-Only Tightening** | PolicyRefiner-style: scopes strictly to observed $T_1$ events | Blind to latent path if uncalled in $T_1$ | High breakage on $T_2$ resource drift |
 | **Method 4a: Point-Estimate** | Thresholds RGCN $\hat{p} \ge 0.50$; repairs single graph | Vulnerable to model calibration errors | Low/Moderate |
-| **Method 4b: Uncertainty-Aware** | Optimizes over sampled completions $\{H_i\}$ with $C(a, r, c)$ | Lowest residual risk among zero-query methods | Low (scopes only what severs latent distribution) |
+| **Method 4b: Uncertainty-Aware** | Optimizes over sampled completions $\lbrace H_i \rbrace$ with $C(a, r, c)$ | Lowest residual risk among zero-query methods | Low (scopes only what severs latent distribution) |
 
 The comparison between **Method 4a** and **Method 4b** isolates whether modeling **latent graph uncertainty**, rather than merely thresholding edge predictions, provides quantifiable advantages.
 
@@ -120,7 +120,7 @@ The comparison between **Method 4a** and **Method 4b** isolates whether modeling
 
 ## Step 8.2: Completion-Set Verifier (4.0h) - [COMPLETED]
 
-**Objective**: Implement the `CompletionSetVerifier` module that formally evaluates proposed IAM policy patches across the 3-level verification boundary ($G_o$, $\{G_o \cup H_i\}_{i=1}^M$, and $G^*$), checks for unwanted privilege escalation side-effects, and quantifies operational breakage on the temporal holdout $\mathcal{D}^{T_2}$.
+**Objective**: Implement the `CompletionSetVerifier` module that formally evaluates proposed IAM policy patches across the 3-level verification boundary ($G_o$, $\lbrace G_o \cup H_i \rbrace_{i=1}^M$, and $G^*$), checks for unwanted privilege escalation side-effects, and quantifies operational breakage on the temporal holdout $\mathcal{D}^{T_2}$.
 
 **Implementation Details**:
 1. **Three-Level Symbolic Verification (`VerificationLevel`)**:
@@ -140,9 +140,9 @@ The comparison between **Method 4a** and **Method 4b** isolates whether modeling
 - [`tests/test_completion_verifier.py`](file:///Users/duke/IAM/tests/test_completion_verifier.py): Comprehensive unit and integration test suite (6 / 6 tests passing).
 
 **Verification & Acceptance Results**:
-- **Contribution 3 Formal Verification**: Successfully verified that an unrepaired baseline under Condition E masks attack reachability at Level 1 ($G_o$ risk = 0.0), but is detected as unsafe at Level 2 ($>70\%$ risk across completions) and Level 3 ($100\%$ risk on $G^*$), correctly classified as `SafetyStatus.MISLEADING_SAFE` with `is_misleading=True`.
+- **Contribution 3 Formal Verification**: Successfully verified that an unrepaired baseline under Condition E masks attack reachability at Level 1 ($G_o$ risk = 0.0), but is detected as unsafe at Level 2 (>70% risk across completions) and Level 3 (100% risk on $G^*$), correctly classified as `SafetyStatus.MISLEADING_SAFE` with `is_misleading=True`.
 - **Side-Effect Audit**: Confirmed clean 0 side-effect verification on sound repairs, while accurately flagging synthetic policy regressions that inadvertently expose new admin pathways.
-- **Holdout Workload Replay**: Validated zero breakage on historical baseline $\mathcal{D}^{T_1}$ ($0.0\%$ breakage) and quantified operational disruption on drifted $\mathcal{D}^{T_2}$.
+- **Holdout Workload Replay**: Validated zero breakage on historical baseline $\mathcal{D}^{T_1}$ (0.0% breakage) and quantified operational disruption on drifted $\mathcal{D}^{T_2}$.
 - **Performance**: Full 3-level verification and replay completes in $< 1\text{ ms}$ on canonical motifs.
 - **Code Quality**: 100% clean passes on `mypy --strict` and `ruff`.
 

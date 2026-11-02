@@ -31,9 +31,9 @@ Following the formal defense preparation and thesis manuscript completion in Wee
 | **Total Automated Unit & Integration Tests** | $\ge 470$ | **476 Passing Tests** | **CERTIFIED** |
 | **Strict Type Checking (`mypy --strict`)** | 100% across all modules | **0 errors across 63 modules** | **CERTIFIED** |
 | **Code Quality & Formatting (`ruff`)** | Zero lint/style violations | **0 errors** | **CERTIFIED** |
-| **Multi-Cloud Conformance Pass Rate** | $100.0\%$ | **100.0% (22/22 Rules)** | **CERTIFIED** |
-| **Illegal Scoping Prevention Rate** | $100.0\%$ | **100.0% Blocked** | **CERTIFIED** |
-| **Benign Workload Utility Preservation** | $100.0\%$ | **100.0% Preserved** | **CERTIFIED** |
+| **Multi-Cloud Conformance Pass Rate** | 100.0% | **100.0% (22/22 Rules)** | **CERTIFIED** |
+| **Illegal Scoping Prevention Rate** | 100.0% | **100.0% Blocked** | **CERTIFIED** |
+| **Benign Workload Utility Preservation** | 100.0% | **100.0% Preserved** | **CERTIFIED** |
 | **Automated Multi-Cloud Reproduction Latency** | $< 45\text{s}$ | **~35s** (including full test suite & type checks) | **CERTIFIED** |
 
 ---

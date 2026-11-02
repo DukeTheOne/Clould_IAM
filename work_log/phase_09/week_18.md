@@ -32,11 +32,11 @@ Week 18 completes the Phase 9 (Months 19–24: Publication Extension & Multi-Clo
 | Metric | Target | Measured Result | Status |
 | :--- | :---: | :---: | :---: |
 | **Total Automated Unit & Integration Tests** | $\ge 490$ | **495 Passing Tests** | **CERTIFIED** |
-| **Test Suite Code Coverage** | $\ge 85.0\%$ | **91.03% Total Coverage** | **CERTIFIED** |
+| **Test Suite Code Coverage** | $\ge$ 85.0% | **91.03% Total Coverage** | **CERTIFIED** |
 | **Strict Type Checking (`mypy --strict`)** | 100% across all modules | **0 errors across 64 modules** | **CERTIFIED** |
 | **Code Quality & Formatting (`ruff`)** | Zero lint/style violations | **0 errors (120 files checked)** | **CERTIFIED** |
-| **CloudTrail Ingestion Conformance Rate** | $100.0\%$ on $G_o$ | **100.0% (4/4 benign events)** | **CERTIFIED** |
-| **Unauthorized Event Filtering Rate** | $100.0\%$ | **100.0% (AccessDenied filtered)** | **CERTIFIED** |
+| **CloudTrail Ingestion Conformance Rate** | 100.0% on $G_o$ | **100.0% (4/4 benign events)** | **CERTIFIED** |
+| **Unauthorized Event Filtering Rate** | 100.0% | **100.0% (AccessDenied filtered)** | **CERTIFIED** |
 | **Automated Multi-Cloud Reproduction Latency** | $< 45\text{s}$ | **42 seconds** (including full test suite & type checks) | **CERTIFIED** |
 
 ---

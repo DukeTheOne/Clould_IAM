@@ -110,7 +110,7 @@
 ### Slide Content
 - **Heterogeneous Multigraph Formulation**: $G = (V, E, \mathcal{R})$
   - $V = V_{\text{User}} \cup V_{\text{Role}} \cup V_{\text{Policy}} \cup V_{\text{Group}} \cup V_{\text{Resource}} \cup V_{\text{Condition}}$
-  - $\mathcal{R} = \{\text{AttachedWith}, \text{MemberOf}, \text{AssumesRole}, \text{PassesTo}, \text{ActsOn}\}$
+  - $\mathcal{R} = \lbrace \text{AttachedWith}, \text{MemberOf}, \text{AssumesRole}, \text{PassesTo}, \text{ActsOn} \rbrace$
 - **The AWS Action Capability Model $C(a, r, c)$**:
   - AWS authorization grammar is non-uniform:
     $$\mathcal{T}(a) = \begin{cases}
@@ -150,7 +150,7 @@
 
 ### Slide Content
 - **Structured Masking Scenarios**:
-  - Condition A: Uniform random link drop ($10\%\dots40\%$).
+  - Condition A: Uniform random link drop (10% to 40%).
   - Condition B: Cross-account external relations hidden.
   - Condition E: Critical adversarial bridge hidden from telemetry.
 - **Benchmark Results (ROC-AUC ± 95% Confidence Interval)**:
@@ -212,7 +212,7 @@
 
 ### Slide Content
 - **Stochastic Completion Ensemble**:
-  $$H_m \sim \prod_{e \in E_{\text{cand}}} \text{Bernoulli}(\hat{p}_e), \quad m \in \{1, \dots, M\}$$
+  $$H_m \sim \prod_{e \in E_{\text{cand}}} \text{Bernoulli}(\hat{p}_e), \quad m \in \lbrace 1, \dots, M \rbrace$$
 - **Chance-Constrained Optimization Objective**:
   $$\min_{P^{\ast}} \quad \text{Cost}(P \to P^{\ast})$$
   $$\text{subject to} \quad \frac{1}{M} \sum_{m=1}^M \mathbf{1} \big[ \text{PathExists}((G_o \cup H_m) \oplus P^{\ast}, s, t) \big] \le \delta$$

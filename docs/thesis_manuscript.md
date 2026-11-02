@@ -31,7 +31,7 @@ Finally, we evaluate Level 2 real-world Infrastructure-as-Code configurations ac
 | $G_o = (V_o, E_o)$ | Partially observed authorization graph accessible to the security scanner. |
 | $G^* = (V^*, E^*)$ | Complete ground-truth authorization graph including unobserved trust relationships. |
 | $H = G^* \setminus G_o$ | Latent (unobserved) authorization relationship subgraph. |
-| $\mathcal{H}_M = \{H_1, \dots, H_M\}$ | Set of $M$ stochastic latent graph completions sampled from the posterior $\mathbb{P}(H \mid G_o)$. |
+| $\mathcal{H}_M = \lbrace H_1, \dots, H_M \rbrace$ | Set of $M$ stochastic latent graph completions sampled from the posterior $\mathbb{P}(H \mid G_o)$. |
 | $C(a, r, c)$ | AWS Action Capability Model governing admissible resource scoping and condition injection for action $a$. |
 | $\mathcal{T}(a)$ | Scope classification of action $a$: $\text{ARN-Restricted}$, $\text{Global-Only}$, or $\text{Resource-Agnostic}$. |
 | $P, P^{\ast}$ | Original IAM policy document AST and synthesized capability-compliant remediation patch AST. |
@@ -216,7 +216,7 @@ In all experiments, our calibrated model achieves $\text{ECE} \le 0.038$, satisf
 
 ### 4.4 Structured Masking Conditions & Gate G0 Results
 We evaluate models across five realistic missingness conditions:
-- **Condition A (Uniform Random)**: $p \in \{10\%, 20\%, 30\%, 40\%\}$ random trust relation omission.
+- **Condition A (Uniform Random)**: $p \in \lbrace 10\\%, 20\\%, 30\\%, 40\\% \rbrace$ random trust relation omission.
 - **Condition B (Cross-Account)**: All trust relations residing in unobservable accounts hidden.
 - **Condition C (Federated IdP)**: Cloud trust policy visible; external SAML delegation hidden.
 - **Condition D (Ephemeral STS)**: Runtime session delegation omitted.
@@ -245,7 +245,7 @@ We evaluate models across five realistic missingness conditions:
 Given calibrated probabilities $\hat{p}_e = \mathbb{P}(e \in E^* \mid G_o)$, we generate $M$ independent Monte Carlo graph completions:
 
 $$
-H_m \sim \prod_{e \in E_{\text{cand}}} \text{Bernoulli}(\hat{p}_e), \quad m \in \{1, \dots, M\}
+H_m \sim \prod_{e \in E_{\text{cand}}} \text{Bernoulli}(\hat{p}_e), \quad m \in \lbrace 1, \dots, M \rbrace
 $$
 
 The empirical reachability risk is evaluated over the completion ensemble:
@@ -375,8 +375,8 @@ When applied to vulnerable enterprise Terraform modules (e.g., Terraform AWS IAM
 ### 6.5 Multi-Cloud Authorization Generalization & Capability Enforcement
 To evaluate whether capability-constrained least-privilege repair generalizes beyond AWS IAM semantics, we implemented a unified multi-cloud action capability engine (`src/iam/parser/multi_cloud.py`, `src/iam/verifier/multi_cloud_eval.py`) supporting:
 - **AWS IAM**: Action-Resource-Condition capability model $C_{\text{AWS}}(a, r, c)$.
-- **Microsoft Azure RBAC**: 5-tier scope hierarchy model $C_{\text{Azure}}(a, s, c)$ over $\mathcal{S}_{\text{Azure}} = \{\text{tenant}, \text{mg}, \text{sub}, \text{rg}, \text{resource}\}$, enforcing DataActions segregation to leaf resources.
-- **Google Cloud IAM**: 4-tier Resource Manager hierarchy $C_{\text{GCP}}(a, l, c)$ over $\mathcal{L}_{\text{GCP}} = \{\text{org}, \text{folder}, \text{project}, \text{resource}\}$ with downward policy inheritance.
+- **Microsoft Azure RBAC**: 5-tier scope hierarchy model $C_{\text{Azure}}(a, s, c)$ over $\mathcal{S}_{\text{Azure}} = \lbrace \text{tenant}, \text{mg}, \text{sub}, \text{rg}, \text{resource} \rbrace$, enforcing DataActions segregation to leaf resources.
+- **Google Cloud IAM**: 4-tier Resource Manager hierarchy $C_{\text{GCP}}(a, l, c)$ over $\mathcal{L}_{\text{GCP}} = \lbrace \text{org}, \text{folder}, \text{project}, \text{resource} \rbrace$ with downward policy inheritance.
 
 We executed an automated benchmark (`iam evaluate-multi-cloud`) across 22 cross-cloud test scenarios:
 

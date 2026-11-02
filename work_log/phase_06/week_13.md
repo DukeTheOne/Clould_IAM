@@ -56,7 +56,7 @@ To satisfy both milestones rigorously, we designed a two-pillar evaluation archi
 Implemented in [src/iam/verifier/pareto.py](file:///Users/duke/IAM/verifier/pareto.py):
 - **Data Models**:
   - `ParetoSolution`: Represents an evaluated remediation patch with method identifier, name, 4 objective scores, raw metrics, and latency. Includes helper method `dominates(other)` implementing weak/strict multi-objective Pareto dominance:
-    $$\text{Sol}_A \succ \text{Sol}_B \iff (\forall i \in \{1..4\}, \text{Obj}_i(A) \le \text{Obj}_i(B)) \land (\exists j, \text{Obj}_j(A) < \text{Obj}_j(B))$$
+    $$\text{Sol}_A \succ \text{Sol}_B \iff (\forall i \in \lbrace 1..4 \rbrace, \text{Obj}_i(A) \le \text{Obj}_i(B)) \land (\exists j, \text{Obj}_j(A) < \text{Obj}_j(B))$$
   - `ParetoEnvironmentResult`: Contains all evaluated solutions for an environment, dominance mapping (`dominates_map`), non-dominated frontier (`pareto_frontier`), and Gate G2 satisfaction status.
   - `ParetoBenchmarkSuiteResult`: Aggregates results across environments, computes macro-averaged metrics, and exports Markdown and JSON reports.
 - **Evaluator Pipeline**:
@@ -74,7 +74,7 @@ Implemented in [src/iam/verifier/scalability.py](file:///Users/duke/IAM/verifier
   - `ScalabilityDataPoint`: Records scale $N$, edges $E$, candidate counts before/after pruning, per-stage execution times (sampling, pruning, greedy repair, Z3 MaxSAT, verification), total latency, and optimality gap.
   - `ScalabilityBenchmarkResult`: Collection of data points across scales with serialization and Markdown reporting capabilities.
 - **Benchmark Runner**:
-  - `ScalabilityBenchmarkRunner`: Instantiates enterprise cloud environments of increasing orders of magnitude ($N \in \{61, 111, 261, 511\}$).
+  - `ScalabilityBenchmarkRunner`: Instantiates enterprise cloud environments of increasing orders of magnitude ($N \in \lbrace 61, 111, 261, 511 \rbrace$).
   - Benchmarks each pipeline stage independently using high-resolution monotonic clocks.
   - Implements a 5-second timeout on exact Z3 MaxSAT to prevent combinatorial hangs on large graphs ($N > 250$), demonstrating the empirical necessity of polynomial greedy repair.
 

@@ -46,14 +46,14 @@ Week 19 advances Phase 9 (Months 19–24: Publication Extension & Multi-Cloud Sc
 | Metric | Target | Measured Result | Status |
 | :--- | :---: | :---: | :---: |
 | **Total Automated Unit & Integration Tests** | $\ge 495$ | **503 Passing Tests** | **CERTIFIED** |
-| **Test Suite Code Coverage** | $\ge 85.0\%$ | **91.26% Total Coverage** | **CERTIFIED** |
+| **Test Suite Code Coverage** | $\ge$ 85.0% | **91.26% Total Coverage** | **CERTIFIED** |
 | **Strict Type Checking (`mypy --strict`)** | 100% across all modules | **0 errors across 64 source files** | **CERTIFIED** |
 | **Code Quality & Formatting (`ruff`)** | Zero lint/style violations | **0 errors (120 files checked)** | **CERTIFIED** |
-| **Multi-Cloud Capability Conformance Rate** | $100.0\%$ | **100.0% (22/22 Rules Evaluated)** | **CERTIFIED** |
-| **Illegal Scoping Prevention Rate** | $100.0\%$ | **100.0% Blocked** | **CERTIFIED** |
-| **Benign Utility Preservation Rate** | $100.0\%$ | **100.0% Preserved** | **CERTIFIED** |
-| **Cross-Cloud Attack Path Detection** | $100.0\%$ | **Detected (Azure $\to$ AWS $\to$ GCP)** | **CERTIFIED** |
-| **Cross-Cloud Blast Radius Remediation** | $100.0\%$ | **Verified (0 Residual Paths)** | **CERTIFIED** |
+| **Multi-Cloud Capability Conformance Rate** | 100.0% | **100.0% (22/22 Rules Evaluated)** | **CERTIFIED** |
+| **Illegal Scoping Prevention Rate** | 100.0% | **100.0% Blocked** | **CERTIFIED** |
+| **Benign Utility Preservation Rate** | 100.0% | **100.0% Preserved** | **CERTIFIED** |
+| **Cross-Cloud Attack Path Detection** | 100.0% | **Detected (Azure $\to$ AWS $\to$ GCP)** | **CERTIFIED** |
+| **Cross-Cloud Blast Radius Remediation** | 100.0% | **Verified (0 Residual Paths)** | **CERTIFIED** |
 | **Automated Multi-Cloud Reproduction Latency** | $< 45\text{s}$ | **43 seconds** (including full test suite & coverage) | **CERTIFIED** |
 
 ---
