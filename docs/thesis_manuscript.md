@@ -4,7 +4,7 @@
 **Author**: Duke
 **Institution**: Advanced Agentic Coding Research Group / Cloud Authorization Laboratory
 **Date**: October 2026
-**Artifact Repository**: `DukeTheOne/IAM_GNN` (Release `v1.0.0`, certified with 468 test suites)
+**Artifact Repository**: `DukeTheOne/IAM_GNN` (Release `v1.0.0`, certified with 503 passing unit & integration tests across 64 modules)
 
 ---
 
