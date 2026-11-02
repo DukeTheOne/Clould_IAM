@@ -197,7 +197,7 @@ To demonstrate that uncertainty-aware least-privilege repair generalizes beyond 
 
 1. **AWS IAM ($C_{\text{AWS}}$)**: Action-Resource-Condition model governing pattern-scoped ARNs, wildcard-only restrictions (e.g., `sts:GetCallerIdentity`), and global/service context condition keys.
 2. **Microsoft Azure RBAC ($C_{\text{Azure}}$)**: 5-tier scope hierarchy model:
-   $$\mathcal{S}_{\text{Azure}} = \lbrace \text{tenant}, \text{management\_group}, \text{subscription}, \text{resource\_group}, \text{resource} \rbrace$$
+   $$\mathcal{S}_{\text{Azure}} = \lbrace \text{tenant}, \text{management\textunderscore group}, \text{subscription}, \text{resource\textunderscore group}, \text{resource} \rbrace$$
    enforcing strict segregation of DataActions (e.g., `Microsoft.KeyVault/vaults/secrets/read` valid strictly at leaf Resource scope) from Control Plane actions (e.g., `Microsoft.Authorization/roleAssignments/write` valid across Management Group, Subscription, and Resource Group boundaries).
 3. **Google Cloud IAM ($C_{\text{GCP}}$)**: 4-tier Resource Manager hierarchy:
    $$\mathcal{L}_{\text{GCP}} = \lbrace \text{organization}, \text{folder}, \text{project}, \text{resource} \rbrace$$
@@ -237,7 +237,7 @@ Across all evaluated scenarios, our multi-cloud engine achieves **100.0% rule co
 ### 8.2 Cross-Cloud Identity Federation & Lateral Blast Radius Remediation
 Beyond isolated single-cloud capabilities, enterprise architectures frequently interconnect heterogeneous clouds via federated identity delegation protocols—including OpenID Connect (OIDC), AWS Security Token Service (STS) Web Identity federation, and Google Cloud Workload Identity Federation (WIF). While these integrations enable unified multi-cloud CI/CD pipelines, they synthesize subtle transitive privilege escalation vectors that cross provider boundaries.
 
-To model and remediate these threats, we engineered `MultiCloudGraphAdapter` (`src/iam/parser/multi_cloud.py`), which ingests heterogeneous Azure RBAC role assignments, GCP IAM bindings, and cross-cloud federation trusts into a unified multi-cloud authorization multigraph $\mathcal{G}_{\text{multi}} = (V_{\text{Azure}} \cup V_{\text{AWS}} \cup V_{\text{GCP}}, E)$. Cross-cloud delegation links are synthesized as directional federation bridge edges ($\text{AssumesRole}$, $\text{is\_bridge}=\text{True}$).
+To model and remediate these threats, we engineered `MultiCloudGraphAdapter` (`src/iam/parser/multi_cloud.py`), which ingests heterogeneous Azure RBAC role assignments, GCP IAM bindings, and cross-cloud federation trusts into a unified multi-cloud authorization multigraph $\mathcal{G}_{\text{multi}} = (V_{\text{Azure}} \cup V_{\text{AWS}} \cup V_{\text{GCP}}, E)$. Cross-cloud delegation links are synthesized as directional federation bridge edges (`AssumesRole`, with `is_bridge = True`).
 
 We evaluated this engine on a canonical 3-cloud lateral movement kill-chain:
 $$\text{Azure Entra ID Service Principal} \xrightarrow{\text{OIDC}} \text{AWS STS Role} \xrightarrow{\text{AssumeRole}} \text{AWS Ops Role} \xrightarrow{\text{WIF}} \text{GCP Service Account} \xrightarrow{\text{roles/resourcemanager.organizationAdmin}} \text{GCP Org Crown Jewel}$$

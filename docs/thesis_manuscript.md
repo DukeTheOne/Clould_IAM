@@ -404,7 +404,7 @@ Modern enterprise deployments rarely operate within an isolated single-cloud sil
 To represent and reason over these interconnected environments, we developed the unified `MultiCloudGraphAdapter` (`src/iam/parser/multi_cloud.py`). The engine translates native cross-cloud primitives:
 1. **Azure RBAC Role Assignments**: $\alpha = (p, d, s)$ where $p$ is the principal, $d$ is the role definition, and $s \in \mathcal{S}_{\text{Azure}}$ is the scope URI, verified via `is_azure_scope_contained()`.
 2. **Google Cloud IAM Bindings**: $\beta = (r, m, c)$ where $r \in \mathcal{L}_{\text{GCP}}$ is the resource hierarchy node, $m$ is the member set (`user:`, `serviceAccount:`, `group:`), and $c$ is an optional CEL conditional expression, verified via `is_gcp_resource_contained()`.
-3. **Cross-Cloud Federation Trusts**: $\tau = (s_{\text{source}}, p_{\text{proto}}, t_{\text{target}}, c_{\text{claims}})$ formalizing cross-cloud identity bridging into directional multigraph edges ($e \in E_{\text{AssumesRole}}, \text{is\_bridge}=\text{True}$).
+3. **Cross-Cloud Federation Trusts**: $\tau = (s_{\text{source}}, p_{\text{proto}}, t_{\text{target}}, c_{\text{claims}})$ formalizing cross-cloud identity bridging into directional multigraph edges ($e \in E_{\text{AssumesRole}}$, with `is_bridge = True`).
 
 We evaluated our framework on a canonical enterprise 3-cloud lateral movement kill-chain:
 $$\text{Azure Entra ID SP} \xrightarrow{\text{OIDC}} \text{AWS STS Deploy Role} \xrightarrow{\text{AssumeRole}} \text{AWS Ops Role} \xrightarrow{\text{WIF}} \text{GCP Service Account} \xrightarrow{\text{OrgAdmin}} \text{GCP Org Root (Crown Jewel)}$$

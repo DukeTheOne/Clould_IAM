@@ -221,16 +221,16 @@ $$
 
 **Implementation Details**:
 1. **SMT Decision Encoding (`Z3CanonicalRepairSolver`)**:
-   - [x] Models policy statements as boolean decision variables: $x_{\text{action\_keep}} \in \lbrace 0, 1 \rbrace$, $x_{\text{scoped\_arn}} \in \lbrace 0, 1 \rbrace$.
-   - [x] Encodes structural consistency invariants: $x_{\text{scoped\_arn}} \implies x_{\text{action\_keep}}$ (scoping requires keeping the action).
-   - [x] Encodes hard capability constraints: $x_{\text{scoped\_arn}} \implies \text{SupportsResourceArn}(\text{action})$; wildcard-only actions or actions with no evidenced ARNs assert $\neg x_{\text{scoped\_arn}}$.
-   - [x] Encodes hard log preservation constraints: $\bigwedge_{e \in \mathcal{D}^{T_1}} x_{\text{action\_keep}} = \text{True}$; if an observed event targets a non-evidenced resource, asserts $\neg x_{\text{scoped\_arn}}$.
-   - [x] Encodes hard security reachability constraints: $\forall \text{attack path } p \text{ in } G_o \cup H_i$, $\neg \text{PathActive}(p)$ where unevidenced steps require $x_{\text{action\_keep}} \land \neg x_{\text{scoped\_arn}}$.
+   - [x] Models policy statements as boolean decision variables: $x_{\text{action\textunderscore keep}} \in \lbrace 0, 1 \rbrace$, $x_{\text{scoped\textunderscore arn}} \in \lbrace 0, 1 \rbrace$.
+   - [x] Encodes structural consistency invariants: $x_{\text{scoped\textunderscore arn}} \implies x_{\text{action\textunderscore keep}}$ (scoping requires keeping the action).
+   - [x] Encodes hard capability constraints: $x_{\text{scoped\textunderscore arn}} \implies \text{SupportsResourceArn}(\text{action})$; wildcard-only actions or actions with no evidenced ARNs assert $\neg x_{\text{scoped\textunderscore arn}}$.
+   - [x] Encodes hard log preservation constraints: $\bigwedge_{e \in \mathcal{D}^{T_1}} x_{\text{action\textunderscore keep}} = \text{True}$; if an observed event targets a non-evidenced resource, asserts $\neg x_{\text{scoped\textunderscore arn}}$.
+   - [x] Encodes hard security reachability constraints: $\forall \text{attack path } p \text{ in } G_o \cup H_i$, $\neg \text{PathActive}(p)$ where unevidenced steps require $x_{\text{action\textunderscore keep}} \land \neg x_{\text{scoped\textunderscore arn}}$.
 2. **Soft Constraint Optimization**:
    - [x] Uses Z3 `Optimize()` to solve MaxSAT: minimizes weighted cost function:
 
    $$
-   \min \sum w_{\text{remove}} \cdot (1 - x_{\text{action\_keep}}) + \sum w_{\text{scope}} \cdot (x_{\text{action\_keep}} \land x_{\text{scoped\_arn}})
+   \min \sum w_{\text{remove}} \cdot (1 - x_{\text{action\textunderscore keep}}) + \sum w_{\text{scope}} \cdot (x_{\text{action\textunderscore keep}} \land x_{\text{scoped\textunderscore arn}})
    $$
 
    with default weights $w_{\text{scope}} = 1.0$ and $w_{\text{remove}} = 5.0$.
